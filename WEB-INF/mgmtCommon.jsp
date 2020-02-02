@@ -41,7 +41,7 @@
 			let objects = document.getElementsByClassName("del");
 			let flag = false;
 
-			for (var i = objects.length - 1; i >= 0; i--) {
+			for (let i = objects.length - 1; i >= 0; i--) {
 				if (objects[i].checked)
 				{
 					flag = true;
