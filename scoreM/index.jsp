@@ -21,36 +21,6 @@
 <%@ include file="../WEB-INF/types.jsp" %>
 
 <%
-	PreparedStatement ps = conn.prepareStatement("delete from kc where kc.courseID = ?;");
-	String delF = request.getParameter("del");
-
-	if (delF != null)
-	{
-		Map<String, String[]> paramMap = request.getParameterMap();
-		HashSet<String> delKeys = new HashSet<>();
-
-		for(Map.Entry<String, String[]> s : paramMap.entrySet())
-		{
-			if (s.getKey().equals("del")) 
-				continue;
-			if (s.getValue()[0].toLowerCase().equals("on"))
-				delKeys.add(s.getKey());
-			// out.print("K: " + s.getKey() + "  V: " + s.getValue()[0] + "\n");
-		}
-
-		// out.print("\n\n\n");
-
-		// out.print("DK:  ");
-
-		for(String s : delKeys)
-		{
-			// out.print(s + ",");
-
-			ps.setString(1, s);
-
-			ps.execute();
-		}
-	}
 
 	ResultSet rs = stmt.executeQuery("select * from kc;");   // Put here to query data after the delete process.
 %>
@@ -58,9 +28,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>课程管理</title>
-	<%@ include file="../WEB-INF/mgmtCommon.jsp" %>
-	
+	<title>成绩管理</title>
+	<link rel="stylesheet" href="../stylesheet/tableCSS.css" />
 	<script>
 		function openDialog(url)
 		{
@@ -69,7 +38,7 @@
 	</script>
 </head>
 <body>
-	<h1>课程管理</h1>
+	<h1>课程成绩管理</h1>
 	<form action="" method="post">
 	<table class="T">  <%-- JSP Scriptlet that uses SQL Commands --%>
 		<tr>
@@ -127,23 +96,21 @@
 		</tr>
 
 		<tr>
-			<td>操作</td>
+			<td>成绩编辑</td>
 			<%
-				String reqS = "subInfo.jsp?type=" + TYPE_MODIFY + "&id=";
+				String reqS = "scoreInfo.jsp?id=";
 				rs.beforeFirst();
 				while (rs.next())
 				{
 					%><td>
-						删除? 
-						<input name='<%= rs.getString("courseID") %>' type="checkbox" class="del"><br />
 						<a href='javascript:void(0);'
-							onclick='openDialog("<%= reqS %><%= rs.getString("courseID")%>");'>编辑</a>
+							onclick='openDialog("<%= reqS + rs.getString("courseID")%>");'>编辑</a>
 					</td><%
 				}
 			%>
 		</tr>
 	</table><br />
-	<input type="button" id="addStudent" onclick='openDialog("subInfo.jsp?type=add");' value="添加">
+	<input type="button" id="addStudent" onclick='openDialog("scoreInfo.jsp?type=add");' value="添加">
 	<input type="submit" name="del" onclick="return checkSelection();" value="删除">
 	<input type="button" name="returnButt" onclick='location.href="../"' value="返回">
 	</form>

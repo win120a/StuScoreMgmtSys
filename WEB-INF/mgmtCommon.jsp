@@ -16,24 +16,7 @@
 --%>
 
 <%@ page contentType="text/html; charset=utf-8" %>
-	<style>
-		table.T
-		{
-			border-collapse: collapse;
-		}
-		.T tr td
-		{
-			border : black 0.5px solid;
-			text-align: center;
-			width: 80px;
-			font-size : 0.8em;
-		}
-
-		*
-		{
-			text-align: center;
-		}
-	</style>
+	<link rel="stylesheet" href="../stylesheet/tableCSS.css" />
 	<script type="text/javascript">
 
 		function checkSelection()

@@ -43,6 +43,12 @@
 		%><script>location.href = "stuM/index.jsp"</script><%
 	}
 
+	String scoreMParm = request.getParameter("scoreM");
+
+	if (scoreMParm != null)
+	{
+		%><script>location.href = "scoreM/index.jsp"</script><%
+	}
 
 	String installParm = request.getParameter("install");
 
@@ -102,6 +108,7 @@
 	<form action="" method="post">
 		<input type="submit" name="stuM" value="学生管理">
 		<input type="submit" name="subM" value="学科管理">
+		<input type="submit" name="scoreM" value="成绩管理">
 		<input type="submit" name="test" value="测试">
 	</form>
 	<% } %>
