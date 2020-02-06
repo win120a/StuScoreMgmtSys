@@ -33,7 +33,7 @@
 	<script>
 		function openDialog(url)
 		{
-			window.open(url, "_blank", "width=670 height=270 left=300 top=50");
+			window.open(url, "info", "width=670 height=270 left=300 top=50");
 		}
 	</script>
 </head>

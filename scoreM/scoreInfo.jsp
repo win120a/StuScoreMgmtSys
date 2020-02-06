@@ -23,7 +23,8 @@
 <%
 	PreparedStatement ps = conn.prepareStatement("select score from xs_kc where stuid=? and courseID=?;");
 
-	PreparedStatement ps_u = conn.prepareStatement("update xs_kc set score=?, credit=? where stuid=?;");
+	PreparedStatement ps_u = conn.prepareStatement("update xs_kc set score=?, credit=? where stuid=?" +
+													"and courseID=?;");
 
 	// sID, cID, score, credit
 	PreparedStatement ps_i = conn.prepareStatement("insert into xs_kc values (?, ?, ?, ?);");
@@ -42,7 +43,7 @@
 
 		for (Map.Entry<String, String[]> s : paramMap.entrySet())
 		{
-			if (s.getKey().equals("update") || s.getKey().equals("id") || s.getValue()[0].isEmpty()) 
+			if (s.getKey().equals("update") || s.getKey().equals("id")) 
 				continue;
 			if (s.getKey().contains("score_")) 
 				scoreMap.put(s.getKey(), s.getValue()[0]);
@@ -54,11 +55,17 @@
 													request.getParameter("id"));
 			creditsS.next();
 			String credits =  creditsS.getString("credits");
+			String score = s.getValue();
 
 			try
 			{
+				if (s.getValue().isEmpty())
+				{
+					score = "-1";
+				}
+
 				ps_i.setString(1, s.getKey().replace("score_", ""));
-				ps_i.setString(3, s.getValue());
+				ps_i.setString(3, score);
 				ps_i.setString(4, credits);
 				ps_i.execute();
 			}
@@ -66,14 +73,20 @@
 			{
 				sqle.printStackTrace();
 				// s c i
-				ps_u.setString(1, s.getValue());
+				if (s.getValue().isEmpty())
+				{
+					score = "-1";
+				}
+
+				ps_u.setString(1, score);
 				ps_u.setString(2, credits);
 				ps_u.setString(3, s.getKey().replace("score_", ""));
+				ps_u.setString(4, request.getParameter("id"));
 				ps_u.execute();
 			}
 		}
 
-		out.print("<script>alert(\"更新成绩成功!\");</script>");
+		out.print("<script>alert(\"更新成绩成功!\");window.opener = null; window.close();</script>");
 	}
 
 	ResultSet rs = stmt.executeQuery("select * from xs;");   // Put here to query data in case the RS is closed.
@@ -137,6 +150,11 @@
 						score = rs1.getString("score");
 					}
 					catch (SQLException sqle)
+					{
+						score = "";
+					}
+
+					if (score.equals("-1"))
 					{
 						score = "";
 					}

@@ -23,6 +23,10 @@
 <%
 	PreparedStatement ps = conn.prepareStatement("delete from kc where kc.courseID = ?;");
 	String delF = request.getParameter("del");
+	StringBuilder undoneMessageBuilder = new StringBuilder();
+	undoneMessageBuilder.append("如下课程由于此前输入了成绩，不能删除。\\n\\n课程号：\\n");
+	boolean notFullyDel = false;
+
 
 	if (delF != null)
 	{
@@ -48,7 +52,21 @@
 
 			ps.setString(1, s);
 
-			ps.execute();
+			try
+			{
+				ps.execute();
+			}
+			catch(java.sql.SQLIntegrityConstraintViolationException e)
+			{
+				notFullyDel = true;
+				undoneMessageBuilder.append(s);
+				undoneMessageBuilder.append("\\n");
+			}
+		}
+
+		if(notFullyDel)
+		{
+			out.write("<script>alert(\"" + undoneMessageBuilder.toString() + "\");</script>");
 		}
 	}
 
@@ -64,7 +82,7 @@
 	<script>
 		function openDialog(url)
 		{
-			window.open(url, "_blank", "width=670 height=270 left=300 top=50");
+			window.open(url, "info", "width=670 height=270 left=300 top=50");
 		}
 	</script>
 </head>

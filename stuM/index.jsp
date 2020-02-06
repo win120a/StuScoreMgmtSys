@@ -23,6 +23,9 @@
 <%
 	PreparedStatement ps = conn.prepareStatement("delete from xs where xs.stuid = ?;");
 	String delF = request.getParameter("del");
+	StringBuilder undoneMessageBuilder = new StringBuilder();
+	undoneMessageBuilder.append("如下学生由于此前输入了成绩，不能删除。\\n\\n学号：\\n");
+	boolean notFullyDel = false;
 
 	if (delF != null)
 	{
@@ -45,7 +48,21 @@
 		for(String s : delKeys)
 		{
 			ps.setString(1, s);
-			ps.execute();
+			try
+			{
+				ps.execute();
+			}
+			catch(java.sql.SQLIntegrityConstraintViolationException sicve)
+			{
+				notFullyDel = true;
+				undoneMessageBuilder.append(s);
+				undoneMessageBuilder.append("\\n");
+			}
+		}
+
+		if(notFullyDel)
+		{
+			out.write("<script>alert(\"" + undoneMessageBuilder.toString() + "\");</script>");
 		}
 	}
 
@@ -60,7 +77,7 @@
 	<script>
 		function openDialog(url)
 		{
-			window.open(url, "_blank", "width=670 height=520 left=300 top=50");
+			window.open(url, "info", "width=670 height=520 left=300 top=50");
 		}
 	</script>
 </head>
@@ -128,10 +145,16 @@
 		<tr>
 			<td>总学分</td>
 			<%
+				PreparedStatement creditsPS = conn.prepareStatement("select sum(credit) as c from xs_kc where stuid=? and score >= 60;");
+
 				rs.beforeFirst();
 				while (rs.next())
 				{
-					%><td><%= rs.getString("totalcredits") %></td><%
+					creditsPS.setString(1, rs.getString("stuid"));
+					ResultSet creditsRS = creditsPS.executeQuery();
+					creditsRS.next();
+					String credits = creditsRS.getString("c");
+					%><td><%= credits == null ? "0" : credits %></td><%
 				}
 			%>
 		</tr>
