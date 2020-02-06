@@ -22,10 +22,6 @@
 
 <%@ page import="java.net.URLDecoder, java.nio.charset.Charset" %>
 
-<%--
-	stuid name major gender birthdate totalCredits photo remark
---%>
-
 <script>
 	function loadVars() {}
 </script>
