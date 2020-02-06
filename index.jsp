@@ -15,7 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 --%>
 
-<%@ page contentType="text/html; charset=utf-8" %>
+<%@ page contentType="text/html; charset=utf-8" errorPage="WEB-INF/errorPage.jsp" %>
 <%@ page import="javax.servlet.http.HttpServletRequest" %>
 <%@ page import="java.sql.*" %>
 

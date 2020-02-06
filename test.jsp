@@ -15,10 +15,14 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 --%>
 
-<%@ page contentType="text/html; charset=UTF-8" language="java" errorPage="" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" errorPage="WEB-INF/errorPage.jsp" %>
 <%@ page import="java.util.function.Consumer" %>    <%-- Equals to the import statements. --%>
 <%@ page import="java.util.Date, java.util.Properties" %>    <%-- Use commas to import multiple classes. --%>
 <%@ page import="java.sql.*" %>
+
+<%--
+	Class.forName("c");  // To Test error page.
+--%>
 
 <html>
 	<head>

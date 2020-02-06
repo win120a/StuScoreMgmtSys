@@ -15,7 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 --%>
 
-<%@ page contentType="text/html; charset=utf-8" %>
+<%@ page contentType="text/html; charset=utf-8" errorPage="WEB-INF/errorPage.jsp" %>
 <%@ page import="java.util.Map, java.util.HashMap" %>
 <%@ include file="../WEB-INF/dbConn.jsp" %>
 <%@ include file="../WEB-INF/types.jsp" %>
@@ -28,6 +28,8 @@
 
 	// sID, cID, score, credit
 	PreparedStatement ps_i = conn.prepareStatement("insert into xs_kc values (?, ?, ?, ?);");
+
+	PreparedStatement ps_d = conn.prepareStatement("delete from xs_kc where stuid=? and courseID=?;");
 
 	ps.setString(2, request.getParameter("id"));
 	ps_i.setString(2, request.getParameter("id"));
@@ -49,7 +51,7 @@
 				scoreMap.put(s.getKey(), s.getValue()[0]);
 		}
 
-		for(Map.Entry<String, String> s : scoreMap.entrySet())
+		for(Map.Entry<String, String> s : scoreMap.entrySet())  // "score_" + StuID, score
 		{
 			ResultSet creditsS = stmt.executeQuery("select credits from kc where courseID=" + 
 													request.getParameter("id"));
@@ -57,32 +59,48 @@
 			String credits =  creditsS.getString("credits");
 			String score = s.getValue();
 
-			try
+			PreparedStatement selectPS = conn.prepareStatement("select * from xs_kc where stuid=? and courseID=?");
+
+			selectPS.setString(1, s.getKey().replace("score_", ""));
+			selectPS.setString(2, request.getParameter("id"));
+
+			ResultSet selectRS = selectPS.executeQuery();
+
+			if (!selectRS.next())
 			{
 				if (s.getValue().isEmpty())
 				{
-					score = "-1";
+					continue;   // Do not do insert statement if the value is empty.
 				}
 
 				ps_i.setString(1, s.getKey().replace("score_", ""));
 				ps_i.setString(3, score);
 				ps_i.setString(4, credits);
 				ps_i.execute();
+
+				// out.print("<script>alert(\"I: " + ps_i.toString() + "\");</script>");
 			}
-			catch (SQLException sqle)  // In case the data was inserted (i.e exists).
+			else   // In case the data was inserted (i.e exists).
 			{
-				sqle.printStackTrace();
 				// s c i
 				if (s.getValue().isEmpty())
 				{
-					score = "-1";
-				}
+					// "delete from xs_kc where stuid=? and courseID=?;"
 
-				ps_u.setString(1, score);
-				ps_u.setString(2, credits);
-				ps_u.setString(3, s.getKey().replace("score_", ""));
-				ps_u.setString(4, request.getParameter("id"));
-				ps_u.execute();
+					ps_d.setString(1, s.getKey().replace("score_", ""));
+					ps_d.setString(2, request.getParameter("id"));
+					ps_d.execute();
+					// out.print("<script>alert(\"D: " + ps_d.toString() + "\");</script>");
+				}
+				else
+				{
+					ps_u.setString(1, score);
+					ps_u.setString(2, credits);
+					ps_u.setString(3, s.getKey().replace("score_", ""));
+					ps_u.setString(4, request.getParameter("id"));
+					ps_u.execute();
+					// out.print("<script>alert(\"U: " + ps_u.toString() + "\");</script>");
+				}
 			}
 		}
 
@@ -142,22 +160,10 @@
 				while (rs.next())
 				{
 					String score = null;
-					try
-					{
-						ps.setString(1, rs.getString("stuid"));
-						ResultSet rs1 = ps.executeQuery();
-						rs1.next();
-						score = rs1.getString("score");
-					}
-					catch (SQLException sqle)
-					{
-						score = "";
-					}
-
-					if (score.equals("-1"))
-					{
-						score = "";
-					}
+					ps.setString(1, rs.getString("stuid"));
+					ResultSet rs1 = ps.executeQuery();
+					boolean hasScore = rs1.next();
+					score = hasScore ? rs1.getString("score") : "";
 
 					%><td>
 						<input type="text" name='score_<%= rs.getString("stuid") %>' id='score_<%= rs.getString("stuid") %>' value="<%= score %>" style="width : 40px;" class="scoreF">
