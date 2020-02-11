@@ -15,7 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 --%>
 
-<%@ page contentType="text/html; charset=utf-8" errorPage="WEB-INF/errorPage.jsp" %>
+<%@ page contentType="text/html; charset=utf-8" errorPage="../WEB-INF/errorPage.jsp" %>
 <%@ page import="java.util.Map, java.util.HashMap" %>
 <%@ include file="../WEB-INF/dbConn.jsp" %>
 <%@ include file="../WEB-INF/types.jsp" %>
@@ -51,7 +51,7 @@
 				scoreMap.put(s.getKey(), s.getValue()[0]);
 		}
 
-		for(Map.Entry<String, String> s : scoreMap.entrySet())  // "score_" + StuID, score
+		for (Map.Entry<String, String> s : scoreMap.entrySet())  // "score_" + StuID, score
 		{
 			ResultSet creditsS = stmt.executeQuery("select credits from kc where courseID=" + 
 													request.getParameter("id"));
