@@ -19,7 +19,7 @@
 <%@ include file="dbConn.jsp" %>
 
 <%
-	getParameters(request);
+	// getParameters(request);
 
 	String install = request.getParameter("install");
 
@@ -50,7 +50,7 @@
 <body style="text-align: center;">
 	<% if (true | !configured) { %>
 
-	<h1>系统安装</h1><br />
+	<h1>信息确认</h1><br />
 	<form action="" method="post">
 		数据库驱动：<input type="text" name="driver" value="<%= driver %>"><br />
 		数据库服务器：<input type="text" name="serverAddr" value="<%= serverAddr %>"><br />

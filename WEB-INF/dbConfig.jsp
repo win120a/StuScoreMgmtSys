@@ -29,40 +29,32 @@
 %>
 
 <%
-	driver = (String) application.getAttribute("driver");
+	driver = (String) application.getInitParameter("driver");
 	driver = driver != null ? (String) driver : "";
 
-	serverAddr = (String) application.getAttribute("serverAddr");
+	serverAddr = (String) application.getInitParameter("serverAddr");
 	serverAddr = driver != null ? (String) serverAddr : "";
 
-	userName = (String) application.getAttribute("userName");
+	userName = (String) application.getInitParameter("userName");
 	
 	Object confO = application.getAttribute("configured");
 	configured = confO == null ? false : (Boolean) confO;
 	
 	userName = userName != null ? (String) userName : "";
 
-	password = (String) application.getAttribute("password");
+	password = (String) application.getInitParameter("password");
 	password = password != null ? (String) password : "";
 
-	serverTimeZone = (String) application.getAttribute("serverTimeZone");
+	serverTimeZone = (String) application.getInitParameter("serverTimeZone");
 	serverTimeZone = serverTimeZone != null ? (String) serverTimeZone : "";
 
-	db = (String) application.getAttribute("db");
+	db = (String) application.getInitParameter("db");
 	db = db != null ? (String) db : "";
 %>
 
 <%!
 	private void saveConfigurations(ServletContext application, boolean configured)
 	{
-		application.setAttribute("driver", driver);
-		application.setAttribute("userName", userName);
-		application.setAttribute("password", password);
-		application.setAttribute("serverTimeZone", serverTimeZone);
-		application.setAttribute("serverAddr", serverAddr);
-		application.setAttribute("db", db);
-
-		userName = (String) application.getAttribute("userName");
 		this.configured = configured;
 		application.setAttribute("configured", configured);
 	}
