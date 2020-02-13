@@ -26,96 +26,115 @@ import java.util.*;
 
 import ac.adproj.scms.dao.*;
 
-public class ScoreInfoServlet extends HttpServlet
-{
+public class ScoreInfoServlet extends HttpServlet {
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-		throws ServletException, IOException
-	{
-		Writer out = response.getWriter();
-		PreparedStatement ps = conn.prepareStatement("select score from xs_kc where stuid=? and courseID=?;");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/html; charset=utf-8");
 
-		PreparedStatement ps_u = conn.prepareStatement("update xs_kc set score=?, credit=? where stuid=?" +
-													"and courseID=?;");
+		try {
+			DBDao daoO = InitServlet.daoO;
 
-		// sID, cID, score, credit
-		PreparedStatement ps_i = conn.prepareStatement("insert into xs_kc values (?, ?, ?, ?);");
+			Connection conn = daoO.getConnection();
 
-		PreparedStatement ps_d = conn.prepareStatement("delete from xs_kc where stuid=? and courseID=?;");
+			Writer out = response.getWriter();
 
-		ps.setString(2, request.getParameter("id"));
-		ps_i.setString(2, request.getParameter("id"));
-		String updateP = request.getParameter("update");
+			Statement stmt = conn.createStatement();
 
-		if (updateP != null && updateP.equals("1"))
-		{
-			Map<String, String[]> paramMap = request.getParameterMap();
-			Map<String, String> scoreMap = new HashMap<>(paramMap.size());
+			PreparedStatement ps = conn.prepareStatement("select score from xs_kc where stuid=? and courseID=?;");
 
-			for (Map.Entry<String, String[]> s : paramMap.entrySet())
-			{
-				if (s.getKey().equals("update") || s.getKey().equals("id")) 
-					continue;
-				if (s.getKey().contains("score_")) 
-					scoreMap.put(s.getKey(), s.getValue()[0]);
-			}
+			PreparedStatement ps_u = conn
+					.prepareStatement("update xs_kc set score=?, credit=? where stuid=?" + "and courseID=?;");
 
-			for (Map.Entry<String, String> s : scoreMap.entrySet())  // "score_" + StuID, score
-			{
-				ResultSet creditsS = stmt.executeQuery("select credits from kc where courseID=" + 
-													request.getParameter("id"));
-				creditsS.next();
-				String credits =  creditsS.getString("credits");
-				String score = s.getValue();
+			// sID, cID, score, credit
+			PreparedStatement ps_i = conn.prepareStatement("insert into xs_kc values (?, ?, ?, ?);");
 
-				PreparedStatement selectPS = conn.prepareStatement("select * from xs_kc where stuid=? and courseID=?");
+			PreparedStatement ps_d = conn.prepareStatement("delete from xs_kc where stuid=? and courseID=?;");
 
-				selectPS.setString(1, s.getKey().replace("score_", ""));
-				selectPS.setString(2, request.getParameter("id"));
+			ps.setString(2, request.getParameter("id"));
+			ps_i.setString(2, request.getParameter("id"));
+			String updateP = request.getParameter("update");
 
-				ResultSet selectRS = selectPS.executeQuery();
+			if (updateP != null && updateP.equals("1")) {
+				Map<String, String[]> paramMap = request.getParameterMap();
+				Map<String, String> scoreMap = new HashMap<>(paramMap.size());
 
-				if (!selectRS.next())
-				{
-					if (s.getValue().isEmpty())
-					{
-						continue;   // Do not do insert statement if the value is empty.
-					}
-
-					ps_i.setString(1, s.getKey().replace("score_", ""));
-					ps_i.setString(3, score);
-					ps_i.setString(4, credits);
-					ps_i.execute();
-
-					// out.print("<script>alert(\"I: " + ps_i.toString() + "\");</script>");
+				for (Map.Entry<String, String[]> s : paramMap.entrySet()) {
+					if (s.getKey().equals("update") || s.getKey().equals("id"))
+						continue;
+					if (s.getKey().contains("score_"))
+						scoreMap.put(s.getKey(), s.getValue()[0]);
 				}
-				else   // In case the data was inserted (i.e exists).
-				{
-					// s c i
-					if (s.getValue().isEmpty())
-					{
-						// "delete from xs_kc where stuid=? and courseID=?;"
 
-						ps_d.setString(1, s.getKey().replace("score_", ""));
-						ps_d.setString(2, request.getParameter("id"));
-						ps_d.execute();
-						// out.print("<script>alert(\"D: " + ps_d.toString() + "\");</script>");
-					}
-					else
+				for (Map.Entry<String, String> s : scoreMap.entrySet()) // "score_" + StuID, score
+				{
+					ResultSet creditsS = stmt
+							.executeQuery("select credits from kc where courseID=" + request.getParameter("id"));
+
+					creditsS.next();
+					String credits = creditsS.getString("credits");
+					String score = s.getValue();
+
+					PreparedStatement selectPS = conn
+							.prepareStatement("select * from xs_kc where stuid=? and courseID=?");
+
+					selectPS.setString(1, s.getKey().replace("score_", ""));
+					selectPS.setString(2, request.getParameter("id"));
+
+					ResultSet selectRS = selectPS.executeQuery();
+
+					if (!selectRS.next()) {
+						if (s.getValue().isEmpty()) {
+							continue; // Do not do insert statement if the value is empty.
+						}
+
+						ps_i.setString(1, s.getKey().replace("score_", ""));
+						ps_i.setString(3, score);
+						ps_i.setString(4, credits);
+						ps_i.execute();
+
+						// out.print("<script>alert(\"I: " + ps_i.toString() + "\");</script>");
+					} else // In case the data was inserted (i.e exists).
 					{
-						ps_u.setString(1, score);
-						ps_u.setString(2, credits);
-						ps_u.setString(3, s.getKey().replace("score_", ""));
-						ps_u.setString(4, request.getParameter("id"));
-						ps_u.execute();
-						// out.print("<script>alert(\"U: " + ps_u.toString() + "\");</script>");
+						// s c i
+						if (s.getValue().isEmpty()) {
+							// "delete from xs_kc where stuid=? and courseID=?;"
+
+							ps_d.setString(1, s.getKey().replace("score_", ""));
+							ps_d.setString(2, request.getParameter("id"));
+							ps_d.execute();
+							// out.print("<script>alert(\"D: " + ps_d.toString() + "\");</script>");
+						} else {
+							ps_u.setString(1, score);
+							ps_u.setString(2, credits);
+							ps_u.setString(3, s.getKey().replace("score_", ""));
+							ps_u.setString(4, request.getParameter("id"));
+							ps_u.execute();
+							// out.print("<script>alert(\"U: " + ps_u.toString() + "\");</script>");
+						}
 					}
+
+					byte[] b = ("<script>alert(\"更新成绩成功!\"); opener = null; close();</script>").getBytes();
+					out.write(new String(b, "utf-8"));
 				}
 			}
-
-			out.print("<script>alert(\"更新成绩成功!\");window.opener = null; window.close();</script>");
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+	}
 
-		ResultSet rs = stmt.executeQuery("select * from xs;");   // Put here to query data in case the RS is closed.
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setHeader("Allow", "GET, HEAD, POST, OPTIONS");
+		request.setCharacterEncoding("utf-8");
+		response.setBufferSize(8192);
+		response.setContentType("text/html; charset=utf-8");
+
+		byte[] b = ("<p>测试 Test:" + request.getParameter("test") + "</p>").getBytes();
+
+		response.getWriter().print(new String(b, "utf-8"));
 	}
 }

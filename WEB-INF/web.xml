@@ -35,33 +35,43 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
 
+  <servlet>
+    <servlet-name>ScoreInfoProc</servlet-name>
+    <servlet-class>ac.adproj.scms.servlet.ScoreInfoServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ScoreInfoProc</servlet-name>
+    <url-pattern>/scoreM/infoProc</url-pattern>
+  </servlet-mapping>
+
   <context-param>
-	<param-name>driver</param-name>
-	<param-value>com.mysql.cj.jdbc.Driver</param-value>
+    <param-name>driver</param-name>
+    <param-value>com.mysql.cj.jdbc.Driver</param-value>
   </context-param>
 
   <context-param>
-	<param-name>serverAddr</param-name>
-	<param-value></param-value>
+    <param-name>serverAddr</param-name>
+    <param-value></param-value>
   </context-param>
 
   <context-param>
-	<param-name>serverTimeZone</param-name>
-	<param-value>Asia/Shanghai</param-value>
+    <param-name>serverTimeZone</param-name>
+    <param-value>Asia/Shanghai</param-value>
   </context-param>
 
   <context-param>
-	<param-name>db</param-name>
-	<param-value>xscj</param-value>
+    <param-name>db</param-name>
+    <param-value>xscj</param-value>
   </context-param>
 
   <context-param>
-	<param-name>userName</param-name>
-	<param-value></param-value>
+    <param-name>userName</param-name>
+    <param-value></param-value>
   </context-param>
 
   <context-param>
-	<param-name>password</param-name>
-	<param-value></param-value>
+    <param-name>password</param-name>
+    <param-value></param-value>
   </context-param>
 </web-app>

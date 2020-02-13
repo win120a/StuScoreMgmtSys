@@ -26,7 +26,7 @@ import javax.servlet.*;
 
 	@author Andy Cheung
 */
-public class DBDao
+public class DBDao implements AutoCloseable
 {
 	private Connection connectionI;
 
@@ -128,5 +128,11 @@ public class DBDao
 	public void delete(String sql, String... contents) throws SQLException
 	{
 		prepStmt(sql, contents).execute();
+	}
+
+	@Override
+	public void close() throws SQLException
+	{
+		connectionI.close();
 	}
 }
