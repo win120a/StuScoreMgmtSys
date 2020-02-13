@@ -29,6 +29,12 @@
      Student Score Enrolling System (ISA Assignment)
   </description>
 
+  <servlet>
+    <servlet-name>Init</servlet-name>
+    <servlet-class>ac.adproj.scms.servlet.InitServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
   <context-param>
 	<param-name>driver</param-name>
 	<param-value>com.mysql.cj.jdbc.Driver</param-value>

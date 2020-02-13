@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=utf-8" %>
-<%@ page import="ac.adproj.scms.dao.*, java.sql.*" %>
+<%@ page import="ac.adproj.scms.dao.*, java.sql.*, ac.adproj.scms.servlet.*" %>
 <%@ include file="WEB-INF/dbConfig.jsp" %>
 
 <!DOCTYPE html>
@@ -9,7 +9,9 @@
 </head>
 <body>
 	<%
-		DBDao daoO = new DBDao(driver, serverAddr, userName, password, serverTimeZone, db);
+		// DBDao daoO = new DBDao(driver, serverAddr, userName, password, serverTimeZone, db);
+
+		DBDao daoO = InitServlet.daoO;
 
 		ResultSet rs = daoO.query("select * from xs;");
 
