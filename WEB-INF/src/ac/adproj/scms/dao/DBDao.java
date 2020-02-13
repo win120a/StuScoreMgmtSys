@@ -37,7 +37,7 @@ public class DBDao
 	private String serverTimeZone;
 	private String db;
 
-	private static final String MYSQL_CONN_STRING_HEAD = "jdbc:mysql://";
+	private static final String ADDR_HEAD = "jdbc:mysql://";
 
 	public DBDao(String driver, String serverAddr, String userName, String password, String serverTimeZone, String db)
 	{
@@ -69,7 +69,7 @@ public class DBDao
 			p.put("password", password);
 			p.put("timezone", serverTimeZone);
 
-			String dbAddress = MYSQL_CONN_STRING_HEAD + serverAddr + "/";
+			String dbAddress = ADDR_HEAD + serverAddr + "/";
 
 			Connection conn = DriverManager.getConnection(dbAddress + db, p);
 
@@ -77,6 +77,21 @@ public class DBDao
 		}
 
 		return connectionI;
+	}
+
+	public String getDriverClassName()
+	{
+		return driver;
+	}
+
+	public String getDBName()
+	{
+		return db;
+	}
+
+	public String getServerTimeZone()
+	{
+		return serverTimeZone;
 	}
 
 	private PreparedStatement prepStmt(String sql, String... contents) throws SQLException
@@ -110,9 +125,8 @@ public class DBDao
 		return prepStmt(sql, contents).executeUpdate();
 	}
 
-	public int delete() throws SQLException
+	public void delete(String sql, String... contents) throws SQLException
 	{
-		throw new UnsupportedOperationException();
-		// return 0;
+		prepStmt(sql, contents).execute();
 	}
 }
