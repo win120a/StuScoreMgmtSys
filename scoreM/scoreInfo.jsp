@@ -16,98 +16,17 @@
 --%>
 
 <%@ page contentType="text/html; charset=utf-8" errorPage="../WEB-INF/errorPage.jsp" %>
-<%@ page import="java.util.Map, java.util.HashMap" %>
-<%@ include file="../WEB-INF/dbConn.jsp" %>
+<%@ page import="ac.adproj.scms.dao.*, ac.adproj.scms.servlet.*" %>
+<%@ page import="java.sql.*" %>
+
 <%@ include file="../WEB-INF/types.jsp" %>
 
 <%
+	DBDao daoO = InitServlet.daoO;
+	Connection conn = daoO.getConnection();
 	PreparedStatement ps = conn.prepareStatement("select score from xs_kc where stuid=? and courseID=?;");
-
-	PreparedStatement ps_u = conn.prepareStatement("update xs_kc set score=?, credit=? where stuid=?" +
-													"and courseID=?;");
-
-	// sID, cID, score, credit
-	PreparedStatement ps_i = conn.prepareStatement("insert into xs_kc values (?, ?, ?, ?);");
-
-	PreparedStatement ps_d = conn.prepareStatement("delete from xs_kc where stuid=? and courseID=?;");
-
 	ps.setString(2, request.getParameter("id"));
-	ps_i.setString(2, request.getParameter("id"));
-%>
-
-<%
-	String updateP = request.getParameter("update");
-
-	if (updateP != null && updateP.equals("1"))
-	{
-		Map<String, String[]> paramMap = request.getParameterMap();
-		Map<String, String> scoreMap = new HashMap<>(paramMap.size());
-
-		for (Map.Entry<String, String[]> s : paramMap.entrySet())
-		{
-			if (s.getKey().equals("update") || s.getKey().equals("id")) 
-				continue;
-			if (s.getKey().contains("score_")) 
-				scoreMap.put(s.getKey(), s.getValue()[0]);
-		}
-
-		for (Map.Entry<String, String> s : scoreMap.entrySet())  // "score_" + StuID, score
-		{
-			ResultSet creditsS = stmt.executeQuery("select credits from kc where courseID=" + 
-													request.getParameter("id"));
-			creditsS.next();
-			String credits =  creditsS.getString("credits");
-			String score = s.getValue();
-
-			PreparedStatement selectPS = conn.prepareStatement("select * from xs_kc where stuid=? and courseID=?");
-
-			selectPS.setString(1, s.getKey().replace("score_", ""));
-			selectPS.setString(2, request.getParameter("id"));
-
-			ResultSet selectRS = selectPS.executeQuery();
-
-			if (!selectRS.next())
-			{
-				if (s.getValue().isEmpty())
-				{
-					continue;   // Do not do insert statement if the value is empty.
-				}
-
-				ps_i.setString(1, s.getKey().replace("score_", ""));
-				ps_i.setString(3, score);
-				ps_i.setString(4, credits);
-				ps_i.execute();
-
-				// out.print("<script>alert(\"I: " + ps_i.toString() + "\");</script>");
-			}
-			else   // In case the data was inserted (i.e exists).
-			{
-				// s c i
-				if (s.getValue().isEmpty())
-				{
-					// "delete from xs_kc where stuid=? and courseID=?;"
-
-					ps_d.setString(1, s.getKey().replace("score_", ""));
-					ps_d.setString(2, request.getParameter("id"));
-					ps_d.execute();
-					// out.print("<script>alert(\"D: " + ps_d.toString() + "\");</script>");
-				}
-				else
-				{
-					ps_u.setString(1, score);
-					ps_u.setString(2, credits);
-					ps_u.setString(3, s.getKey().replace("score_", ""));
-					ps_u.setString(4, request.getParameter("id"));
-					ps_u.execute();
-					// out.print("<script>alert(\"U: " + ps_u.toString() + "\");</script>");
-				}
-			}
-		}
-
-		out.print("<script>alert(\"更新成绩成功!\");window.opener = null; window.close();</script>");
-	}
-
-	ResultSet rs = stmt.executeQuery("select * from xs;");   // Put here to query data in case the RS is closed.
+	ResultSet rs = daoO.query("select * from xs;");   // Put here to query data in case the RS is closed.
 %>
 
 <!DOCTYPE html>
@@ -127,7 +46,7 @@
 </head>
 <body>
 	<h1>学生成绩</h1>
-	<form action="" method="post">
+	<form action="infoProc" method="post">
 	<table class="T">  <%-- JSP Scriptlet that uses SQL Commands --%>
 		<%--
 			stuidname major gender birthdate totalCredits photo remark
@@ -173,6 +92,7 @@
 		</tr>
 	</table><br />
 	<input type="hidden" name="update" value="1" />
+	<input type="hidden" name="id" value='<%= request.getParameter("id") %>' />
 	<input type="submit" value="保存">
 	<input type="reset" value="恢复">
 	<input type="button" value="清空" onclick="clearBlanks();">
