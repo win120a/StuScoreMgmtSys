@@ -31,71 +31,8 @@
 </script>
 
 <%
-	request.setCharacterEncoding("utf-8");
-	String addP = request.getParameter("add");
-	String modP = request.getParameter("modify");
+
 	String type = request.getParameter("type");
-
-	if (addP != null && addP.equals("1"))
-	{
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("insert into xs values (\"");
-		builder.append(request.getParameter("id"));
-
-		builder.append("\", \"");
-
-		String name = request.getParameter("name");
-
-		builder.append(name);
-
-		builder.append("\", \"");
-		builder.append(request.getParameter("major"));
-		builder.append("\", \"");
-		builder.append(request.getParameter("gender"));
-		builder.append("\", \"");
-		builder.append(request.getParameter("dob"));
-		builder.append("\", ");
-		builder.append("0");
-		builder.append(", ");
-		builder.append("NULL");
-		builder.append(", \"");
-		builder.append(request.getParameter("remark"));
-		builder.append("\"");
-		builder.append(");");
-
-		// out.write("<script>alert('SQLS: " + builder.toString() + "');</script>");
-		stmt.execute(builder.toString());
-		%>
-		<script>
-			window.alert("添加成功！");
-			opener.location.reload();
-			window.opener = null;
-			window.close();
-		</script><%
-	}
-
-	if (modP != null && modP.equals("1"))
-	{
-		PreparedStatement ps = conn.prepareStatement("update xs set name=?, major=?, gender=?, birthdate=?, " + 
-														"remark=? where stuid=?;");
-														
-		ps.setString(1, request.getParameter("name"));
-		ps.setString(2, request.getParameter("major"));
-		ps.setString(3, request.getParameter("gender"));
-		ps.setString(4, request.getParameter("dob"));
-		ps.setString(5, request.getParameter("remark"));
-		ps.setString(6, request.getParameter("id"));
-
-		ps.execute();
-		%>
-		<script>
-			window.alert("修改成功！");
-			opener.location.reload();
-			window.opener = null;
-			window.close();
-		</script><%
-	}
 
 	if (TYPE_MODIFY.equals(type))
 	{
@@ -143,7 +80,7 @@
 	<meta charset="utf-8">
 </head>
 <body style="text-align : center;" onload="loadVars();">
-	<form action="" method="post">
+	<form action="infoProc" method="post">
 		<fieldset>
 			<legend>学生信息</legend>
 			
@@ -197,7 +134,7 @@
 				}
 			%>
 
-
+			<input type="hidden" name="id" value='<%= request.getParameter("id") %>'>
 			<input type="submit" id="submit" value="提交" />
 			<input type="reset" id="reset" value="重置" />
 			<%
