@@ -28,12 +28,12 @@ import javax.servlet.*;
 */	
 public class InitServlet extends HttpServlet
 {
-	String driver = "";
-	String serverAddr = "";
-	String userName = "";
-	String password = "";
-	String serverTimeZone = "";
-	String db = "";
+	private String driver = "";
+	private String serverAddr = "";
+	private String userName = "";
+	private String password = "";
+	private String serverTimeZone = "";
+	private String db = "";
 
 	public static DBDao daoO;
 

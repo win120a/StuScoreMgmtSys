@@ -27,53 +27,9 @@
 </script>
 
 <%
-	request.setCharacterEncoding("utf-8");
-	String addP = request.getParameter("add");
-	String modP = request.getParameter("modify");
 	String type = request.getParameter("type");
 
-	if(addP != null && addP.equals("1"))
-	{
-		PreparedStatement ps = conn.prepareStatement("insert into kc values (" + 
-													"?, ?, ?, ?, ?);");
-
-		ps.setString(1, request.getParameter("courseID"));
-		ps.setString(2, request.getParameter("courseName"));
-		ps.setString(3, request.getParameter("term"));
-		ps.setString(4, request.getParameter("courseHours"));
-		ps.setString(5, request.getParameter("credits"));
-
-		ps.execute();
-		%>
-		<script>
-			window.alert("添加成功！");
-			opener.location.reload();
-			window.opener = null;
-			window.close();
-		</script><%
-	}
-
-	if(modP != null && modP.equals("1"))
-	{
-		PreparedStatement ps = conn.prepareStatement("update kc set courseName=?, term=?, credits=?, " + 
-													"courseHours=? where courseID=?;");
-
-		ps.setString(1, request.getParameter("courseName"));
-		ps.setString(2, request.getParameter("term"));
-		ps.setString(3, request.getParameter("credits"));
-		ps.setString(4, request.getParameter("courseHours"));
-		//ps.setString(5, request.getParameter("courseID"));
-		ps.setString(5, request.getParameter("id"));
-
-		ps.execute();
-		%>
-		<script>
-			window.alert("修改成功！");
-			opener.location.reload();
-			window.opener = null;
-			window.close();
-		</script><%
-	}
+	request.setCharacterEncoding("utf-8");
 
 	if (TYPE_MODIFY.equals(type))
 	{
@@ -109,7 +65,7 @@
 	<meta charset="utf-8">
 </head>
 <body style="text-align : center;" onload="loadVars();">
-	<form action="" method="post">
+	<form action="infoProc" method="post">
 		<fieldset>
 			<legend>课程信息</legend>
 			
@@ -155,7 +111,7 @@
 				}
 			%>
 
-
+			<input type="hidden" name="id" value='<%= request.getParameter("id") %>'>
 			<input type="submit" id="submit" value="提交" />
 			<input type="reset" id="reset" value="重置" />
 				<%

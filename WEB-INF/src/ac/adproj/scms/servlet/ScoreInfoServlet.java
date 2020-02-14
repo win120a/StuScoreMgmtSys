@@ -34,8 +34,7 @@ public class ScoreInfoServlet extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
 
-		try {
-			DBDao daoO = InitServlet.daoO;
+		try (DBDao daoO = InitServlet.daoO) {
 
 			Connection conn = daoO.getConnection();
 
@@ -96,8 +95,7 @@ public class ScoreInfoServlet extends HttpServlet {
 						ps_i.execute();
 
 						// out.print("<script>alert(\"I: " + ps_i.toString() + "\");</script>");
-					} else // In case the data was inserted (i.e exists).
-					{
+					} else { // In case the data was inserted (i.e exists).
 						// s c i
 						if (s.getValue().isEmpty()) {
 							// "delete from xs_kc where stuid=? and courseID=?;"
@@ -133,7 +131,7 @@ public class ScoreInfoServlet extends HttpServlet {
 		response.setBufferSize(8192);
 		response.setContentType("text/html; charset=utf-8");
 
-		byte[] b = ("<p>测试 Test:" + request.getParameter("test") + "</p>").getBytes();
+		byte[] b = ("<p>测试1 Test:" + request.getParameter("test") + "</p>").getBytes();
 
 		response.getWriter().print(new String(b, "utf-8"));
 	}
