@@ -45,6 +45,26 @@
     <url-pattern>/scoreM/infoProc</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>SubInfoProcServlet</servlet-name>
+    <servlet-class>ac.adproj.scms.servlet.SubInfoProcServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SubInfoProcServlet</servlet-name>
+    <url-pattern>/subM/infoProc</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>StuInfoProcServlet</servlet-name>
+    <servlet-class>ac.adproj.scms.servlet.StuInfoProcServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>StuInfoProcServlet</servlet-name>
+    <url-pattern>/stuM/infoProc</url-pattern>
+  </servlet-mapping>
+
   <context-param>
     <param-name>driver</param-name>
     <param-value>com.mysql.cj.jdbc.Driver</param-value>
