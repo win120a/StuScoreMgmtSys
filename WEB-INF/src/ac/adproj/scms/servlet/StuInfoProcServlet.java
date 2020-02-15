@@ -115,7 +115,7 @@ public class StuInfoProcServlet extends HttpServlet {
 				// byte[] pictB = getUploadedFile(request, "headSet", daoO);
 				DataWrap pictW = formContents.get("headSet");
 				
-				if (pictW != null)
+				if (pictW != null && ((byte[]) pictW.object).length != 0)
 				{
 					byte[] pictB = (byte[]) formContents.get("headSet").object;
 					ps_p.setBlob(1, new SerialBlob(pictB));
