@@ -8,6 +8,7 @@ GPLv3
 # Third-party Code Credits
 1. This program uses MySQL Connector/J 8.0 with no code altered (GPLv2). <br />
 2. `.gitignore` is based on `Java.gitignore` in https://github.com/github/gitignore, which is licensed under Creative Commons Zero v1.0 Universal License (CC0-1.0).
+3. `WEB-INF/lib/commons-fileupload-1.4.jar` and `WEB-INF/lib/commons-io-2.6.jar` are files of the Apache Commons Project (http://commons.apache.org/), which are licensed under Apache License.
 
 # Structure
 1. The Servelet Part of this project (a.k.a. WEB-INF/src and WEB-INF/classes) is an Ant project.

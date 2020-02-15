@@ -70,7 +70,7 @@
     <servlet-name>StuInfoProcServlet</servlet-name>
     <url-pattern>/stuM/infoProc</url-pattern>
   </servlet-mapping>
-
+  
 
   <servlet>
     <servlet-name>PhotoServlet</servlet-name>
@@ -92,7 +92,7 @@
 
   <context-param>
     <param-name>serverAddr</param-name>
-    <param-value></param-value>
+    <param-value>192.168.1.110</param-value>
   </context-param>
 
   <context-param>
@@ -107,11 +107,11 @@
 
   <context-param>
     <param-name>userName</param-name>
-    <param-value></param-value>
+    <param-value>remoteA</param-value>
   </context-param>
 
   <context-param>
     <param-name>password</param-name>
-    <param-value></param-value>
+    <param-value>1</param-value>
   </context-param>
 </web-app>
