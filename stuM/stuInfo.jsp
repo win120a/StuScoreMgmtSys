@@ -76,15 +76,42 @@
 		{
 			padding-right : 50px;
 		}
+
+		.paneLeft, .paneRight
+		{
+			float : left;
+		}
+
+		.photo
+		{
+			width: 70px;
+			height : 95px;
+		}
+
+		#remarkLabel::before
+		{
+			content : "";
+			height : 0;
+			line-height : 0;
+			visibility: hidden;
+			clear : both;
+			display: block;
+		}
+
+		#remarkLabel
+		{
+			display: block;
+			text-align: center;
+		}
 	</style>
 	<meta charset="utf-8">
 </head>
 <body style="text-align : center;" onload="loadVars();">
-	<form action="infoProc" method="post">
+	<form action="infoProc" method="post" enctype="multipart/form-data">
 		<fieldset>
 			<legend>学生信息</legend>
 			
-			<table>
+			<table class="paneLeft">
 				<tr>
 					<td>
 						<label for="name">姓名：</label>
@@ -116,11 +143,19 @@
 						<label for="major">专业：</label>
 						<input type="text" name="major" id="major" required>&nbsp;
 					</td>
+
+					<td>
+						<label for="major">头像：</label>
+						<input type="file" name="headSet" id="headSet" style="width : 150px" accept="image/*">&nbsp;
+					</td>
 				</tr>
 			</table>
-						
 
-			<label for="remark">备注：</label><br />
+			<div class="paneRight">
+				<img src='../stuPhoto.png?id=${param.id}' class="photo" />
+			</div>
+
+			<label for="remark" id="remarkLabel">备注：</label><br />
 			<textarea name="remark" id="remark" cols="80" rows="20"></textarea>
 
 			<%
@@ -134,7 +169,7 @@
 				}
 			%>
 
-			<input type="hidden" name="id" value='<%= request.getParameter("id") %>'>
+			<input type="hidden" name="id" value='${param.id}'>
 			<input type="submit" id="submit" value="提交" />
 			<input type="reset" id="reset" value="重置" />
 			<%

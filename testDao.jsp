@@ -29,6 +29,12 @@
 
 		ps.executeUpdate();
 		*/
+
+		ServletContext ctx = getServletContext();
+
+		out.write(ctx.getContextPath());
+		out.write(ctx.getRealPath("/images/none.png"));
+
 	%>
 </body>
 </html>

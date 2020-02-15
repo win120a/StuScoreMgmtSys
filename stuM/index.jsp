@@ -77,7 +77,7 @@
 	<script>
 		function openDialog(url)
 		{
-			window.open(url, "info", "width=670 height=520 left=300 top=50");
+			window.open(url, "info", "width=690 height=520 left=300 top=50");
 		}
 	</script>
 </head>

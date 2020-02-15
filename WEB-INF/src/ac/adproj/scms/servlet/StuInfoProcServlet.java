@@ -24,6 +24,8 @@ import java.io.Writer;
 import java.sql.*;
 import java.util.*;
 
+import javax.sql.rowset.serial.*;
+
 import ac.adproj.scms.dao.*;
 
 public class StuInfoProcServlet extends HttpServlet {
@@ -88,6 +90,8 @@ public class StuInfoProcServlet extends HttpServlet {
 				PreparedStatement ps = conn.prepareStatement(
 						"update xs set name=?, major=?, gender=?, birthdate=?, " + "remark=? where stuid=?;");
 
+				PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
+
 				ps.setString(1, request.getParameter("name"));
 				ps.setString(2, request.getParameter("major"));
 				ps.setString(3, request.getParameter("gender"));
@@ -96,6 +100,15 @@ public class StuInfoProcServlet extends HttpServlet {
 				ps.setString(6, request.getParameter("id"));
 
 				ps.execute();
+
+				byte[] pictB = getUploadedFile(request, "headSet", daoO);
+
+				if (pictB[0] != -1)
+				{
+					ps_p.setBlob(1, new SerialBlob(pictB));
+					ps_p.setString(2, request.getParameter("id"));
+					ps_p.execute();
+				}
 
 				out.write("<script>");
 
@@ -124,5 +137,18 @@ public class StuInfoProcServlet extends HttpServlet {
 		byte[] b = ("<p>测试 Test:" + request.getParameter("test") + "</p>").getBytes();
 
 		response.getWriter().print(new String(b, "utf-8"));
+	}
+
+	private byte[] getUploadedFile(HttpServletRequest request, String name, DBDao daoO) throws IOException, ServletException
+	{
+		Part p = request.getPart("name");
+
+		byte[] buffer = (p == null) ? new byte[1] : p.getInputStream().readAllBytes();
+
+		byte n = buffer[0];
+
+		buffer[0] = (p != null) ? n : -1;
+
+		return buffer;
 	}
 }

@@ -31,7 +31,7 @@ public class StudentPhotoServlet extends HttpServlet
 	private static final String QUERY_SQL = "select photo as p from xs where stuid=?;";
 
 	@Override
-	public void service(ServletRequest request, ServletResponse response) throws IOException
+	public void service(HttpServletRequest request, HttpServletResponse response)
 	{
 		String id = request.getParameter("id");
 
@@ -52,16 +52,27 @@ public class StudentPhotoServlet extends HttpServlet
 
 			Blob photoO = resSet.getBlob("p");
 
-			InputStream photoS = photoO.getBinaryStream();
-
-			byte[] buffer = photoS.readAllBytes();
+			// FileInputStream fis = new FileInputStream();
 
 			/*    Send Response     */
 
-			response.setContentType("image/png");
-			response.getOutputStream().write(buffer);
+			if (photoO == null)
+			{
+				ServletContext ctx = getServletContext();
+				String rPath = ctx.getRealPath("/images/none.png");
+				FileInputStream photoS = new FileInputStream(new File(rPath));
+				byte[] buffer = photoS.readAllBytes();
+				response.getOutputStream().write(buffer);
+			}
+			else
+			{	
+				InputStream photoS = photoO.getBinaryStream();
+				byte[] buffer = photoS.readAllBytes();
+				response.setContentType("image/png");
+				response.getOutputStream().write(buffer);
+			}
 		}
-		catch (SQLException e)
+		catch (SQLException | IOException e)
 		{
 			e.printStackTrace();
 		}
