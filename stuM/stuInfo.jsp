@@ -152,7 +152,7 @@
 			</table>
 
 			<div class="paneRight">
-				<img src='../stuPhoto.png?id=${param.id}' class="photo" />
+				<img src='../stuPhoto.png?id=${param.id}' class="photo" title="当前头像" />
 			</div>
 
 			<label for="remark" id="remarkLabel">备注：</label><br />
@@ -165,11 +165,11 @@
 				}
 				else if(type.equals(TYPE_MODIFY))
 				{ %>
+					<input type="hidden" name="id" value='${param.id}'>
 					<input type="hidden" name="modify" value="1"><br /><br /><%
 				}
 			%>
 
-			<input type="hidden" name="id" value='${param.id}'>
 			<input type="submit" id="submit" value="提交" />
 			<input type="reset" id="reset" value="重置" />
 			<%

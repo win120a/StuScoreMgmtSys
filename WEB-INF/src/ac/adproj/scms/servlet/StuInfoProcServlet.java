@@ -58,33 +58,28 @@ public class StuInfoProcServlet extends HttpServlet {
 			String type = getStringParameter("type", formContents);
 
 			if (addP != null && addP.equals("1")) {
-				StringBuilder builder = new StringBuilder();
+				// id name major gender dob totalCredits(=0) photo remark
+				PreparedStatement ps_a = conn.prepareStatement("insert into xs values (?, ?, ?, ?, ?, ?, NULL, ?);");
 
-				builder.append("insert into xs values (\"");
-				builder.append(getStringParameter("id", formContents));
+				ps_a.setString(1, getStringParameter("id", formContents));
+				ps_a.setString(2, getStringParameter("name", formContents));
+				ps_a.setString(3, getStringParameter("major", formContents));
+				ps_a.setString(4, getStringParameter("gender", formContents));
+				ps_a.setString(5, getStringParameter("dob", formContents));
+				ps_a.setString(6, "0");
 
-				builder.append("\", \"");
+				ps_a.setString(7, getStringParameter("remark", formContents));
 
-				String name = getStringParameter("name", formContents);
+				// System.err.println(ps_a.toString());
 
-				builder.append(name);
+				ps_a.execute();
 
-				builder.append("\", \"");
-				builder.append(getStringParameter("major", formContents));
-				builder.append("\", \"");
-				builder.append(getStringParameter("gender", formContents));
-				builder.append("\", \"");
-				builder.append(getStringParameter("dob", formContents));
-				builder.append("\", ");
-				builder.append("0");
-				builder.append(", ");
-				builder.append("NULL");
-				builder.append(", \"");
-				builder.append(getStringParameter("remark", formContents));
-				builder.append("\"");
-				builder.append(");");
+				DataWrap pictW = formContents.get("headSet");
 
-				stmt.execute(builder.toString());
+				if (pictW != null && ((byte[]) pictW.object).length != 0)
+				{
+					updatePhoto(conn, getStringParameter("id", formContents), pictW);
+				}
 
 				out.write("<script>");
 
@@ -117,10 +112,7 @@ public class StuInfoProcServlet extends HttpServlet {
 				
 				if (pictW != null && ((byte[]) pictW.object).length != 0)
 				{
-					byte[] pictB = (byte[]) formContents.get("headSet").object;
-					ps_p.setBlob(1, new SerialBlob(pictB));
-					ps_p.setString(2, getStringParameter("id", formContents));
-					ps_p.execute();
+					updatePhoto(conn, getStringParameter("id", formContents), pictW);
 				}
 
 				out.write("<script>");
@@ -136,6 +128,22 @@ public class StuInfoProcServlet extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			// response.sendRedirect("/META-INF/errorPage.jsp");
+		}
+	}
+
+	private void updatePhoto(Connection conn, String id, DataWrap pictW) throws SQLException
+	{
+		PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
+		if (pictW != null && (!pictW.isFormField()) && ((byte[]) pictW.object).length != 0)
+		{
+			byte[] pictB = (byte[]) pictW.object;
+			ps_p.setBlob(1, new SerialBlob(pictB));
+			ps_p.setString(2, id);
+			ps_p.execute();
+		}
+		else
+		{
+			throw new IllegalArgumentException();
 		}
 	}
 

@@ -37,6 +37,12 @@ public class StudentPhotoServlet extends HttpServlet
 
 		try (DBDao daoO = InitServlet.daoO)
 		{
+
+			if (id == null || id.equals(""))
+			{
+				sendNone(response);
+			}
+
 			/*     Get the photo file    */
 			Connection conn = daoO.getConnection();
 
@@ -58,11 +64,7 @@ public class StudentPhotoServlet extends HttpServlet
 
 			if (photoO == null)
 			{
-				ServletContext ctx = getServletContext();
-				String rPath = ctx.getRealPath("/images/none.png");
-				FileInputStream photoS = new FileInputStream(new File(rPath));
-				byte[] buffer = photoS.readAllBytes();
-				response.getOutputStream().write(buffer);
+				sendNone(response);
 			}
 			else
 			{	
@@ -76,5 +78,14 @@ public class StudentPhotoServlet extends HttpServlet
 		{
 			e.printStackTrace();
 		}
+	}
+
+	private void sendNone(HttpServletResponse response) throws IOException
+	{
+		ServletContext ctx = getServletContext();
+		String rPath = ctx.getRealPath("/images/none.png");
+		FileInputStream photoS = new FileInputStream(new File(rPath));
+		byte[] buffer = photoS.readAllBytes();
+		response.getOutputStream().write(buffer);
 	}
 }
