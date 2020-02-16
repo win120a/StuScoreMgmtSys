@@ -60,27 +60,3 @@
 	}
 
 %>
-
-<%!
-	private void getParameters(HttpServletRequest request)
-	{
-		driver = (String) request.getParameter("driver");
-		driver = driver != null ? (String) driver : "";
-
-		serverAddr = (String) request.getParameter("serverAddr");
-		serverAddr = driver != null ? (String) serverAddr : "";
-
-		userName = (String) request.getParameter("userName");
-		configured = Boolean.parseBoolean((String) request.getParameter("configured"));
-		userName = userName != null ? (String) userName : "";
-
-		password = (String) request.getParameter("password");
-		password = password != null ? (String) password : "";
-
-		serverTimeZone = (String) request.getParameter("serverTimeZone");
-		serverTimeZone = serverTimeZone != null ? (String) serverTimeZone : "";
-
-		db = (String) request.getParameter("db");
-		db = db != null ? (String) db : "";
-	}
-%>

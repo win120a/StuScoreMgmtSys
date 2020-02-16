@@ -15,28 +15,11 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 --%>
 
-<%@ page import="java.util.Date, java.util.Properties" %>    <%-- Use commas to import multiple classes. --%>
-<%@ page import="java.sql.*" %>     <%-- Equals to the import statements. --%>
-
-<%@ include file="./dbConfig.jsp" %>
+<%@ page import="java.util.Properties, ac.adproj.scms.dao.DBDao, ac.adproj.scms.servlet.InitServlet" %>
+<%@ page import="java.sql.*" %>
 
 <%
-	try
-	{
-		Class.forName(driver);
-	}
-	catch(ClassNotFoundException cnfe)
-	{
-		cnfe.printStackTrace();
-	}
-%>
-
-<%
-	Properties p = new Properties();
-	p.put("user", userName);
-	p.put("password", password);
-	p.put("timezone", serverTimeZone);
-	Connection conn = DriverManager.getConnection(configured ? "jdbc:mysql://" + serverAddr + "/" + db : 
-													"jdbc:mysql://" + serverAddr + "/" , p);
+	DBDao daoO = InitServlet.daoO;
+	Connection conn = daoO.getConnection();
 	Statement stmt = conn.createStatement();
 %>
