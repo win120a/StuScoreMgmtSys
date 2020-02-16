@@ -29,11 +29,15 @@
      Student Score Enrolling System (ISA Assignment)
   </description>
 
+
+  <!-- Servlet Configurations -->
+
   <servlet>
     <servlet-name>Init</servlet-name>
     <servlet-class>ac.adproj.scms.servlet.InitServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
+
 
   <servlet>
     <servlet-name>ScoreInfoProc</servlet-name>
@@ -45,6 +49,7 @@
     <url-pattern>/scoreM/infoProc</url-pattern>
   </servlet-mapping>
 
+
   <servlet>
     <servlet-name>SubInfoProcServlet</servlet-name>
     <servlet-class>ac.adproj.scms.servlet.SubInfoProcServlet</servlet-class>
@@ -55,6 +60,7 @@
     <url-pattern>/subM/infoProc</url-pattern>
   </servlet-mapping>
 
+
   <servlet>
     <servlet-name>StuInfoProcServlet</servlet-name>
     <servlet-class>ac.adproj.scms.servlet.StuInfoProcServlet</servlet-class>
@@ -64,6 +70,20 @@
     <servlet-name>StuInfoProcServlet</servlet-name>
     <url-pattern>/stuM/infoProc</url-pattern>
   </servlet-mapping>
+  
+
+  <servlet>
+    <servlet-name>PhotoServlet</servlet-name>
+    <servlet-class>ac.adproj.scms.servlet.StudentPhotoServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>PhotoServlet</servlet-name>
+    <url-pattern>/stuPhoto.png</url-pattern>
+  </servlet-mapping>
+
+
+  <!-- Context (Application) Configurations -->
 
   <context-param>
     <param-name>driver</param-name>
@@ -72,7 +92,7 @@
 
   <context-param>
     <param-name>serverAddr</param-name>
-    <param-value></param-value>
+    <param-value>192.168.1.110</param-value>
   </context-param>
 
   <context-param>
@@ -87,11 +107,11 @@
 
   <context-param>
     <param-name>userName</param-name>
-    <param-value></param-value>
+    <param-value>remoteA</param-value>
   </context-param>
 
   <context-param>
     <param-name>password</param-name>
-    <param-value></param-value>
+    <param-value>1</param-value>
   </context-param>
 </web-app>

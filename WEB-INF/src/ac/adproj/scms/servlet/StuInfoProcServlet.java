@@ -19,10 +19,20 @@ package ac.adproj.scms.servlet;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+
+import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.sql.*;
 import java.util.*;
+
+import javax.sql.rowset.serial.*;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import ac.adproj.scms.dao.*;
 
@@ -30,6 +40,9 @@ public class StuInfoProcServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		Map<String, DataWrap> formContents = getFormContents(request);
+		
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
@@ -40,38 +53,33 @@ public class StuInfoProcServlet extends HttpServlet {
 			Statement stmt = conn.createStatement();
 
 			request.setCharacterEncoding("utf-8");
-			String addP = request.getParameter("add");
-			String modP = request.getParameter("modify");
-			String type = request.getParameter("type");
+			String addP = getStringParameter("add", formContents);
+			String modP = getStringParameter("modify", formContents);
+			String type = getStringParameter("type", formContents);
 
 			if (addP != null && addP.equals("1")) {
-				StringBuilder builder = new StringBuilder();
+				// id name major gender dob totalCredits(=0) photo remark
+				PreparedStatement ps_a = conn.prepareStatement("insert into xs values (?, ?, ?, ?, ?, ?, NULL, ?);");
 
-				builder.append("insert into xs values (\"");
-				builder.append(request.getParameter("id"));
+				ps_a.setString(1, getStringParameter("id", formContents));
+				ps_a.setString(2, getStringParameter("name", formContents));
+				ps_a.setString(3, getStringParameter("major", formContents));
+				ps_a.setString(4, getStringParameter("gender", formContents));
+				ps_a.setString(5, getStringParameter("dob", formContents));
+				ps_a.setString(6, "0");
 
-				builder.append("\", \"");
+				ps_a.setString(7, getStringParameter("remark", formContents));
 
-				String name = request.getParameter("name");
+				// System.err.println(ps_a.toString());
 
-				builder.append(name);
+				ps_a.execute();
 
-				builder.append("\", \"");
-				builder.append(request.getParameter("major"));
-				builder.append("\", \"");
-				builder.append(request.getParameter("gender"));
-				builder.append("\", \"");
-				builder.append(request.getParameter("dob"));
-				builder.append("\", ");
-				builder.append("0");
-				builder.append(", ");
-				builder.append("NULL");
-				builder.append(", \"");
-				builder.append(request.getParameter("remark"));
-				builder.append("\"");
-				builder.append(");");
+				DataWrap pictW = formContents.get("headSet");
 
-				stmt.execute(builder.toString());
+				if (pictW != null && ((byte[]) pictW.object).length != 0)
+				{
+					updatePhoto(conn, getStringParameter("id", formContents), pictW);
+				}
 
 				out.write("<script>");
 
@@ -88,14 +96,24 @@ public class StuInfoProcServlet extends HttpServlet {
 				PreparedStatement ps = conn.prepareStatement(
 						"update xs set name=?, major=?, gender=?, birthdate=?, " + "remark=? where stuid=?;");
 
-				ps.setString(1, request.getParameter("name"));
-				ps.setString(2, request.getParameter("major"));
-				ps.setString(3, request.getParameter("gender"));
-				ps.setString(4, request.getParameter("dob"));
-				ps.setString(5, request.getParameter("remark"));
-				ps.setString(6, request.getParameter("id"));
+				PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
+
+				ps.setString(1, getStringParameter("name", formContents));
+				ps.setString(2, getStringParameter("major", formContents));
+				ps.setString(3, getStringParameter("gender", formContents));
+				ps.setString(4, getStringParameter("dob", formContents));
+				ps.setString(5, getStringParameter("remark", formContents));
+				ps.setString(6, getStringParameter("id", formContents));
 
 				ps.execute();
+
+				// byte[] pictB = getUploadedFile(request, "headSet", daoO);
+				DataWrap pictW = formContents.get("headSet");
+				
+				if (pictW != null && ((byte[]) pictW.object).length != 0)
+				{
+					updatePhoto(conn, getStringParameter("id", formContents), pictW);
+				}
 
 				out.write("<script>");
 
@@ -113,6 +131,22 @@ public class StuInfoProcServlet extends HttpServlet {
 		}
 	}
 
+	private void updatePhoto(Connection conn, String id, DataWrap pictW) throws SQLException
+	{
+		PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
+		if (pictW != null && (!pictW.isFormField()) && ((byte[]) pictW.object).length != 0)
+		{
+			byte[] pictB = (byte[]) pictW.object;
+			ps_p.setBlob(1, new SerialBlob(pictB));
+			ps_p.setString(2, id);
+			ps_p.execute();
+		}
+		else
+		{
+			throw new IllegalArgumentException();
+		}
+	}
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -124,5 +158,75 @@ public class StuInfoProcServlet extends HttpServlet {
 		byte[] b = ("<p>测试 Test:" + request.getParameter("test") + "</p>").getBytes();
 
 		response.getWriter().print(new String(b, "utf-8"));
+	}
+
+	private static class DataWrap {
+		private Object object;
+		private boolean formField;
+
+		public Object getObject() {
+			return object;
+		}
+
+		public boolean isFormField() {
+			return formField;
+		}
+
+		public DataWrap(Object object, boolean formField) {
+			super();
+			this.object = object;
+			this.formField = formField;
+		}
+	}
+	
+	private String getStringParameter(String key, Map<String, DataWrap> formContents)
+	{
+		if (formContents.get(key) == null)
+			return null;
+		
+		if (!formContents.get(key).formField)
+			throw new IllegalArgumentException();
+		
+		return (String) formContents.get(key).getObject();
+	}
+
+	private Map<String, DataWrap> getFormContents(HttpServletRequest request) throws UnsupportedEncodingException {
+		HashMap<String, DataWrap> contents = new HashMap<String, DataWrap>();
+		
+		if(!ServletFileUpload.isMultipartContent(request))
+			throw new IllegalArgumentException();
+
+		// Create a factory for disk-based file items
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+
+		// Configure a repository (to ensure a secure temp location is used)
+		ServletContext servletContext = this.getServletConfig().getServletContext();
+		File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
+		factory.setRepository(repository);
+
+		// Create a new file upload handler
+		ServletFileUpload upload = new ServletFileUpload(factory);
+
+		// Parse the request
+		try {
+			List<FileItem> items = upload.parseRequest(request);
+
+			for (FileItem fi : items) {
+				if (fi.isFormField()) {
+					DataWrap dw = new DataWrap(fi.getString("utf-8"), true);
+					contents.put(fi.getFieldName(), dw);
+				}
+				else
+				{
+					DataWrap dw = new DataWrap(fi.get(), false);
+					contents.put(fi.getFieldName(), dw);
+				}
+			}
+		} catch (FileUploadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return contents;
 	}
 }
