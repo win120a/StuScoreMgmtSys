@@ -82,6 +82,16 @@
     <url-pattern>/stuPhoto.png</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>StuListProcServlet</servlet-name>
+    <servlet-class>ac.adproj.scms.servlet.stuM.StuListProcServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>StuListProcServlet</servlet-name>
+    <url-pattern>/stuM/listProc</url-pattern>
+  </servlet-mapping>
+
 
   <!-- Context (Application) Configurations -->
 

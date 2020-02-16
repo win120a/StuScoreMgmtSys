@@ -21,51 +21,6 @@
 <%@ include file="../WEB-INF/types.jsp" %>
 
 <%
-	PreparedStatement ps = conn.prepareStatement("delete from xs where xs.stuid = ?;");
-	String delF = request.getParameter("del");
-	StringBuilder undoneMessageBuilder = new StringBuilder();
-	undoneMessageBuilder.append("如下学生由于此前输入了成绩，不能删除。\\n\\n学号：\\n");
-	boolean notFullyDel = false;
-
-	if (delF != null)
-	{
-		Map<String, String[]> paramMap = request.getParameterMap();
-		HashSet<String> delKeys = new HashSet<>();
-
-		for(Map.Entry<String, String[]> s : paramMap.entrySet())
-		{
-			if (s.getKey().equals("del")) 
-				continue;
-			if (s.getValue()[0].toLowerCase().equals("on"))
-				delKeys.add(s.getKey());
-			// out.print("K: " + s.getKey() + "  V: " + s.getValue()[0] + "\n");
-		}
-
-		// out.print("\n\n\n");
-
-		// out.print("DK:  ");
-
-		for(String s : delKeys)
-		{
-			ps.setString(1, s);
-			try
-			{
-				ps.execute();
-			}
-			catch(java.sql.SQLIntegrityConstraintViolationException sicve)
-			{
-				notFullyDel = true;
-				undoneMessageBuilder.append(s);
-				undoneMessageBuilder.append("\\n");
-			}
-		}
-
-		if(notFullyDel)
-		{
-			out.write("<script>alert(\"" + undoneMessageBuilder.toString() + "\");</script>");
-		}
-	}
-
 	ResultSet rs = stmt.executeQuery("select * from xs;");   // Put here to query data after the delete process.
 %>
 
@@ -83,7 +38,7 @@
 </head>
 <body>
 	<h1>学生管理</h1>
-	<form action="" method="post">
+	<form action="listProc" method="post">
 	<table class="T">  <%-- JSP Scriptlet that uses SQL Commands --%>
 		<%--
 			stuidname major gender birthdate totalCredits photo remark
@@ -179,8 +134,9 @@
 				while (rs.next())
 				{
 					%><td>
-						删除? 
-						<input name='<%= rs.getString("stuid") %>' type="checkbox" class="del"><br />
+						<label for='score_<%= rs.getString("stuid") %>'>删除? </label>
+						<input name='<%= rs.getString("stuid") %>' type="checkbox" class="del"
+							id='score_<%= rs.getString("stuid") %>'><br />
 						<a href='javascript:void(0);'
 							onclick='openDialog("<%= reqS %><%= rs.getString("stuid")%>");'>编辑</a>
 					</td><%
