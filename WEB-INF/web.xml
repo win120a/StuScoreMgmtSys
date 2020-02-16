@@ -92,6 +92,16 @@
     <url-pattern>/stuM/listProc</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>SubjectListProcServlet</servlet-name>
+    <servlet-class>ac.adproj.scms.servlet.subM.SubjectListProcServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SubjectListProcServlet</servlet-name>
+    <url-pattern>/subM/listProc</url-pattern>
+  </servlet-mapping>
+
 
   <!-- Context (Application) Configurations -->
 
