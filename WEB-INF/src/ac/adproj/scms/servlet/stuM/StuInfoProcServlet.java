@@ -15,7 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet;
+package ac.adproj.scms.servlet.stuM;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -35,7 +35,13 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import ac.adproj.scms.dao.*;
+import ac.adproj.scms.servlet.InitServlet;
 
+/**
+	The student info's processing Servlet. (a.k.a /stuM/infoProc)
+
+	@author Andy Cheung
+*/
 public class StuInfoProcServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -160,6 +166,11 @@ public class StuInfoProcServlet extends HttpServlet {
 		response.getWriter().print(new String(b, "utf-8"));
 	}
 
+	/**
+		A simple Data Wrapper class to wrap a form entry.
+
+		@author Andy Cheung
+	*/
 	private static class DataWrap {
 		private Object object;
 		private boolean formField;
@@ -179,6 +190,11 @@ public class StuInfoProcServlet extends HttpServlet {
 		}
 	}
 	
+	/**
+		Get a form field value in the pre-generated formContents from getFormContents(HttpServletRequest);
+
+		@author Andy Cheung
+	*/
 	private String getStringParameter(String key, Map<String, DataWrap> formContents)
 	{
 		if (formContents.get(key) == null)
@@ -190,6 +206,11 @@ public class StuInfoProcServlet extends HttpServlet {
 		return (String) formContents.get(key).getObject();
 	}
 
+	/**
+		Core method to gather the multipart/form-data form's data.
+
+		@author Andy Cheung
+	*/
 	private Map<String, DataWrap> getFormContents(HttpServletRequest request) throws UnsupportedEncodingException {
 		HashMap<String, DataWrap> contents = new HashMap<String, DataWrap>();
 		

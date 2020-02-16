@@ -15,7 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet;
+package ac.adproj.scms.servlet.subM;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -25,6 +25,7 @@ import java.sql.*;
 import java.util.*;
 
 import ac.adproj.scms.dao.*;
+import ac.adproj.scms.servlet.InitServlet;
 
 public class SubInfoProcServlet extends HttpServlet {
 	@Override
@@ -81,6 +82,8 @@ public class SubInfoProcServlet extends HttpServlet {
 
 				byte[] b = ("window.alert('修改成功! ');").getBytes();
 				out.write(new String(b, "utf-8"));
+
+				// out.write("window.alert('修改成功! ');");
 
 				out.write("opener.location.reload();");
 				out.write("window.opener = null;");

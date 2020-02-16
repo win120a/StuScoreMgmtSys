@@ -41,7 +41,7 @@
 
   <servlet>
     <servlet-name>ScoreInfoProc</servlet-name>
-    <servlet-class>ac.adproj.scms.servlet.ScoreInfoServlet</servlet-class>
+    <servlet-class>ac.adproj.scms.servlet.scoreM.ScoreInfoServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -52,7 +52,7 @@
 
   <servlet>
     <servlet-name>SubInfoProcServlet</servlet-name>
-    <servlet-class>ac.adproj.scms.servlet.SubInfoProcServlet</servlet-class>
+    <servlet-class>ac.adproj.scms.servlet.subM.SubInfoProcServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -63,7 +63,7 @@
 
   <servlet>
     <servlet-name>StuInfoProcServlet</servlet-name>
-    <servlet-class>ac.adproj.scms.servlet.StuInfoProcServlet</servlet-class>
+    <servlet-class>ac.adproj.scms.servlet.stuM.StuInfoProcServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
