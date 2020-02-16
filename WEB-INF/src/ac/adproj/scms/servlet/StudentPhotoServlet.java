@@ -38,9 +38,10 @@ public class StudentPhotoServlet extends HttpServlet
 		try (DBDao daoO = InitServlet.daoO)
 		{
 
-			if (id == null || id.equals(""))
+			if (id == null || id.isEmpty())
 			{
 				sendNone(response);
+				return;
 			}
 
 			/*     Get the photo file    */
