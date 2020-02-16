@@ -17,6 +17,7 @@
 
 <%@ page contentType="text/html; charset=utf-8" errorPage="errorPage.jsp" %>
 <%@ include file="dbConn.jsp" %>
+<%@ include file="dbConfig.jsp" %>
 
 <%
 	// getParameters(request);

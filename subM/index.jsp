@@ -21,55 +21,6 @@
 <%@ include file="../WEB-INF/types.jsp" %>
 
 <%
-	PreparedStatement ps = conn.prepareStatement("delete from kc where kc.courseID = ?;");
-	String delF = request.getParameter("del");
-	StringBuilder undoneMessageBuilder = new StringBuilder();
-	undoneMessageBuilder.append("如下课程由于此前输入了成绩，不能删除。\\n\\n课程号：\\n");
-	boolean notFullyDel = false;
-
-
-	if (delF != null)
-	{
-		Map<String, String[]> paramMap = request.getParameterMap();
-		HashSet<String> delKeys = new HashSet<>();
-
-		for(Map.Entry<String, String[]> s : paramMap.entrySet())
-		{
-			if (s.getKey().equals("del")) 
-				continue;
-			if (s.getValue()[0].toLowerCase().equals("on"))
-				delKeys.add(s.getKey());
-			// out.print("K: " + s.getKey() + "  V: " + s.getValue()[0] + "\n");
-		}
-
-		// out.print("\n\n\n");
-
-		// out.print("DK:  ");
-
-		for(String s : delKeys)
-		{
-			// out.print(s + ",");
-
-			ps.setString(1, s);
-
-			try
-			{
-				ps.execute();
-			}
-			catch(java.sql.SQLIntegrityConstraintViolationException e)
-			{
-				notFullyDel = true;
-				undoneMessageBuilder.append(s);
-				undoneMessageBuilder.append("\\n");
-			}
-		}
-
-		if(notFullyDel)
-		{
-			out.write("<script>alert(\"" + undoneMessageBuilder.toString() + "\");</script>");
-		}
-	}
-
 	ResultSet rs = stmt.executeQuery("select * from kc;");   // Put here to query data after the delete process.
 %>
 
@@ -88,7 +39,7 @@
 </head>
 <body>
 	<h1>课程管理</h1>
-	<form action="" method="post">
+	<form action="listProc" method="post">
 	<table class="T">  <%-- JSP Scriptlet that uses SQL Commands --%>
 		<tr>
 			<td>课程号</td>

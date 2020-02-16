@@ -54,7 +54,6 @@
 
 	if (installParm != null)
 	{
-		getParameters(request);
 		saveConfigurations(application, false);
 		%><jsp:forward page="WEB-INF/installDB.jsp"></jsp:forward><%
 	}
@@ -63,7 +62,6 @@
 
 	if (loginParm != null)
 	{
-		getParameters(request);
 		saveConfigurations(application, true);
 	}
 %>
