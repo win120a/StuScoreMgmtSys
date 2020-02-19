@@ -26,6 +26,7 @@ import java.util.*;
 
 import ac.adproj.scms.dao.*;
 import ac.adproj.scms.servlet.InitServlet;
+import ac.adproj.scms.servlet.ServletProcessingException;
 
 public class ScoreInfoServlet extends HttpServlet {
 	@Override
@@ -121,6 +122,7 @@ public class ScoreInfoServlet extends HttpServlet {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new ServletProcessingException(e);
 		}
 	}
 

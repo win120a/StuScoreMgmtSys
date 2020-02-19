@@ -26,6 +26,7 @@ import java.util.*;
 
 import ac.adproj.scms.dao.*;
 import ac.adproj.scms.servlet.InitServlet;
+import ac.adproj.scms.servlet.ServletProcessingException;
 
 public class StuListProcServlet extends HttpServlet {   //    /scms/stuM/listProc
 	@Override
@@ -80,6 +81,7 @@ public class StuListProcServlet extends HttpServlet {   //    /scms/stuM/listPro
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new ServletProcessingException(e);
 		}
 	}
 

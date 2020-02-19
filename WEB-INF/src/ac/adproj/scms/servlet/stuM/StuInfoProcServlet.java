@@ -36,6 +36,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import ac.adproj.scms.dao.*;
 import ac.adproj.scms.servlet.InitServlet;
+import ac.adproj.scms.servlet.ServletProcessingException;
 
 /**
 	The student info's processing Servlet. (a.k.a /stuM/infoProc)
@@ -133,6 +134,7 @@ public class StuInfoProcServlet extends HttpServlet {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new ServletProcessingException(e);
 			// response.sendRedirect("/META-INF/errorPage.jsp");
 		}
 	}
@@ -244,8 +246,8 @@ public class StuInfoProcServlet extends HttpServlet {
 				}
 			}
 		} catch (FileUploadException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new ServletProcessingException();
 		}
 
 		return contents;

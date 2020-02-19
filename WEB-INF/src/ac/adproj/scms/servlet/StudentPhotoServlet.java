@@ -29,13 +29,16 @@ import ac.adproj.scms.dao.*;
 public class StudentPhotoServlet extends HttpServlet
 {
 	private static final String QUERY_SQL = "select photo as p from xs where stuid=?;";
+	private static final String PLACEHOLDER_RELATIVE_PATH = "/images/none.png";
 
 	@Override
 	public void service(HttpServletRequest request, HttpServletResponse response)
 	{
 		String id = request.getParameter("id");
 
-		try (DBDao daoO = InitServlet.daoO)
+		try (DBDao daoO = InitServlet.daoO;
+			Connection conn = daoO.getConnection();
+			PreparedStatement ps = conn.prepareStatement(QUERY_SQL);)
 		{
 
 			if (id == null || id.isEmpty())
@@ -45,13 +48,10 @@ public class StudentPhotoServlet extends HttpServlet
 			}
 
 			/*     Get the photo file    */
-			Connection conn = daoO.getConnection();
-
-			PreparedStatement ps = conn.prepareStatement(QUERY_SQL);
 
 			ps.setString(1, id);
 
-			System.out.println(ps.toString());
+			// System.out.println(ps.toString());
 
 			ResultSet resSet = ps.executeQuery();
 
@@ -74,17 +74,21 @@ public class StudentPhotoServlet extends HttpServlet
 				response.setContentType("image/png");
 				response.getOutputStream().write(buffer);
 			}
+
+			resSet.close();
 		}
 		catch (SQLException | IOException e)
 		{
 			e.printStackTrace();
+			
+			throw new ServletProcessingException(e);
 		}
 	}
 
 	private void sendNone(HttpServletResponse response) throws IOException
 	{
 		ServletContext ctx = getServletContext();
-		String rPath = ctx.getRealPath("/images/none.png");
+		String rPath = ctx.getRealPath(PLACEHOLDER_RELATIVE_PATH);
 		FileInputStream photoS = new FileInputStream(new File(rPath));
 		byte[] buffer = photoS.readAllBytes();
 		response.getOutputStream().write(buffer);
