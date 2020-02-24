@@ -21,6 +21,8 @@ import java.sql.*;
 import java.util.Properties;
 import javax.servlet.*;
 
+import ac.adproj.scms.servlet.ServletProcessingException;
+
 /**
 	Object that represents an connection to Database.
 
@@ -59,7 +61,7 @@ public class DBDao implements AutoCloseable
 			}
 			catch(ClassNotFoundException nfe)
 			{
-				// ...
+				throw new ServletProcessingException(nfe);
 			}
 
 

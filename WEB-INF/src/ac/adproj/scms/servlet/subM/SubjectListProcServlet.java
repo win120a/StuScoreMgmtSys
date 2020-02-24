@@ -28,7 +28,12 @@ import ac.adproj.scms.dao.*;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
-public class SubjectListProcServlet extends HttpServlet { // /scms/subM/listProc
+/**
+	The subject list's processing Servlet. (a.k.a /subM/listProc)
+
+	@author Andy Cheung
+*/
+public class SubjectListProcServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

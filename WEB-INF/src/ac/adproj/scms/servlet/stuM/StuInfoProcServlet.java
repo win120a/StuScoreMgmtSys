@@ -29,14 +29,10 @@ import java.util.*;
 
 import javax.sql.rowset.serial.*;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
 import ac.adproj.scms.dao.*;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
+import ac.adproj.scms.model.MultipartForm;
 
 /**
 	The student info's processing Servlet. (a.k.a /stuM/infoProc)
@@ -47,8 +43,10 @@ public class StuInfoProcServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		File tempdir = (File) getServletConfig().getServletContext().getAttribute("javax.servlet.context.tempdir");
 		
-		Map<String, DataWrap> formContents = getFormContents(request);
+		MultipartForm mpf = new MultipartForm(request, tempdir.getAbsolutePath());
 		
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
@@ -60,32 +58,32 @@ public class StuInfoProcServlet extends HttpServlet {
 			Statement stmt = conn.createStatement();
 
 			request.setCharacterEncoding("utf-8");
-			String addP = getStringParameter("add", formContents);
-			String modP = getStringParameter("modify", formContents);
-			String type = getStringParameter("type", formContents);
+			String addP = mpf.getStringParameter("add");
+			String modP = mpf.getStringParameter("modify");
+			String type = mpf.getStringParameter("type");
 
 			if (addP != null && addP.equals("1")) {
 				// id name major gender dob totalCredits(=0) photo remark
 				PreparedStatement ps_a = conn.prepareStatement("insert into xs values (?, ?, ?, ?, ?, ?, NULL, ?);");
 
-				ps_a.setString(1, getStringParameter("id", formContents));
-				ps_a.setString(2, getStringParameter("name", formContents));
-				ps_a.setString(3, getStringParameter("major", formContents));
-				ps_a.setString(4, getStringParameter("gender", formContents));
-				ps_a.setString(5, getStringParameter("dob", formContents));
+				ps_a.setString(1, mpf.getStringParameter("id"));
+				ps_a.setString(2, mpf.getStringParameter("name"));
+				ps_a.setString(3, mpf.getStringParameter("major"));
+				ps_a.setString(4, mpf.getStringParameter("gender"));
+				ps_a.setString(5, mpf.getStringParameter("dob"));
 				ps_a.setString(6, "0");
 
-				ps_a.setString(7, getStringParameter("remark", formContents));
+				ps_a.setString(7, mpf.getStringParameter("remark"));
 
 				// System.err.println(ps_a.toString());
 
 				ps_a.execute();
 
-				DataWrap pictW = formContents.get("headSet");
+				byte[] pictW = (byte[]) mpf.getNonFormFieldObject("headSet");
 
-				if (pictW != null && ((byte[]) pictW.object).length != 0)
+				if (pictW != null && pictW.length != 0)
 				{
-					updatePhoto(conn, getStringParameter("id", formContents), pictW);
+					updatePhoto(conn, mpf.getStringParameter("id"), pictW);
 				}
 
 				out.write("<script>");
@@ -105,21 +103,21 @@ public class StuInfoProcServlet extends HttpServlet {
 
 				PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
 
-				ps.setString(1, getStringParameter("name", formContents));
-				ps.setString(2, getStringParameter("major", formContents));
-				ps.setString(3, getStringParameter("gender", formContents));
-				ps.setString(4, getStringParameter("dob", formContents));
-				ps.setString(5, getStringParameter("remark", formContents));
-				ps.setString(6, getStringParameter("id", formContents));
+				ps.setString(1, mpf.getStringParameter("name"));
+				ps.setString(2, mpf.getStringParameter("major"));
+				ps.setString(3, mpf.getStringParameter("gender"));
+				ps.setString(4, mpf.getStringParameter("dob"));
+				ps.setString(5, mpf.getStringParameter("remark"));
+				ps.setString(6, mpf.getStringParameter("id"));
 
 				ps.execute();
 
 				// byte[] pictB = getUploadedFile(request, "headSet", daoO);
-				DataWrap pictW = formContents.get("headSet");
+				byte[] pictW = (byte[]) mpf.getNonFormFieldObject("headSet");
 				
-				if (pictW != null && ((byte[]) pictW.object).length != 0)
+				if (pictW != null && pictW.length != 0)
 				{
-					updatePhoto(conn, getStringParameter("id", formContents), pictW);
+					updatePhoto(conn, mpf.getStringParameter("id"), pictW);
 				}
 
 				out.write("<script>");
@@ -139,12 +137,12 @@ public class StuInfoProcServlet extends HttpServlet {
 		}
 	}
 
-	private void updatePhoto(Connection conn, String id, DataWrap pictW) throws SQLException
+	private void updatePhoto(Connection conn, String id, byte[] pictW) throws SQLException
 	{
 		PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
-		if (pictW != null && (!pictW.isFormField()) && ((byte[]) pictW.object).length != 0)
+		if (pictW != null && pictW.length != 0)
 		{
-			byte[] pictB = (byte[]) pictW.object;
+			byte[] pictB = pictW;
 			ps_p.setBlob(1, new SerialBlob(pictB));
 			ps_p.setString(2, id);
 			ps_p.execute();
@@ -168,88 +166,4 @@ public class StuInfoProcServlet extends HttpServlet {
 		response.getWriter().print(new String(b, "utf-8"));
 	}
 
-	/**
-		A simple Data Wrapper class to wrap a form entry.
-
-		@author Andy Cheung
-	*/
-	private static class DataWrap {
-		private Object object;
-		private boolean formField;
-
-		public Object getObject() {
-			return object;
-		}
-
-		public boolean isFormField() {
-			return formField;
-		}
-
-		public DataWrap(Object object, boolean formField) {
-			super();
-			this.object = object;
-			this.formField = formField;
-		}
-	}
-	
-	/**
-		Get a form field value in the pre-generated formContents from getFormContents(HttpServletRequest);
-
-		@author Andy Cheung
-	*/
-	private String getStringParameter(String key, Map<String, DataWrap> formContents)
-	{
-		if (formContents.get(key) == null)
-			return null;
-		
-		if (!formContents.get(key).formField)
-			throw new IllegalArgumentException();
-		
-		return (String) formContents.get(key).getObject();
-	}
-
-	/**
-		Core method to gather the multipart/form-data form's data.
-
-		@author Andy Cheung
-	*/
-	private Map<String, DataWrap> getFormContents(HttpServletRequest request) throws UnsupportedEncodingException {
-		HashMap<String, DataWrap> contents = new HashMap<String, DataWrap>();
-		
-		if(!ServletFileUpload.isMultipartContent(request))
-			throw new IllegalArgumentException();
-
-		// Create a factory for disk-based file items
-		DiskFileItemFactory factory = new DiskFileItemFactory();
-
-		// Configure a repository (to ensure a secure temp location is used)
-		ServletContext servletContext = this.getServletConfig().getServletContext();
-		File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-		factory.setRepository(repository);
-
-		// Create a new file upload handler
-		ServletFileUpload upload = new ServletFileUpload(factory);
-
-		// Parse the request
-		try {
-			List<FileItem> items = upload.parseRequest(request);
-
-			for (FileItem fi : items) {
-				if (fi.isFormField()) {
-					DataWrap dw = new DataWrap(fi.getString("utf-8"), true);
-					contents.put(fi.getFieldName(), dw);
-				}
-				else
-				{
-					DataWrap dw = new DataWrap(fi.get(), false);
-					contents.put(fi.getFieldName(), dw);
-				}
-			}
-		} catch (FileUploadException e) {
-			e.printStackTrace();
-			throw new ServletProcessingException();
-		}
-
-		return contents;
-	}
 }

@@ -28,6 +28,11 @@ import ac.adproj.scms.dao.*;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
+/**
+	The subject info's processing Servlet. (a.k.a /subM/infoProc)
+
+	@author Andy Cheung
+*/
 public class SubInfoProcServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -46,7 +51,8 @@ public class SubInfoProcServlet extends HttpServlet {
 			String type = request.getParameter("type");
 
 			if (addP != null && addP.equals("1")) {
-				PreparedStatement ps = conn.prepareStatement("insert into kc values (" + "?, ?, ?, ?, ?);");
+				PreparedStatement ps = conn.prepareStatement("insert into kc values (" 
+															+ "?, ?, ?, ?, ?);");
 
 				ps.setString(1, request.getParameter("courseID"));
 				ps.setString(2, request.getParameter("courseName"));
