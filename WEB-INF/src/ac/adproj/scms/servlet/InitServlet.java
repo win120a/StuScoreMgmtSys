@@ -22,49 +22,49 @@ import javax.servlet.http.*;
 import javax.servlet.*;
 
 /**
-	The initialization Servlet that provides connection DAO object.
+    The initialization Servlet that provides connection DAO object.
 
-	@author Andy Cheung
-*/	
+    @author Andy Cheung
+*/  
 public class InitServlet extends HttpServlet
 {
-	private String driver = "";
-	private String serverAddr = "";
-	private String userName = "";
-	private String password = "";
-	private String serverTimeZone = "";
-	private String db = "";
+    private String driver = "";
+    private String serverAddr = "";
+    private String userName = "";
+    private String password = "";
+    private String serverTimeZone = "";
+    private String db = "";
 
-	public static DBDao daoO;
+    public static DBDao daoO;
 
-	@Override
-	public void init()
-	{
-		ServletContext application = getServletContext();
-		boolean configured = false;
+    @Override
+    public void init()
+    {
+        ServletContext application = getServletContext();
+        boolean configured = false;
 
-		driver = (String) application.getInitParameter("driver");
-		driver = driver != null ? (String) driver : "";
+        driver = (String) application.getInitParameter("driver");
+        driver = driver != null ? (String) driver : "";
 
-		serverAddr = (String) application.getInitParameter("serverAddr");
-		serverAddr = driver != null ? (String) serverAddr : "";
+        serverAddr = (String) application.getInitParameter("serverAddr");
+        serverAddr = driver != null ? (String) serverAddr : "";
 
-		userName = (String) application.getInitParameter("userName");
-	
-		Object confO = application.getAttribute("configured");
-		configured = confO == null ? false : (Boolean) confO;
-	
-		userName = userName != null ? (String) userName : "";
+        userName = (String) application.getInitParameter("userName");
+    
+        Object confO = application.getAttribute("configured");
+        configured = confO == null ? false : (Boolean) confO;
+    
+        userName = userName != null ? (String) userName : "";
 
-		password = (String) application.getInitParameter("password");
-		password = password != null ? (String) password : "";
+        password = (String) application.getInitParameter("password");
+        password = password != null ? (String) password : "";
 
-		serverTimeZone = (String) application.getInitParameter("serverTimeZone");
-		serverTimeZone = serverTimeZone != null ? (String) serverTimeZone : "";
+        serverTimeZone = (String) application.getInitParameter("serverTimeZone");
+        serverTimeZone = serverTimeZone != null ? (String) serverTimeZone : "";
 
-		db = (String) application.getInitParameter("db");
-		db = db != null ? (String) db : "";
+        db = (String) application.getInitParameter("db");
+        db = db != null ? (String) db : "";
 
-		daoO = new DBDao(driver, serverAddr, userName, password, serverTimeZone, db);
-	}
+        daoO = new DBDao(driver, serverAddr, userName, password, serverTimeZone, db);
+    }
 }

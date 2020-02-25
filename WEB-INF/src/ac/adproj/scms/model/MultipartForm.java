@@ -31,130 +31,130 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
 /**
-	Represents a multipart form.
+    Represents a multipart form.
 
-	@author Andy Cheung
+    @author Andy Cheung
 */
 public class MultipartForm
 {
-	private HttpServletRequest request;
-	private Map<String, DataWrap> formContents;
-	private String tempdir;
+    private HttpServletRequest request;
+    private Map<String, DataWrap> formContents;
+    private String tempdir;
 
-	/**
-		Constructs the MultipartForm Object from HttpServletRequest object.
+    /**
+        Constructs the MultipartForm Object from HttpServletRequest object.
 
-		@param request The request from client.
-		@param tempdir The temporary directory.
-		@author Andy Cheung
-	*/
-	public MultipartForm(HttpServletRequest request, String tempdir)
-		throws UnsupportedEncodingException, FileNotFoundException
-	{
-		this.request = request;
-		this.formContents = getFormContents(request, tempdir);
-	}
+        @param request The request from client.
+        @param tempdir The temporary directory.
+        @author Andy Cheung
+    */
+    public MultipartForm(HttpServletRequest request, String tempdir)
+        throws UnsupportedEncodingException, FileNotFoundException
+    {
+        this.request = request;
+        this.formContents = getFormContents(request, tempdir);
+    }
 
-	/**
-		A simple Data Wrapper class to wrap a form entry.
+    /**
+        A simple Data Wrapper class to wrap a form entry.
 
-		@author Andy Cheung
-	*/
-	private static class DataWrap {
-		private Object object;
-		private boolean formField;
+        @author Andy Cheung
+    */
+    private static class DataWrap {
+        private Object object;
+        private boolean formField;
 
-		public Object getObject() {
-			return object;
-		}
+        public Object getObject() {
+            return object;
+        }
 
-		public boolean isFormField() {
-			return formField;
-		}
+        public boolean isFormField() {
+            return formField;
+        }
 
-		public DataWrap(Object object, boolean formField) {
-			super();
-			this.object = object;
-			this.formField = formField;
-		}
-	}
+        public DataWrap(Object object, boolean formField) {
+            super();
+            this.object = object;
+            this.formField = formField;
+        }
+    }
 
-	/**
-		Get a non-form field value (e.g. File).
+    /**
+        Get a non-form field value (e.g. File).
 
-		@author Andy Cheung
-	*/
-	public Object getNonFormFieldObject(String key)
-	{
-		if (formContents.get(key) == null)
-			return null;
-		
-		if (formContents.get(key).formField)
-			throw new IllegalArgumentException();
-		
-		return formContents.get(key).getObject();
-	}
-	
-	/**
-		Get a form field value.
+        @author Andy Cheung
+    */
+    public Object getNonFormFieldObject(String key)
+    {
+        if (formContents.get(key) == null)
+            return null;
+        
+        if (formContents.get(key).formField)
+            throw new IllegalArgumentException();
+        
+        return formContents.get(key).getObject();
+    }
+    
+    /**
+        Get a form field value.
 
-		@param key The key to the value in the multipart form.
-		@author Andy Cheung
-	*/
-	public String getStringParameter(String key)
-	{
-		if (formContents.get(key) == null)
-			return null;
-		
-		if (!formContents.get(key).formField)
-			throw new IllegalArgumentException();
-		
-		return (String) formContents.get(key).getObject();
-	}
+        @param key The key to the value in the multipart form.
+        @author Andy Cheung
+    */
+    public String getStringParameter(String key)
+    {
+        if (formContents.get(key) == null)
+            return null;
+        
+        if (!formContents.get(key).formField)
+            throw new IllegalArgumentException();
+        
+        return (String) formContents.get(key).getObject();
+    }
 
-	/**
-		Core method to gather the multipart/form-data form's data.
+    /**
+        Core method to gather the multipart/form-data form's data.
 
-		@author Andy Cheung
-	*/
-	private static Map<String, DataWrap> getFormContents(HttpServletRequest request, String tempdir)
-		throws UnsupportedEncodingException, FileNotFoundException {
+        @author Andy Cheung
+    */
+    private static Map<String, DataWrap> getFormContents(HttpServletRequest request, String tempdir)
+        throws UnsupportedEncodingException, FileNotFoundException {
 
-		HashMap<String, DataWrap> contents = new HashMap<String, DataWrap>();
-		
-		if(!ServletFileUpload.isMultipartContent(request))
-			throw new IllegalArgumentException();
+        HashMap<String, DataWrap> contents = new HashMap<String, DataWrap>();
+        
+        if(!ServletFileUpload.isMultipartContent(request))
+            throw new IllegalArgumentException();
 
-		// Create a factory for disk-based file items
-		DiskFileItemFactory factory = new DiskFileItemFactory();
+        // Create a factory for disk-based file items
+        DiskFileItemFactory factory = new DiskFileItemFactory();
 
-		// Configure a repository (to ensure a secure temp location is used)
-		File repository = new File(tempdir);
-		factory.setRepository(repository);
+        // Configure a repository (to ensure a secure temp location is used)
+        File repository = new File(tempdir);
+        factory.setRepository(repository);
 
-		// Create a new file upload handler
-		ServletFileUpload upload = new ServletFileUpload(factory);
+        // Create a new file upload handler
+        ServletFileUpload upload = new ServletFileUpload(factory);
 
-		// Parse the request
-		try {
-			List<FileItem> items = upload.parseRequest(request);
+        // Parse the request
+        try {
+            List<FileItem> items = upload.parseRequest(request);
 
-			for (FileItem fi : items) {
-				if (fi.isFormField()) {
-					DataWrap dw = new DataWrap(fi.getString("utf-8"), true);
-					contents.put(fi.getFieldName(), dw);
-				}
-				else
-				{
-					DataWrap dw = new DataWrap(fi.get(), false);
-					contents.put(fi.getFieldName(), dw);
-				}
-			}
-		} catch (FileUploadException e) {
-			e.printStackTrace();
-			throw new ServletProcessingException(e);
-		}
+            for (FileItem fi : items) {
+                if (fi.isFormField()) {
+                    DataWrap dw = new DataWrap(fi.getString("utf-8"), true);
+                    contents.put(fi.getFieldName(), dw);
+                }
+                else
+                {
+                    DataWrap dw = new DataWrap(fi.get(), false);
+                    contents.put(fi.getFieldName(), dw);
+                }
+            }
+        } catch (FileUploadException e) {
+            e.printStackTrace();
+            throw new ServletProcessingException(e);
+        }
 
-		return contents;
-	}
+        return contents;
+    }
 }
