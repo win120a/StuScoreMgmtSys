@@ -19,7 +19,7 @@
 <%@ page import="java.sql.*" %>
 
 <%
-	DBDao daoO = InitServlet.daoO;
-	Connection conn = daoO.getConnection();
-	Statement stmt = conn.createStatement();
+    DBDao daoO = InitServlet.daoO;
+    Connection conn = daoO.getConnection();
+    Statement stmt = conn.createStatement();
 %>

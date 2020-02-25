@@ -26,73 +26,80 @@ import java.util.*;
 
 import ac.adproj.scms.dao.*;
 import ac.adproj.scms.servlet.InitServlet;
+import ac.adproj.scms.servlet.ServletProcessingException;
 
-public class SubjectListProcServlet extends HttpServlet { // /scms/subM/listProc
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+/**
+    The subject list's processing Servlet. (a.k.a /subM/listProc)
 
-		request.setCharacterEncoding("utf-8");
-		response.setCharacterEncoding("utf-8");
-		response.setContentType("text/html; charset=utf-8");
+    @author Andy Cheung
+*/
+public class SubjectListProcServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		try (DBDao daoO = InitServlet.daoO;
-				Connection conn = daoO.getConnection();
-				PreparedStatement ps = conn.prepareStatement("delete from kc where kc.courseID = ?;");
-				Writer out = response.getWriter()) {
+        request.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("text/html; charset=utf-8");
 
-			String delF = request.getParameter("del");
-			StringBuilder undoneMessageBuilder = new StringBuilder();
-			undoneMessageBuilder.append("如下课程由于此前输入了成绩，不能删除。\\n\\n课程号：\\n");
-			boolean notFullyDel = false;
+        try (DBDao daoO = InitServlet.daoO;
+                Connection conn = daoO.getConnection();
+                PreparedStatement ps = conn.prepareStatement("delete from kc where kc.courseID = ?;");
+                Writer out = response.getWriter()) {
 
-			if (delF != null) {
-				Map<String, String[]> paramMap = request.getParameterMap();
-				HashSet<String> delKeys = new HashSet<>();
+            String delF = request.getParameter("del");
+            StringBuilder undoneMessageBuilder = new StringBuilder();
+            undoneMessageBuilder.append("如下课程由于此前输入了成绩，不能删除。\\n\\n课程号：\\n");
+            boolean notFullyDel = false;
 
-				for (Map.Entry<String, String[]> s : paramMap.entrySet()) {
-					if (s.getKey().equals("del"))
-						continue;
-					if (s.getValue()[0].toLowerCase().equals("on"))
-						delKeys.add(s.getKey());
-				}
+            if (delF != null) {
+                Map<String, String[]> paramMap = request.getParameterMap();
+                HashSet<String> delKeys = new HashSet<>();
 
-				for (String s : delKeys) {
-					ps.setString(1, s);
+                for (Map.Entry<String, String[]> s : paramMap.entrySet()) {
+                    if (s.getKey().equals("del"))
+                        continue;
+                    if (s.getValue()[0].toLowerCase().equals("on"))
+                        delKeys.add(s.getKey());
+                }
 
-					try {
-						ps.execute();
-					} catch (java.sql.SQLIntegrityConstraintViolationException e) {
-						notFullyDel = true;
-						undoneMessageBuilder.append(s);
-						undoneMessageBuilder.append("\\n");
-					}
-				}
+                for (String s : delKeys) {
+                    ps.setString(1, s);
 
-				if (notFullyDel) {
-					out.write("<script>alert(\"" + new String(undoneMessageBuilder.toString().getBytes(), "utf-8") + "\"); location.href=\"index.jsp\";</script>");
-				}
-				else
-				{
-					out.write(new String(("<script>alert(\"删除成功! \"); location.href=\"index.jsp\";</script>").getBytes(), "utf-8"));
-				}
-			}
+                    try {
+                        ps.execute();
+                    } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+                        notFullyDel = true;
+                        undoneMessageBuilder.append(s);
+                        undoneMessageBuilder.append("\\n");
+                    }
+                }
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+                if (notFullyDel) {
+                    out.write("<script>alert(\"" + new String(undoneMessageBuilder.toString().getBytes(), "utf-8") + "\"); location.href=\"index.jsp\";</script>");
+                }
+                else
+                {
+                    out.write(new String(("<script>alert(\"删除成功! \"); location.href=\"index.jsp\";</script>").getBytes(), "utf-8"));
+                }
+            }
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		response.setHeader("Allow", "GET, HEAD, POST, OPTIONS");
-		request.setCharacterEncoding("utf-8");
-		response.setBufferSize(8192);
-		response.setContentType("text/html; charset=utf-8");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ServletProcessingException(e);
+        }
+    }
 
-		byte[] b = ("<p>测试 Test:" + request.getParameter("test") + "</p>").getBytes();
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setHeader("Allow", "GET, HEAD, POST, OPTIONS");
+        request.setCharacterEncoding("utf-8");
+        response.setBufferSize(8192);
+        response.setContentType("text/html; charset=utf-8");
 
-		response.getWriter().print(new String(b, "utf-8"));
-	}
+        byte[] b = ("<p>测试 Test:" + request.getParameter("test") + "</p>").getBytes();
+
+        response.getWriter().print(new String(b, "utf-8"));
+    }
 }

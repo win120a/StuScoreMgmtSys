@@ -5,36 +5,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Test DAO</title>
+    <title>Test DAO</title>
 </head>
 <body>
-	<%
-		// DBDao daoO = new DBDao(driver, serverAddr, userName, password, serverTimeZone, db);
+    <%
+        // DBDao daoO = new DBDao(driver, serverAddr, userName, password, serverTimeZone, db);
 
-		DBDao daoO = InitServlet.daoO;
+        DBDao daoO = InitServlet.daoO;
 
-		ResultSet rs = daoO.query("select * from xs;");
+        ResultSet rs = daoO.query("select * from xs;");
 
-		while (rs.next())
-		{
-			out.write("<p>" + rs.getString("stuid") + "</p>");
-		}
+        while (rs.next())
+        {
+            out.write("<p>" + rs.getString("stuid") + "</p>");
+        }
 
-		/*
-		PreparedStatement ps = daoO.getConnection().prepareStatement("update xs set photo=? where stuid=123456;");
+        /*
+        PreparedStatement ps = daoO.getConnection().prepareStatement("update xs set photo=? where stuid=123456;");
 
-		FileInputStream fis = new FileInputStream("D:\\1.png");
+        FileInputStream fis = new FileInputStream("D:\\1.png");
 
-		ps.setBinaryStream(1, fis);
+        ps.setBinaryStream(1, fis);
 
-		ps.executeUpdate();
-		*/
+        ps.executeUpdate();
+        */
 
-		ServletContext ctx = getServletContext();
+        ServletContext ctx = getServletContext();
 
-		out.write(ctx.getContextPath());
-		out.write(ctx.getRealPath("/images/none.png"));
+        out.write(ctx.getContextPath());
+        out.write(ctx.getRealPath("/images/none.png"));
 
-	%>
+    %>
 </body>
 </html>
