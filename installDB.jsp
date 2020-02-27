@@ -15,18 +15,54 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 --%>
 
-<%@ page contentType="text/html; charset=utf-8" errorPage="errorPage.jsp" %>
-<%@ include file="dbConn.jsp" %>
-<%@ include file="dbConfig.jsp" %>
+<%@ page contentType="text/html; charset=utf-8" errorPage="WEB-INF/errorPage.jsp" %>
+<%@ page import="java.sql.*" %>
+<%@ page import="java.util.Properties" %>
+
+<%!
+    private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+
+    String driver = "";
+    String serverAddr = "";
+    String userName = "";
+    String password = "";
+    String serverTimeZone = "";
+    String db = "";
+%>
 
 <%
-    // getParameters(request);
+    driver = (String) request.getParameter("driver");
+    driver = driver != null ? (String) driver : JDBC_DRIVER;
 
+    serverAddr = (String) request.getParameter("serverAddr");
+    serverAddr = serverAddr != null ? (String) serverAddr : "";
+
+    userName = (String) request.getParameter("userName");
+    userName = userName != null ? (String) userName : "";
+
+    password = (String) request.getParameter("password");
+    password = password != null ? (String) password : "";
+
+    serverTimeZone = (String) request.getParameter("serverTimeZone");
+    serverTimeZone = serverTimeZone != null ? (String) serverTimeZone : "";
+
+    db = (String) request.getParameter("db");
+    db = db != null ? (String) db : "";
+%>
+
+<%
     String install = request.getParameter("install");
 
     if (install != null && install.equals("1"))
     {
-        saveConfigurations(application, true);
+        Class.forName(driver);
+
+        Properties p = new Properties();
+        p.put("user", userName);
+        p.put("password", password);
+        p.put("timezone", serverTimeZone);
+        Connection conn = DriverManager.getConnection("jdbc:mysql://" + serverAddr + "/" , p);
+        Statement stmt = conn.createStatement();
 
         stmt.execute("create database if not exists " + request.getParameter("db") + ";");
 
@@ -38,7 +74,7 @@
 
         stmt.execute("CREATE TABLE `xs_kc` (`stuid` varchar(10) CHARACTER SET utf8 NOT NULL COMMENT '学号',`courseid` int(11) NOT NULL COMMENT '课程编号',`score` int(11) NOT NULL COMMENT '成绩',`credit` int(11) NOT NULL COMMENT '学分',PRIMARY KEY (`stuid`,`courseid`),KEY `courseid` (`courseid`),CONSTRAINT `xs_kc_ibfk_1` FOREIGN KEY (`stuid`) REFERENCES `xs` (`stuid`) ON DELETE RESTRICT ON UPDATE RESTRICT,CONSTRAINT `xs_kc_ibfk_2` FOREIGN KEY (`courseid`) REFERENCES `kc` (`courseID`) ON DELETE RESTRICT ON UPDATE RESTRICT) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;");
 
-        out.write("<script>alert(\"安装成功\");");
+        out.write("<script>alert(\"安装成功，请修改web.xml并重启应用。\");");
         out.write("location.href = \"index.jsp\"; </script>");
     }
 %>
@@ -46,12 +82,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>系统安装</title>
+    <title>建表程序</title>
 </head>
 <body style="text-align: center;">
-    <% if (true | !configured) { %>
-
-    <h1>信息确认</h1><br />
+    <h1>建表程序</h1><br />
     <form action="" method="post">
         数据库驱动：<input type="text" name="driver" value="<%= driver %>"><br />
         数据库服务器：<input type="text" name="serverAddr" value="<%= serverAddr %>"><br />
@@ -62,14 +96,5 @@
         <input type="hidden" name="install" value="1"><br />
         <input type="submit" value="安装">
     </form>
-
-    <%
-    } 
-    else {
-        %>
-            <h1>系统已安装！</h1>
-        <%
-    }
-    %>
 </body>
 </html>
