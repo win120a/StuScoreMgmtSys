@@ -19,4 +19,5 @@ GPLv3
 0. Copy The entire folder to the `webapps` directory.
 1. Edit values in `WEB-INF/build.xml` (JAVA_HOME) & `WEB-INF/web.xml` (Server Configurations).
 2. Compile the ant project in `WEB-INF` folder.
-3. (The install function is under construction...)
+3. Forward http://<Address to WebApp>/installDB.jsp to create databases.
+4. Delete the installDB.jsp file.
