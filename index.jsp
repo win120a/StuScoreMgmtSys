@@ -16,38 +16,6 @@
 --%>
 
 <%@ page contentType="text/html; charset=utf-8" errorPage="WEB-INF/errorPage.jsp" %>
-<%@ page import="javax.servlet.http.HttpServletRequest" %>
-<%@ page import="java.sql.*" %>
-
-<%
-    String testParm = request.getParameter("test");
-
-    if (testParm != null)
-    {
-        %><jsp:forward page="test.jsp"></jsp:forward><%
-    }
-
-    String subMParm = request.getParameter("subM");
-
-    if (subMParm != null)
-    {
-        %><script>location.href = "subM/index.jsp"</script><%
-    }
-
-    String stuMParm = request.getParameter("stuM");
-
-    if (stuMParm != null)
-    {
-        %><script>location.href = "stuM/index.jsp"</script><%
-    }
-
-    String scoreMParm = request.getParameter("scoreM");
-
-    if (scoreMParm != null)
-    {
-        %><script>location.href = "scoreM/index.jsp"</script><%
-    }
-%>
 
 <!DOCTYPE html>
 <html>
@@ -56,7 +24,7 @@
 </head>
 <body style="text-align: center;">
     <h1>系统主页</h1>
-    <form action="" method="post">
+    <form action="dispatcher" method="post">
         <input type="submit" name="stuM" value="学生管理">
         <input type="submit" name="subM" value="学科管理">
         <input type="submit" name="scoreM" value="成绩管理">

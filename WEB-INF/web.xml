@@ -41,6 +41,18 @@
 
 
   <servlet>
+    <servlet-name>PageDispatcher</servlet-name>
+    <servlet-class>ac.adproj.scms.servlet.PageDispatcherServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>PageDispatcher</servlet-name>
+    <url-pattern>/dispatcher</url-pattern>
+  </servlet-mapping>
+
+
+
+  <servlet>
     <servlet-name>ScoreInfoProc</servlet-name>
     <servlet-class>ac.adproj.scms.servlet.scoreM.ScoreInfoServlet</servlet-class>
   </servlet>
