@@ -18,9 +18,10 @@
 -->
 
 <project name="SCMS-Servlet" default="build" basedir=".">
-    <property name="JAVA_HOME" value="C:\\Program Files\\Java\\jdk-10.0.1\\" />
+    <property name="JAVA_HOME" value="C:\\Program Files\\Java\\jdk-10.0.1" />
+    <property name="TOMCAT_HOME" value="C:\\DevKits\\tomcat" />
     <property name="JAVA" value="${JAVA_HOME}\\bin" />
-    <property name="CLASSPATH" value=".;lib\\mysql-connector-java-8.0.17.jar;lib\\commons-io-2.6.jar;lib\\commons-fileupload-1.4.jar;..\\..\\..\\lib\\servlet-api.jar" />
+    <property name="CLASSPATH" value=".;lib\\mysql-connector-java-8.0.17.jar;lib\\commons-io-2.6.jar;lib\\commons-fileupload-1.4.jar;${TOMCAT_HOME}\\lib\\servlet-api.jar" />
     
     <target name="build">
         <mkdir dir="classes" />
