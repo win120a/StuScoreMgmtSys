@@ -25,11 +25,27 @@ import javax.servlet.http.HttpServletRequest;
 
 import ac.adproj.scms.servlet.ServletProcessingException;
 
+/**
+ * Simple factory of Multipart Form Handler.
+ * 
+ * @author Andy Cheung
+ */
 public class MultipartFormHandlerFactory {
+    /**
+     * Class name of the handler.
+     */
     private static final String FORM_HANDLER_CLASS_NAME = "ac.adproj.scms.servlet.forms.MultipartFormHandlerApacheCommonsImpl";
 
+    /**
+     * Factory method of form handler.
+     * 
+     * @param request The HTTP Request.
+     * @return Instance of the class which name is {@link #FORM_HANDLER_CLASS_NAME}.
+     * @see #FORM_HANDLER_CLASS_NAME
+     * @author Andy Cheung
+     */
     public static MultipartFormHandler getFormHandler(HttpServletRequest request) {
-        
+
         File tempdir = (File) request.getServletContext().getAttribute("javax.servlet.context.tempdir");
 
         try {

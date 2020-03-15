@@ -18,10 +18,10 @@
 -->
 
 <project name="SCMS-Servlet" default="build" basedir="WEB-INF">
-	<property name="LIBRARIES" value=".\\lib" />
-	
-	<import file="props.xml" as="p" />
-	
+    <property name="LIBRARIES" value=".\\lib" />
+    
+    <import file="props.xml" as="p" />
+    
     <target name="build">
         <mkdir dir="classes" />
         <javac srcdir="src" destdir="classes" fork="yes" executable="${JAVA}\\javac.exe"

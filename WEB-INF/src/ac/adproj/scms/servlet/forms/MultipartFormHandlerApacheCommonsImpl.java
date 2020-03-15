@@ -40,7 +40,12 @@ import ac.adproj.scms.servlet.ServletProcessingException;
 */
 public class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler
 {
+    /**
+     * The Map of storing form contents.
+     * @author Andy Cheung
+     */
     private Map<String, DataWrap> formContents;
+    
     /**
         Constructs the MultipartForm Object from HttpServletRequest object.
 
