@@ -34,36 +34,37 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
 /**
-    The Apache Commons (commons-fileupload.jar) implementation of MultipartFormHandler.
-
-    @author Andy Cheung
-*/
-public class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler
-{
+ * The Apache Commons (commons-fileupload.jar) implementation of
+ * MultipartFormHandler.
+ * 
+ * @author Andy Cheung
+ */
+public class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
     /**
      * The Map of storing form contents.
+     * 
      * @author Andy Cheung
      */
     private Map<String, DataWrap> formContents;
-    
-    /**
-        Constructs the MultipartForm Object from HttpServletRequest object.
 
-        @param request The request from client.
-        @param tempdir The temporary directory.
-        @author Andy Cheung
-    */
+    /**
+     * Constructs the MultipartForm Object from HttpServletRequest object.
+     * 
+     * @param request The request from client.
+     * @param tempdir The temporary directory.
+     * @author Andy Cheung
+     */
     public MultipartFormHandlerApacheCommonsImpl(HttpServletRequest request, String tempdir)
-        throws UnsupportedEncodingException, FileNotFoundException
-    {
+            throws UnsupportedEncodingException, FileNotFoundException {
+        
         this.formContents = getFormContents(request, tempdir);
     }
 
     /**
-        A simple Data Wrapper class to wrap a form entry.
-
-        @author Andy Cheung
-    */
+     * A simple Data Wrapper class to wrap a form entry.
+     * 
+     * @author Andy Cheung
+     */
     private static class DataWrap {
         private Object object;
         private boolean formField;
@@ -84,51 +85,49 @@ public class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandl
     }
 
     /**
-        Get a non-form field value (e.g. File).
-
-        @author Andy Cheung
-    */
+     * Get a non-form field value (e.g. File).
+     * 
+     * @author Andy Cheung
+     */
     @Override
-    public Object getNonFormFieldObject(String key)
-    {
+    public Object getNonFormFieldObject(String key) {
         if (formContents.get(key) == null)
             return null;
-        
+
         if (formContents.get(key).isFormField())
             throw new IllegalArgumentException();
-        
+
         return formContents.get(key).getObject();
     }
-    
-    /**
-        Get a form field value.
 
-        @param key The key to the value in the multipart form.
-        @author Andy Cheung
-    */
+    /**
+     * Get a form field value.
+     * 
+     * @param key The key to the value in the multipart form.
+     * @author Andy Cheung
+     */
     @Override
-    public String getStringParameter(String key)
-    {
+    public String getStringParameter(String key) {
         if (formContents.get(key) == null)
             return null;
-        
+
         if (!formContents.get(key).isFormField())
             throw new IllegalArgumentException();
-        
+
         return (String) formContents.get(key).getObject();
     }
 
     /**
-        Core method to gather the multipart/form-data form's data.
-
-        @author Andy Cheung
-    */
+     * Core method to gather the multipart/form-data form's data.
+     * 
+     * @author Andy Cheung
+     */
     private static Map<String, DataWrap> getFormContents(HttpServletRequest request, String tempdir)
-        throws UnsupportedEncodingException, FileNotFoundException {
+            throws UnsupportedEncodingException, FileNotFoundException {
 
         HashMap<String, DataWrap> contents = new HashMap<String, DataWrap>();
-        
-        if(!ServletFileUpload.isMultipartContent(request))
+
+        if (!ServletFileUpload.isMultipartContent(request))
             throw new IllegalArgumentException();
 
         // Create a factory for disk-based file items
@@ -149,9 +148,7 @@ public class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandl
                 if (fi.isFormField()) {
                     DataWrap dw = new DataWrap(fi.getString("utf-8"), true);
                     contents.put(fi.getFieldName(), dw);
-                }
-                else
-                {
+                } else {
                     DataWrap dw = new DataWrap(fi.get(), false);
                     contents.put(fi.getFieldName(), dw);
                 }

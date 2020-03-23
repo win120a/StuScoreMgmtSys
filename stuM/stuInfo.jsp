@@ -134,7 +134,7 @@
 
                     <td>
                         <label for="dob">生日：</label>
-                        <input type="text" name="dob" id="dob" required>
+                        <input type="date" name="dob" id="dob" required>
                     </td>
                 </tr>
 

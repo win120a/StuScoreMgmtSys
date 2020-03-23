@@ -25,11 +25,11 @@ import ac.adproj.scms.util.ByteArrayUtils;
 public class Student implements Entity {
     private String name;
     private String dob;
-    private Gender gender;
+    private GenderEnum gender;
     private String id;
     private byte[] photo;
 
-    public Student(String name, String dob, Gender gender, String id, byte[] photo) {
+    public Student(String name, String dob, GenderEnum gender, String id, byte[] photo) {
         super();
         this.name = name;
         this.dob = dob;
@@ -46,7 +46,7 @@ public class Student implements Entity {
         return dob;
     }
 
-    public Gender getGender() {
+    public GenderEnum getGender() {
         return gender;
     }
 
