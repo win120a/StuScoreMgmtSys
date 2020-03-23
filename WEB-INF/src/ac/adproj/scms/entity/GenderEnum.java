@@ -1,5 +1,5 @@
 package ac.adproj.scms.entity;
 
-public enum Gender {
+public enum GenderEnum {
     MALE, FEMALE;
 }
