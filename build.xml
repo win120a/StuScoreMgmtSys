@@ -17,18 +17,18 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<project name="SCMS-Servlet" default="build" basedir=".">
-    <property name="JAVA_HOME" value="C:\\Program Files\\Java\\jdk-10.0.1\\" />
-    <property name="JAVA" value="${JAVA_HOME}\\bin" />
-    <property name="CLASSPATH" value=".;lib\\mysql-connector-java-8.0.17.jar;lib\\commons-io-2.6.jar;lib\\commons-fileupload-1.4.jar;..\\..\\..\\lib\\servlet-api.jar" />
-    
+<project name="SCMS-Servlet" default="build" basedir="WEB-INF">
+    <property name="LIBRARIES" value=".\\lib"/>
+
+    <import file="props.xml" as="p"/>
+
     <target name="build">
-        <mkdir dir="classes" />
+        <mkdir dir="classes"/>
         <javac srcdir="src" destdir="classes" fork="yes" executable="${JAVA}\\javac.exe"
-           classpath="${CLASSPATH}" debug="on" includeantruntime="false" />
+               classpath="${CLASSPATH}" debug="on" includeantruntime="false"/>
     </target>
-    
+
     <target name="clean">
-        <delete dir="classes" />
+        <delete dir="classes"/>
     </target>
 </project>

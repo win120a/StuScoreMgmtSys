@@ -17,16 +17,21 @@
 
 package ac.adproj.scms.servlet.stuM;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.io.IOException;
-import java.io.Writer;
-import java.sql.*;
-import java.util.*;
-
-import ac.adproj.scms.dao.*;
+import ac.adproj.scms.dao.DBDao;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Map;
 
 public class StuListProcServlet extends HttpServlet {   //    /scms/stuM/listProc
     @Override
@@ -42,7 +47,7 @@ public class StuListProcServlet extends HttpServlet {   //    /scms/stuM/listPro
                 Connection conn = daoO.getConnection();
                 PreparedStatement ps = conn.prepareStatement("delete from xs where xs.stuid = ?;");
                 Writer out = response.getWriter()) {
-            
+
             String delF = request.getParameter("del");
             StringBuilder undoneMessageBuilder = new StringBuilder();
             undoneMessageBuilder.append("如下学生由于此前输入了成绩，不能删除。\\n\\n学号：\\n");
@@ -73,9 +78,7 @@ public class StuListProcServlet extends HttpServlet {   //    /scms/stuM/listPro
 
                 if (notFullyDel) {
                     out.write("<script>alert(\"" + new String(undoneMessageBuilder.toString().getBytes(), "utf-8") + "\"); location.href=\"index.jsp\";</script>");
-                }
-                else
-                {
+                } else {
                     out.write(new String(("<script>alert(\"删除成功! \"); location.href=\"index.jsp\";</script>").getBytes(), "utf-8"));
                 }
             }

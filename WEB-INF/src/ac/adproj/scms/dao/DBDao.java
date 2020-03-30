@@ -17,21 +17,19 @@
 
 package ac.adproj.scms.dao;
 
-import java.sql.*;
-import java.util.Properties;
-import javax.servlet.*;
-
 import ac.adproj.scms.servlet.ServletProcessingException;
 
+import java.sql.*;
+import java.util.Properties;
+
 /**
-    Object that represents an connection to Database.
-
-    @author Andy Cheung
-*/
-public class DBDao implements AutoCloseable
-{
+ * Object that represents an connection to Database.
+ *
+ * @author Andy Cheung
+ */
+public class DBDao implements AutoCloseable {
+    private static final String ADDR_HEAD = "jdbc:mysql://";
     private Connection connectionI;
-
     private String driver;
     private String serverAddr;
     private String userName;
@@ -39,10 +37,7 @@ public class DBDao implements AutoCloseable
     private String serverTimeZone;
     private String db;
 
-    private static final String ADDR_HEAD = "jdbc:mysql://";
-
-    public DBDao(String driver, String serverAddr, String userName, String password, String serverTimeZone, String db)
-    {
+    public DBDao(String driver, String serverAddr, String userName, String password, String serverTimeZone, String db) {
         this.driver = driver;
         this.serverAddr = serverAddr;
         this.userName = userName;
@@ -51,16 +46,11 @@ public class DBDao implements AutoCloseable
         this.db = db;
     }
 
-    public Connection getConnection() throws SQLException
-    {
-        if (connectionI == null || connectionI.isClosed())
-        {
-            try
-            {
+    public Connection getConnection() throws SQLException {
+        if (connectionI == null || connectionI.isClosed()) {
+            try {
                 Class.forName(driver);
-            }
-            catch(ClassNotFoundException nfe)
-            {
+            } catch (ClassNotFoundException nfe) {
                 throw new ServletProcessingException(nfe);
             }
 
@@ -81,35 +71,29 @@ public class DBDao implements AutoCloseable
         return connectionI;
     }
 
-    public String getDriverClassName()
-    {
+    public String getDriverClassName() {
         return driver;
     }
 
-    public String getDBName()
-    {
+    public String getDBName() {
         return db;
     }
 
-    public String getServerTimeZone()
-    {
+    public String getServerTimeZone() {
         return serverTimeZone;
     }
 
-    private PreparedStatement prepStmt(String sql, String... contents) throws SQLException
-    {
+    private PreparedStatement prepStmt(String sql, String... contents) throws SQLException {
         PreparedStatement prepS = getConnection().prepareStatement(sql);
 
-        for (int i = 0; i < contents.length; i++)
-        {
+        for (int i = 0; i < contents.length; i++) {
             prepS.setString(i + 1, contents[i]);
         }
 
         return prepS;
     }
 
-    public ResultSet query(String sql, String... contents) throws SQLException
-    {
+    public ResultSet query(String sql, String... contents) throws SQLException {
         PreparedStatement prepS = prepStmt(sql, contents);
 
         ResultSet results = prepS.executeQuery();
@@ -117,24 +101,20 @@ public class DBDao implements AutoCloseable
         return results;
     }
 
-    public void insert(String sql, String... contents) throws SQLException
-    {
+    public void insert(String sql, String... contents) throws SQLException {
         prepStmt(sql, contents).execute();
     }
 
-    public int update(String sql, String... contents) throws SQLException
-    {
+    public int update(String sql, String... contents) throws SQLException {
         return prepStmt(sql, contents).executeUpdate();
     }
 
-    public void delete(String sql, String... contents) throws SQLException
-    {
+    public void delete(String sql, String... contents) throws SQLException {
         prepStmt(sql, contents).execute();
     }
 
     @Override
-    public void close() throws SQLException
-    {
+    public void close() throws SQLException {
         connectionI.close();
     }
 }

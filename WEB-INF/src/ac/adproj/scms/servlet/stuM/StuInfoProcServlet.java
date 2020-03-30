@@ -17,37 +17,36 @@
 
 package ac.adproj.scms.servlet.stuM;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.sql.*;
-import java.util.*;
-
-import javax.sql.rowset.serial.*;
-
-import ac.adproj.scms.dao.*;
+import ac.adproj.scms.dao.DBDao;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
-import ac.adproj.scms.model.MultipartForm;
+import ac.adproj.scms.servlet.forms.MultipartFormHandler;
+import ac.adproj.scms.servlet.forms.MultipartFormHandlerFactory;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.rowset.serial.SerialBlob;
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
-    The student info's processing Servlet. (a.k.a /stuM/infoProc)
-
-    @author Andy Cheung
-*/
+ * The student info's processing Servlet. (a.k.a /stuM/infoProc)
+ *
+ * @author Andy Cheung
+ */
 public class StuInfoProcServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        File tempdir = (File) getServletConfig().getServletContext().getAttribute("javax.servlet.context.tempdir");
-        
-        MultipartForm mpf = new MultipartForm(request, tempdir.getAbsolutePath());
-        
+        MultipartFormHandler mpf = MultipartFormHandlerFactory.getFormHandler(request);
+
         request.setCharacterEncoding("utf-8");
         response.setCharacterEncoding("utf-8");
         response.setContentType("text/html; charset=utf-8");
@@ -81,8 +80,7 @@ public class StuInfoProcServlet extends HttpServlet {
 
                 byte[] pictW = (byte[]) mpf.getNonFormFieldObject("headSet");
 
-                if (pictW != null && pictW.length != 0)
-                {
+                if (pictW != null && pictW.length != 0) {
                     updatePhoto(conn, mpf.getStringParameter("id"), pictW);
                 }
 
@@ -114,9 +112,8 @@ public class StuInfoProcServlet extends HttpServlet {
 
                 // byte[] pictB = getUploadedFile(request, "headSet", daoO);
                 byte[] pictW = (byte[]) mpf.getNonFormFieldObject("headSet");
-                
-                if (pictW != null && pictW.length != 0)
-                {
+
+                if (pictW != null && pictW.length != 0) {
                     updatePhoto(conn, mpf.getStringParameter("id"), pictW);
                 }
 
@@ -137,18 +134,14 @@ public class StuInfoProcServlet extends HttpServlet {
         }
     }
 
-    private void updatePhoto(Connection conn, String id, byte[] pictW) throws SQLException
-    {
+    private void updatePhoto(Connection conn, String id, byte[] pictW) throws SQLException {
         PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
-        if (pictW != null && pictW.length != 0)
-        {
+        if (pictW != null && pictW.length != 0) {
             byte[] pictB = pictW;
             ps_p.setBlob(1, new SerialBlob(pictB));
             ps_p.setString(2, id);
             ps_p.execute();
-        }
-        else
-        {
+        } else {
             throw new IllegalArgumentException();
         }
     }

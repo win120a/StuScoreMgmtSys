@@ -1,4 +1,4 @@
-<%--
+/*
     Copyright (C) 2011-2020 Andy Cheung
 
     This program is free software: you can redistribute it and/or modify
@@ -13,22 +13,30 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
---%>
+*/
 
-<%@ page contentType="text/html; charset=utf-8" errorPage="WEB-INF/errorPage.jsp" %>
+package ac.adproj.scms.servlet.forms;
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>学生成绩管理系统</title>
-</head>
-<body style="text-align: center;">
-    <h1>系统主页</h1>
-    <form action="dispatcher" method="post">
-        <input type="submit" name="stuM" value="学生管理">
-        <input type="submit" name="subM" value="学科管理">
-        <input type="submit" name="scoreM" value="成绩管理">
-        <input type="submit" name="test" value="测试">
-    </form>
-</body>
-</html>
+/**
+ * Represents a multipart form handler.
+ *
+ * @author Andy Cheung
+ */
+public interface MultipartFormHandler {
+
+    /**
+     * Get a non-form field value (e.g. File).
+     *
+     * @author Andy Cheung
+     */
+    Object getNonFormFieldObject(String key);
+
+    /**
+     * Get a form field value.
+     *
+     * @param key The key to the value in the multipart form.
+     * @author Andy Cheung
+     */
+    String getStringParameter(String key);
+
+}

@@ -14,7 +14,7 @@
     <% } %>
     
     <h1>程序出现错误。</h1>
-    <p>错误类：<%= exception.getClass().getName() %></h2>
+    <p>错误类：<%= exception.getClass().getName() %></p>
     <p>错误信息：<%= exception.getMessage() %></p>
     <p>
         调用堆栈：

@@ -17,22 +17,26 @@
 
 package ac.adproj.scms.servlet.subM;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.io.IOException;
-import java.io.Writer;
-import java.sql.*;
-import java.util.*;
-
-import ac.adproj.scms.dao.*;
+import ac.adproj.scms.dao.DBDao;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
-/**
-    The subject info's processing Servlet. (a.k.a /subM/infoProc)
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-    @author Andy Cheung
-*/
+/**
+ * The subject info's processing Servlet. (a.k.a /subM/infoProc)
+ *
+ * @author Andy Cheung
+ */
 public class SubInfoProcServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -51,8 +55,8 @@ public class SubInfoProcServlet extends HttpServlet {
             String type = request.getParameter("type");
 
             if (addP != null && addP.equals("1")) {
-                PreparedStatement ps = conn.prepareStatement("insert into kc values (" 
-                                                            + "?, ?, ?, ?, ?);");
+                PreparedStatement ps = conn.prepareStatement("insert into kc values ("
+                        + "?, ?, ?, ?, ?);");
 
                 ps.setString(1, request.getParameter("courseID"));
                 ps.setString(2, request.getParameter("courseName"));

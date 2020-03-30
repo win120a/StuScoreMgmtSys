@@ -9,15 +9,16 @@ GPLv3
 1. This program uses MySQL Connector/J 8.0 with no code altered (Licensed under GPLv2). <br />
 2. `.gitignore` is based on `Java.gitignore` in https://github.com/github/gitignore, which is licensed under Creative Commons Zero v1.0 Universal License (CC0-1.0).
 3. `WEB-INF/lib/commons-fileupload-1.4.jar` and `WEB-INF/lib/commons-io-2.6.jar` are files of the Apache Commons Project (http://commons.apache.org/), which is licensed under Apache License.
+3. Gson project (https://github.com/google/gson) is used (`WEB-INF/lib/gson-2.8.6.jar`). It is licensed under Apache License.
 
 # Structure
-1. The Servelet Part of this project (a.k.a. `WEB-INF/src` and `WEB-INF/classes`) is an Ant project.
+1. The building system of the Servlet Part of this project (a.k.a. `WEB-INF/src` and `WEB-INF/classes`) is driven by Ant. The build file is located in the root of the project.
 2. The whole folder is a web-app folder, copy it into Tomcat's `webapps` folder to deploy.
 3. The DB Server Configuration is located in `WEB-INF/web.xml`.
 
 # Building & Deploy
 0. Copy The entire folder to the `webapps` directory.
-1. Edit values in `WEB-INF/build.xml` (JAVA_HOME) & `WEB-INF/web.xml` (Server Configurations).
-2. Compile the ant project in `WEB-INF` folder.
-3. Forward http://[Address to WebApp]/installDB.jsp to create databases.
+1. Edit values in `props.xml` (JAVA_HOME) & `WEB-INF/web.xml` (Server Configurations).
+2. Compile the ant project.
+3. Forward to http://[Address to WebApp]/installDB.jsp to create database.
 4. Delete the installDB.jsp file.

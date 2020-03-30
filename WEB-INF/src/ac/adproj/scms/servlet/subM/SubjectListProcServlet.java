@@ -17,22 +17,27 @@
 
 package ac.adproj.scms.servlet.subM;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.io.IOException;
-import java.io.Writer;
-import java.sql.*;
-import java.util.*;
-
-import ac.adproj.scms.dao.*;
+import ac.adproj.scms.dao.DBDao;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
-/**
-    The subject list's processing Servlet. (a.k.a /subM/listProc)
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Writer;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Map;
 
-    @author Andy Cheung
-*/
+/**
+ * The subject list's processing Servlet. (a.k.a /subM/listProc)
+ *
+ * @author Andy Cheung
+ */
 public class SubjectListProcServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -43,9 +48,9 @@ public class SubjectListProcServlet extends HttpServlet {
         response.setContentType("text/html; charset=utf-8");
 
         try (DBDao daoO = InitServlet.daoO;
-                Connection conn = daoO.getConnection();
-                PreparedStatement ps = conn.prepareStatement("delete from kc where kc.courseID = ?;");
-                Writer out = response.getWriter()) {
+             Connection conn = daoO.getConnection();
+             PreparedStatement ps = conn.prepareStatement("delete from kc where kc.courseID = ?;");
+             Writer out = response.getWriter()) {
 
             String delF = request.getParameter("del");
             StringBuilder undoneMessageBuilder = new StringBuilder();
@@ -77,9 +82,7 @@ public class SubjectListProcServlet extends HttpServlet {
 
                 if (notFullyDel) {
                     out.write("<script>alert(\"" + new String(undoneMessageBuilder.toString().getBytes(), "utf-8") + "\"); location.href=\"index.jsp\";</script>");
-                }
-                else
-                {
+                } else {
                     out.write(new String(("<script>alert(\"删除成功! \"); location.href=\"index.jsp\";</script>").getBytes(), "utf-8"));
                 }
             }
