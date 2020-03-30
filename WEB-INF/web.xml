@@ -17,140 +17,134 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
                       http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
-  version="4.0"
-  metadata-complete="true">
+         version="4.0"
+         metadata-complete="true">
 
-  <display-name>Student Score Enrolling System</display-name>
-  <description>
-     Student Score Enrolling System (ISA Assignment)
-  </description>
-
-
-  <!-- Servlet Configurations -->
-
-  <servlet>
-    <servlet-name>Init</servlet-name>
-    <servlet-class>ac.adproj.scms.servlet.InitServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
+    <display-name>Student Score Enrolling System</display-name>
+    <description>
+        Student Score Enrolling System (ISA Assignment)
+    </description>
 
 
+    <!-- Servlet Configurations -->
 
-  <servlet>
-    <servlet-name>PageDispatcher</servlet-name>
-    <servlet-class>ac.adproj.scms.servlet.PageDispatcherServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>PageDispatcher</servlet-name>
-    <url-pattern>/dispatcher</url-pattern>
-  </servlet-mapping>
+    <servlet>
+        <servlet-name>Init</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.InitServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
 
+    <servlet>
+        <servlet-name>PageDispatcher</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.PageDispatcherServlet</servlet-class>
+    </servlet>
 
-  <servlet>
-    <servlet-name>ScoreInfoProc</servlet-name>
-    <servlet-class>ac.adproj.scms.servlet.scoreM.ScoreInfoServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>ScoreInfoProc</servlet-name>
-    <url-pattern>/scoreM/infoProc</url-pattern>
-  </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>PageDispatcher</servlet-name>
+        <url-pattern>/dispatcher</url-pattern>
+    </servlet-mapping>
 
 
-  <servlet>
-    <servlet-name>SubInfoProcServlet</servlet-name>
-    <servlet-class>ac.adproj.scms.servlet.subM.SubInfoProcServlet</servlet-class>
-  </servlet>
+    <servlet>
+        <servlet-name>ScoreInfoProc</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.scoreM.ScoreInfoServlet</servlet-class>
+    </servlet>
 
-  <servlet-mapping>
-    <servlet-name>SubInfoProcServlet</servlet-name>
-    <url-pattern>/subM/infoProc</url-pattern>
-  </servlet-mapping>
-
-
-  <servlet>
-    <servlet-name>StuInfoProcServlet</servlet-name>
-    <servlet-class>ac.adproj.scms.servlet.stuM.StuInfoProcServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>StuInfoProcServlet</servlet-name>
-    <url-pattern>/stuM/infoProc</url-pattern>
-  </servlet-mapping>
-  
+    <servlet-mapping>
+        <servlet-name>ScoreInfoProc</servlet-name>
+        <url-pattern>/scoreM/infoProc</url-pattern>
+    </servlet-mapping>
 
 
-  <servlet>
-    <servlet-name>PhotoServlet</servlet-name>
-    <servlet-class>ac.adproj.scms.servlet.StudentPhotoServlet</servlet-class>
-  </servlet>
+    <servlet>
+        <servlet-name>SubInfoProcServlet</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.subM.SubInfoProcServlet</servlet-class>
+    </servlet>
 
-  <servlet-mapping>
-    <servlet-name>PhotoServlet</servlet-name>
-    <url-pattern>/stuPhoto.png</url-pattern>
-  </servlet-mapping>
-
-
-
-  <servlet>
-    <servlet-name>StuListProcServlet</servlet-name>
-    <servlet-class>ac.adproj.scms.servlet.stuM.StuListProcServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>StuListProcServlet</servlet-name>
-    <url-pattern>/stuM/listProc</url-pattern>
-  </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubInfoProcServlet</servlet-name>
+        <url-pattern>/subM/infoProc</url-pattern>
+    </servlet-mapping>
 
 
+    <servlet>
+        <servlet-name>StuInfoProcServlet</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.stuM.StuInfoProcServlet</servlet-class>
+    </servlet>
 
-  <servlet>
-    <servlet-name>SubjectListProcServlet</servlet-name>
-    <servlet-class>ac.adproj.scms.servlet.subM.SubjectListProcServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>SubjectListProcServlet</servlet-name>
-    <url-pattern>/subM/listProc</url-pattern>
-  </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StuInfoProcServlet</servlet-name>
+        <url-pattern>/stuM/infoProc</url-pattern>
+    </servlet-mapping>
 
 
-  <!-- Context (Application) Configurations -->
+    <servlet>
+        <servlet-name>PhotoServlet</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.StudentPhotoServlet</servlet-class>
+    </servlet>
 
-  <context-param>
-    <param-name>driver</param-name>
-    <param-value>com.mysql.cj.jdbc.Driver</param-value>
-  </context-param>
+    <servlet-mapping>
+        <servlet-name>PhotoServlet</servlet-name>
+        <url-pattern>/stuPhoto.png</url-pattern>
+    </servlet-mapping>
 
-  <context-param>
-    <param-name>serverAddr</param-name>
-    <param-value>192.168.1.110</param-value>
-  </context-param>
 
-  <context-param>
-    <param-name>serverTimeZone</param-name>
-    <param-value>Asia/Shanghai</param-value>
-  </context-param>
+    <servlet>
+        <servlet-name>StuListProcServlet</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.stuM.StuListProcServlet</servlet-class>
+    </servlet>
 
-  <context-param>
-    <param-name>db</param-name>
-    <param-value>xscj</param-value>
-  </context-param>
+    <servlet-mapping>
+        <servlet-name>StuListProcServlet</servlet-name>
+        <url-pattern>/stuM/listProc</url-pattern>
+    </servlet-mapping>
 
-  <context-param>
-    <param-name>userName</param-name>
-    <param-value>remoteA</param-value>
-  </context-param>
 
-  <context-param>
-    <param-name>password</param-name>
-    <param-value>1</param-value>
-  </context-param>
+    <servlet>
+        <servlet-name>SubjectListProcServlet</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.subM.SubjectListProcServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SubjectListProcServlet</servlet-name>
+        <url-pattern>/subM/listProc</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- Context (Application) Configurations -->
+
+    <context-param>
+        <param-name>driver</param-name>
+        <param-value>com.mysql.cj.jdbc.Driver</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>serverAddr</param-name>
+        <param-value>192.168.1.110</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>serverTimeZone</param-name>
+        <param-value>Asia/Shanghai</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>db</param-name>
+        <param-value>xscj</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>userName</param-name>
+        <param-value>remoteA</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>password</param-name>
+        <param-value>1</param-value>
+    </context-param>
 </web-app>

@@ -5,7 +5,7 @@
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Softwebappe Foundation, either version 3 of the License, or
+    the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -18,10 +18,12 @@
 -->
 
 <project name="scms-properties">
-	<property name="JAVA_HOME" value="C:\\Program Files\\Java\\jdk-10.0.1" />
-	<property name="TOMCAT_HOME" value="C:\\DevKits\\tomcat" />
-	<property name="JAVA" value="${JAVA_HOME}\\bin" />
-	<property name="SOURCES" value="src" />
-	<property name="LIBRARIES" value=".\\WebContent\\WEB-INF\\lib" />
-	<property name="CLASSPATH" value=".;${LIBRARIES}\\mysql-connector-java-8.0.17.jar;${LIBRARIES}\\commons-io-2.6.jar;${LIBRARIES}\\commons-fileupload-1.4.jar;${TOMCAT_HOME}\\lib\\servlet-api.jar;${LIBRARIES}\\gson-2.8.6.jar" />
+    <property name="JAVA_HOME" value="C:\\Program Files\\Java\\jdk-10.0.1"/>
+    <property name="TOMCAT_HOME" value="C:\\DevKits\\tomcat"/>
+    <property name="JAVA" value="${JAVA_HOME}\\bin"/>
+    <property name="SOURCES" value="src"/>
+    <property name="ECLIPSE_PROJECTS" value="D:\\Workspace\\Eclipse"/>
+    <property name="LIBRARIES" value=".\\web\\WEB-INF\\lib"/>
+    <property name="CLASSPATH"
+              value=".;${LIBRARIES}\\mysql-connector-java-8.0.17.jar;${LIBRARIES}\\commons-io-2.6.jar;${LIBRARIES}\\commons-fileupload-1.4.jar;${TOMCAT_HOME}\\lib\\servlet-api.jar;${TOMCAT_HOME}\\lib\\jsp-api.jar;${LIBRARIES}\\gson-2.8.6.jar"/>
 </project>
