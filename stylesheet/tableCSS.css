@@ -1,16 +1,14 @@
-table.T
-{
+table.T {
     border-collapse: collapse;
 }
-.T tr td
-{
-    border : black 0.5px solid;
+
+.T tr td {
+    border: black 0.5px solid;
     text-align: center;
     width: 80px;
-    font-size : 0.8em;
+    font-size: 0.8em;
 }
 
-*
-{
+* {
     text-align: center;
 }

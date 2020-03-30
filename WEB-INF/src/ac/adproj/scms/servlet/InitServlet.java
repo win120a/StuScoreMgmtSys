@@ -17,17 +17,18 @@
 
 package ac.adproj.scms.servlet;
 
-import ac.adproj.scms.dao.*;
-import javax.servlet.http.*;
-import javax.servlet.*;
+import ac.adproj.scms.dao.DBDao;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
 
 /**
-    The initialization Servlet that provides connection DAO object.
-
-    @author Andy Cheung
-*/  
-public class InitServlet extends HttpServlet
-{
+ * The initialization Servlet that provides connection DAO object.
+ *
+ * @author Andy Cheung
+ */
+public class InitServlet extends HttpServlet {
+    public static DBDao daoO;
     private String driver = "";
     private String serverAddr = "";
     private String userName = "";
@@ -35,11 +36,8 @@ public class InitServlet extends HttpServlet
     private String serverTimeZone = "";
     private String db = "";
 
-    public static DBDao daoO;
-
     @Override
-    public void init()
-    {
+    public void init() {
         ServletContext application = getServletContext();
         boolean configured = false;
 
@@ -50,10 +48,10 @@ public class InitServlet extends HttpServlet
         serverAddr = driver != null ? (String) serverAddr : "";
 
         userName = (String) application.getInitParameter("userName");
-    
+
         Object confO = application.getAttribute("configured");
         configured = confO == null ? false : (Boolean) confO;
-    
+
         userName = userName != null ? (String) userName : "";
 
         password = (String) application.getInitParameter("password");

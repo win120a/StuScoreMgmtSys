@@ -17,10 +17,9 @@
 
 package ac.adproj.scms.entity;
 
+import ac.adproj.scms.util.ByteArrayUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import ac.adproj.scms.util.ByteArrayUtils;
 
 public class Student implements Entity {
     private String name;

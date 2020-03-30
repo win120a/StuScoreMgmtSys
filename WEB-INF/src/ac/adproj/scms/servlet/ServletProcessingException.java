@@ -17,20 +17,16 @@
 
 package ac.adproj.scms.servlet;
 
-public class ServletProcessingException extends RuntimeException
-{
-    public ServletProcessingException()
-    {
+public class ServletProcessingException extends RuntimeException {
+    public ServletProcessingException() {
         super();
     }
 
-    public ServletProcessingException(String message)
-    {
+    public ServletProcessingException(String message) {
         super(message);
     }
 
-    public ServletProcessingException(Throwable cause)
-    {
+    public ServletProcessingException(Throwable cause) {
         super(cause);
     }
 }

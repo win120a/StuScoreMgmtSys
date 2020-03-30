@@ -17,17 +17,16 @@
 
 package ac.adproj.scms.servlet.forms;
 
+import ac.adproj.scms.servlet.ServletProcessingException;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import javax.servlet.http.HttpServletRequest;
-
-import ac.adproj.scms.servlet.ServletProcessingException;
-
 /**
  * Simple factory of Multipart Form Handler.
- * 
+ *
  * @author Andy Cheung
  */
 public class MultipartFormHandlerFactory {
@@ -38,11 +37,11 @@ public class MultipartFormHandlerFactory {
 
     /**
      * Factory method of form handler.
-     * 
+     *
      * @param request The HTTP Request.
      * @return Instance of the class which name is {@link #FORM_HANDLER_CLASS_NAME}.
-     * @see #FORM_HANDLER_CLASS_NAME
      * @author Andy Cheung
+     * @see #FORM_HANDLER_CLASS_NAME
      */
     public static MultipartFormHandler getFormHandler(HttpServletRequest request) {
 

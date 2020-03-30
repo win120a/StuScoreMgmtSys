@@ -17,11 +17,12 @@
 
 package ac.adproj.scms.servlet;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.io.*;
-
-import ac.adproj.scms.servlet.ServletProcessingException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Writer;
 
 public class PageDispatcherServlet extends HttpServlet {
     @Override
@@ -34,30 +35,26 @@ public class PageDispatcherServlet extends HttpServlet {
         try (Writer out = response.getWriter()) {
             String testParm = request.getParameter("test");
 
-            if (testParm != null)
-            {
+            if (testParm != null) {
                 forward("/test.jsp", request, response);
                 return;
             }
 
             String subMParm = request.getParameter("subM");
 
-            if (subMParm != null)
-            {
+            if (subMParm != null) {
                 out.write("<script>location.href = \"subM/index.jsp\"</script>");
             }
 
             String stuMParm = request.getParameter("stuM");
 
-            if (stuMParm != null)
-            {
+            if (stuMParm != null) {
                 out.write("<script>location.href = \"stuM/index.jsp\"</script>");
             }
 
             String scoreMParm = request.getParameter("scoreM");
 
-            if (scoreMParm != null)
-            {
+            if (scoreMParm != null) {
                 out.write("<script>location.href = \"scoreM/index.jsp\"</script>");
             }
         }

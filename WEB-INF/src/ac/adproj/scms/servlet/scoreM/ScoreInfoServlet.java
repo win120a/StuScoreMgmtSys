@@ -17,16 +17,19 @@
 
 package ac.adproj.scms.servlet.scoreM;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import ac.adproj.scms.dao.DBDao;
+import ac.adproj.scms.servlet.InitServlet;
+import ac.adproj.scms.servlet.ServletProcessingException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.*;
-import java.util.*;
-
-import ac.adproj.scms.dao.*;
-import ac.adproj.scms.servlet.InitServlet;
-import ac.adproj.scms.servlet.ServletProcessingException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ScoreInfoServlet extends HttpServlet {
     @Override

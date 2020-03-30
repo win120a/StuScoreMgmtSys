@@ -17,6 +17,17 @@
 
 package ac.adproj.scms.servlet.stuM;
 
+import ac.adproj.scms.dao.DBDao;
+import ac.adproj.scms.servlet.InitServlet;
+import ac.adproj.scms.servlet.ServletProcessingException;
+import ac.adproj.scms.servlet.forms.MultipartFormHandler;
+import ac.adproj.scms.servlet.forms.MultipartFormHandlerFactory;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.Connection;
@@ -24,21 +35,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.sql.rowset.serial.SerialBlob;
-
-import ac.adproj.scms.dao.DBDao;
-import ac.adproj.scms.servlet.InitServlet;
-import ac.adproj.scms.servlet.ServletProcessingException;
-import ac.adproj.scms.servlet.forms.MultipartFormHandler;
-import ac.adproj.scms.servlet.forms.MultipartFormHandlerFactory;
-
 /**
  * The student info's processing Servlet. (a.k.a /stuM/infoProc)
- * 
+ *
  * @author Andy Cheung
  */
 public class StuInfoProcServlet extends HttpServlet {

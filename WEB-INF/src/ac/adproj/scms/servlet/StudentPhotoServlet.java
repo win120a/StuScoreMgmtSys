@@ -17,28 +17,29 @@
 
 package ac.adproj.scms.servlet;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import ac.adproj.scms.dao.DBDao;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.*;
+import java.io.InputStream;
 import java.sql.*;
-import java.util.*;
 
-import ac.adproj.scms.dao.*;
-
-public class StudentPhotoServlet extends HttpServlet
-{
+public class StudentPhotoServlet extends HttpServlet {
     private static final String QUERY_SQL = "select photo as p from xs where stuid=?;";
     private static final String PLACEHOLDER_RELATIVE_PATH = "/images/none.png";
 
     @Override
-    public void service(HttpServletRequest request, HttpServletResponse response)
-    {
+    public void service(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("id");
 
         try (DBDao daoO = InitServlet.daoO;
-            Connection conn = daoO.getConnection();
-            PreparedStatement ps = conn.prepareStatement(QUERY_SQL);) {
+             Connection conn = daoO.getConnection();
+             PreparedStatement ps = conn.prepareStatement(QUERY_SQL);) {
 
             if (id == null || id.isEmpty()) {
                 sendNone(response);
@@ -63,7 +64,7 @@ public class StudentPhotoServlet extends HttpServlet
 
             if (photoO == null) {
                 sendNone(response);
-            } else {    
+            } else {
                 InputStream photoS = photoO.getBinaryStream();
                 byte[] buffer = photoS.readAllBytes();
                 // response.setContentType("image/png");
@@ -77,8 +78,7 @@ public class StudentPhotoServlet extends HttpServlet
         }
     }
 
-    private void sendNone(HttpServletResponse response) throws IOException
-    {
+    private void sendNone(HttpServletResponse response) throws IOException {
         ServletContext ctx = getServletContext();
         String rPath = ctx.getRealPath(PLACEHOLDER_RELATIVE_PATH);
         FileInputStream photoS = new FileInputStream(new File(rPath));
