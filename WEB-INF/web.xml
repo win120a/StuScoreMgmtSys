@@ -73,13 +73,13 @@
 
 
     <servlet>
-        <servlet-name>StuInfoProcServlet</servlet-name>
-        <servlet-class>ac.adproj.scms.servlet.stuM.StuInfoProcServlet</servlet-class>
+        <servlet-name>StuInfoController</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.stuM.StuInfoController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>StuInfoProcServlet</servlet-name>
-        <url-pattern>/stuM/infoProc</url-pattern>
+        <servlet-name>StuInfoController</servlet-name>
+        <url-pattern>/stuM/info</url-pattern>
     </servlet-mapping>
 
 

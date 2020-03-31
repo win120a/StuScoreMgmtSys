@@ -15,10 +15,22 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.entity;
+package ac.adproj.scms.dao;
 
-import com.google.gson.JsonObject;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-public interface Entity {
-    JsonObject getJSON();
+public interface DBConnectionHandler extends AutoCloseable {
+    Connection getConnection() throws SQLException;
+
+    default PreparedStatement prepStmt(String sql, String... contents) throws SQLException {
+        PreparedStatement prepS = getConnection().prepareStatement(sql);
+
+        for (int i = 0; i < contents.length; i++) {
+            prepS.setString(i + 1, contents[i]);
+        }
+
+        return prepS;
+    }
 }

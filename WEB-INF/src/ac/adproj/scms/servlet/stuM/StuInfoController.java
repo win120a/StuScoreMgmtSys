@@ -18,12 +18,15 @@
 package ac.adproj.scms.servlet.stuM;
 
 import ac.adproj.scms.dao.DBDao;
+import ac.adproj.scms.dao.StudentDao;
+import ac.adproj.scms.entity.Student;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 import ac.adproj.scms.servlet.forms.MultipartFormHandler;
 import ac.adproj.scms.servlet.forms.MultipartFormHandlerFactory;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,12 +38,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**
- * The student info's processing Servlet. (a.k.a /stuM/infoProc)
- *
- * @author Andy Cheung
- */
-public class StuInfoProcServlet extends HttpServlet {
+public class StuInfoController extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String stuid = req.getParameter("id");
+        Student s = StudentDao.getStudentObjectThroughDB(stuid);
+        req.setAttribute("studentObject", s);
+        req.getRequestDispatcher("stuInfo.jsp").forward(req, resp);
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -145,18 +151,4 @@ public class StuInfoProcServlet extends HttpServlet {
             throw new IllegalArgumentException();
         }
     }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setHeader("Allow", "GET, HEAD, POST, OPTIONS");
-        request.setCharacterEncoding("utf-8");
-        response.setBufferSize(8192);
-        response.setContentType("text/html; charset=utf-8");
-
-        byte[] b = ("<p>测试 Test:" + request.getParameter("test") + "</p>").getBytes();
-
-        response.getWriter().print(new String(b, "utf-8"));
-    }
-
 }
