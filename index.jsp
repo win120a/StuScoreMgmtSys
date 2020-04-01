@@ -23,12 +23,12 @@
     <title>学生成绩管理系统</title>
 </head>
 <body style="text-align: center;">
-    <h1>系统主页</h1>
-    <form action="dispatcher" method="post">
-        <input type="submit" name="stuM" value="学生管理">
-        <input type="submit" name="subM" value="学科管理">
-        <input type="submit" name="scoreM" value="成绩管理">
-        <input type="submit" name="test" value="测试">
-    </form>
+<h1>系统主页</h1>
+<form action="dispatcher" method="post">
+    <input type="submit" name="stuM" value="学生管理">
+    <input type="submit" name="subM" value="学科管理">
+    <input type="submit" name="scoreM" value="成绩管理">
+    <input type="submit" name="test" value="测试">
+</form>
 </body>
 </html>

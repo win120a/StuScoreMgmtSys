@@ -17,7 +17,6 @@
 
 package ac.adproj.scms.entity;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class Course implements Entity {
@@ -26,6 +25,34 @@ public class Course implements Entity {
     private String term;
     private int courseHours;
     private int credits;
+
+    public Course(String id) {
+        this.id = id;
+    }
+
+    public Course(String id, String name, String term, int courseHours, int credits) {
+        this.id = id;
+        this.name = name;
+        this.term = term;
+        this.courseHours = courseHours;
+        this.credits = credits;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
+    }
+
+    public void setCourseHours(int courseHours) {
+        this.courseHours = courseHours;
+    }
+
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
 
     public String getId() {
         return id;

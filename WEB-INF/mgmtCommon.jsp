@@ -16,33 +16,29 @@
 --%>
 
 <%@ page contentType="text/html; charset=utf-8" %>
-    <link rel="stylesheet" href="../stylesheet/tableCSS.css" />
-    <script type="text/javascript">
+<link rel="stylesheet" href="../stylesheet/tableCSS.css"/>
+<script type="text/javascript">
 
-        function checkSelection()
-        {
-            let objects = document.getElementsByClassName("del");
-            let flag = false;
+    function checkSelection() {
+        let objects = document.getElementsByClassName("del");
+        let flag = false;
 
-            for (let i = objects.length - 1; i >= 0; i--) {
-                if (objects[i].checked)
-                {
-                    flag = true;
-                    break;
-                }
+        for (let i = objects.length - 1; i >= 0; i--) {
+            if (objects[i].checked) {
+                flag = true;
+                break;
             }
+        }
 
-            if (!flag || objects.length == 0)
-            {
-                alert("没有选择的项目！");
-                return false;
-            }
-
-            if (confirm("确认删除？"))
-            {
-                return true;
-            }
-
+        if (!flag || objects.length == 0) {
+            alert("没有选择的项目！");
             return false;
         }
-    </script>
+
+        if (confirm("确认删除？")) {
+            return true;
+        }
+
+        return false;
+    }
+</script>

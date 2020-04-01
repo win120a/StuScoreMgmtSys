@@ -22,12 +22,8 @@ public enum GenderEnum {
 
     private int genderN;
 
-    GenderEnum (int genderN){
+    GenderEnum(int genderN) {
         this.genderN = genderN;
-    }
-
-    public int getGenderNumber() {
-        return genderN;
     }
 
     public static GenderEnum getGenderEnumThroughNumber(int n) {
@@ -36,5 +32,9 @@ public enum GenderEnum {
         }
 
         return (n == 1) ? MALE : FEMALE;
+    }
+
+    public int getGenderNumber() {
+        return genderN;
     }
 }

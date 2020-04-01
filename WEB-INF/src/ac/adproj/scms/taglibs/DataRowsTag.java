@@ -1,4 +1,4 @@
-<%--
+/*
     Copyright (C) 2011-2020 Andy Cheung
 
     This program is free software: you can redistribute it and/or modify
@@ -13,15 +13,18 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
---%>
+*/
 
-<%@ page import="ac.adproj.scms.dao.DBDao, ac.adproj.scms.servlet.InitServlet, java.sql.Connection" %>
-<%@ page import="java.sql.PreparedStatement" %>
-<%@ page import="java.sql.ResultSet" %>
-<%@ page import="java.sql.Statement" %>
+package ac.adproj.scms.taglibs;
 
-<%
-    DBDao daoO = InitServlet.daoO;
-    Connection conn = daoO.getConnection();
-    Statement stmt = conn.createStatement();
-%>
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+import java.io.IOException;
+
+public class DataRowsTag extends SimpleTagSupport {
+
+    @Override
+    public void doTag() throws JspException, IOException {
+        this.getJspContext().getOut().print("<p>TAG " + getClass().getName() + "ATTACHED! </p>");
+    }
+}

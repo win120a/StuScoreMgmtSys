@@ -16,7 +16,9 @@
 --%>
 
 <%@ page contentType="text/html; charset=utf-8" errorPage="WEB-INF/errorPage.jsp" %>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.DriverManager" %>
+<%@ page import="java.sql.Statement" %>
 <%@ page import="java.util.Properties" %>
 
 <%!
@@ -53,15 +55,14 @@
 <%
     String install = request.getParameter("install");
 
-    if (install != null && install.equals("1"))
-    {
+    if (install != null && install.equals("1")) {
         Class.forName(driver);
 
         Properties p = new Properties();
         p.put("user", userName);
         p.put("password", password);
         p.put("timezone", serverTimeZone);
-        Connection conn = DriverManager.getConnection("jdbc:mysql://" + serverAddr + "/" , p);
+        Connection conn = DriverManager.getConnection("jdbc:mysql://" + serverAddr + "/", p);
         Statement stmt = conn.createStatement();
 
         stmt.execute("create database if not exists " + request.getParameter("db") + ";");
@@ -85,16 +86,16 @@
     <title>建表程序</title>
 </head>
 <body style="text-align: center;">
-    <h1>建表程序</h1><br />
-    <form action="" method="post">
-        数据库驱动：<input type="text" name="driver" value="<%= driver %>"><br />
-        数据库服务器：<input type="text" name="serverAddr" value="<%= serverAddr %>"><br />
-        数据库：<input type="text" name="db" value="<%= db %>"><br />
-        用户名：<input type="text" name="userName" value="<%= userName %>"><br />
-        密  码：<input type="password" name="password" value="<%= password %>"><br />
-        服务器时区：<input type="text" name="serverTimeZone" value="<%= serverTimeZone %>"><br />
-        <input type="hidden" name="install" value="1"><br />
-        <input type="submit" value="安装">
-    </form>
+<h1>建表程序</h1><br/>
+<form action="" method="post">
+    数据库驱动：<input type="text" name="driver" value="<%= driver %>"><br/>
+    数据库服务器：<input type="text" name="serverAddr" value="<%= serverAddr %>"><br/>
+    数据库：<input type="text" name="db" value="<%= db %>"><br/>
+    用户名：<input type="text" name="userName" value="<%= userName %>"><br/>
+    密 码：<input type="password" name="password" value="<%= password %>"><br/>
+    服务器时区：<input type="text" name="serverTimeZone" value="<%= serverTimeZone %>"><br/>
+    <input type="hidden" name="install" value="1"><br/>
+    <input type="submit" value="安装">
+</form>
 </body>
 </html>

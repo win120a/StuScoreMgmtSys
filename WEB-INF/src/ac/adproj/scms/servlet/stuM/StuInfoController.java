@@ -17,30 +17,20 @@
 
 package ac.adproj.scms.servlet.stuM;
 
-import ac.adproj.scms.dao.DBDao;
 import ac.adproj.scms.dao.StudentDao;
 import ac.adproj.scms.entity.Student;
-import ac.adproj.scms.servlet.InitServlet;
-import ac.adproj.scms.servlet.ServletProcessingException;
-import ac.adproj.scms.servlet.forms.MultipartFormHandler;
-import ac.adproj.scms.servlet.forms.MultipartFormHandlerFactory;
+import ac.adproj.scms.servlet.base.MultiPartFormControllerBase;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class StuInfoController extends HttpServlet {
+public class StuInfoController extends MultiPartFormControllerBase {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String stuid = req.getParameter("id");
         Student s = StudentDao.getStudentObjectThroughDB(stuid);
         req.setAttribute("studentObject", s);
@@ -48,58 +38,21 @@ public class StuInfoController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void uploadObjectToDataBase(HttpServletRequest request) throws SQLException {
+        Student s = new Student(getStringParameter(request, "id"));
 
-        MultipartFormHandler mpf = MultipartFormHandlerFactory.getFormHandler(request);
+        s.setName(getStringParameter(request, "name"));
+        s.setMajor(getStringParameter(request, "major"));
+        s.setGenderThroughNumber(Integer.parseInt(getStringParameter(request, "gender")));
+        s.setDob(getStringParameter(request, "dob"));
+        s.setRemark(getStringParameter(request, "remark"));
 
-        request.setCharacterEncoding("utf-8");
-        response.setCharacterEncoding("utf-8");
-        response.setContentType("text/html; charset=utf-8");
+        byte[] pictW = (byte[]) getNonFormFieldObject(request, "headSet");
 
-        try (DBDao daoO = InitServlet.daoO) {
-            Writer out = response.getWriter();
-            Connection conn = daoO.getConnection();
-            Statement stmt = conn.createStatement();
-
-            request.setCharacterEncoding("utf-8");
-            String addP = mpf.getStringParameter("add");
-            String modP = mpf.getStringParameter("modify");
-
-            Student s = new Student(mpf.getStringParameter("id"));
-
-            s.setName(mpf.getStringParameter("name"));
-            s.setMajor(mpf.getStringParameter("major"));
-            s.setGenderThroughNumber(Integer.parseInt(mpf.getStringParameter("gender")));
-            s.setDob(mpf.getStringParameter("dob"));
-            s.setRemark(mpf.getStringParameter("remark"));
-
-            byte[] pictW = (byte[]) mpf.getNonFormFieldObject("headSet");
-
-            if (pictW != null && pictW.length != 0) {
-                s.setPhoto(pictW);
-            }
-
-            StudentDao.writeStudentObjectToDatabase(s);
-
-            out.write("<script>");
-
-            if (addP != null && addP.equals("1")) {
-                byte[] b = ("window.alert('添加成功! ');").getBytes();
-                out.write(new String(b, StandardCharsets.UTF_8));
-            } else if (modP != null && modP.equals("1")) {
-                byte[] b = ("window.alert('修改成功! ');").getBytes();
-                out.write(new String(b, StandardCharsets.UTF_8));
-            }
-
-            out.write("opener.location.reload();");
-            out.write("window.opener = null;");
-            out.write("window.close();");
-            out.write("</script>");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new ServletProcessingException(e);
-            // response.sendRedirect("/META-INF/errorPage.jsp");
+        if (pictW != null && pictW.length != 0) {
+            s.setPhoto(pictW);
         }
+
+        StudentDao.writeStudentObjectToDatabase(s);
     }
 }

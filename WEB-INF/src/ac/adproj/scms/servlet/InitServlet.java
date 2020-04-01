@@ -21,6 +21,7 @@ import ac.adproj.scms.dao.DBDao;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
+import java.sql.SQLException;
 
 /**
  * The initialization Servlet that provides connection DAO object.
@@ -29,40 +30,39 @@ import javax.servlet.http.HttpServlet;
  */
 public class InitServlet extends HttpServlet {
     public static DBDao daoO;
-    private String driver = "";
-    private String serverAddr = "";
-    private String userName = "";
-    private String password = "";
-    private String serverTimeZone = "";
-    private String db = "";
 
     @Override
     public void init() {
         ServletContext application = getServletContext();
-        boolean configured = false;
 
-        driver = (String) application.getInitParameter("driver");
-        driver = driver != null ? (String) driver : "";
+        String driver = application.getInitParameter("driver");
+        driver = driver != null ? driver : "";
 
-        serverAddr = (String) application.getInitParameter("serverAddr");
-        serverAddr = driver != null ? (String) serverAddr : "";
+        String serverAddr = application.getInitParameter("serverAddr");
+        serverAddr = serverAddr != null ? serverAddr : "";
 
-        userName = (String) application.getInitParameter("userName");
+        String userName = application.getInitParameter("userName");
+        userName = userName != null ? userName : "";
 
-        Object confO = application.getAttribute("configured");
-        configured = confO == null ? false : (Boolean) confO;
+        String password = application.getInitParameter("password");
+        password = password != null ? password : "";
 
-        userName = userName != null ? (String) userName : "";
+        String serverTimeZone = application.getInitParameter("serverTimeZone");
+        serverTimeZone = serverTimeZone != null ? serverTimeZone : "";
 
-        password = (String) application.getInitParameter("password");
-        password = password != null ? (String) password : "";
-
-        serverTimeZone = (String) application.getInitParameter("serverTimeZone");
-        serverTimeZone = serverTimeZone != null ? (String) serverTimeZone : "";
-
-        db = (String) application.getInitParameter("db");
-        db = db != null ? (String) db : "";
+        String db = application.getInitParameter("db");
+        db = db != null ? db : "";
 
         daoO = new DBDao(driver, serverAddr, userName, password, serverTimeZone, db);
+    }
+
+    @Override
+    public void destroy() {
+        try {
+            daoO.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ServletProcessingException(e);
+        }
     }
 }

@@ -50,8 +50,6 @@ public class StudentPhotoServlet extends HttpServlet {
 
             ps.setString(1, id);
 
-            // System.out.println(ps.toString());
-
             ResultSet resSet = ps.executeQuery();
 
             resSet.next();
