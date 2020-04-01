@@ -78,11 +78,14 @@
     <style type="text/css">
         td
         {
-            padding-right : 50px;
+            padding-right : 30px;
         }
 
-        .paneLeft, .paneRight
-        {
+        table.paneLeft {
+            width : 80%;
+        }
+
+        .paneLeft, .paneRight {
             float : left;
         }
 
@@ -102,8 +105,12 @@
             display: block;
         }
 
-        #remarkLabel
-        {
+        #remark {
+            width : 100%;
+            height : 350px;
+        }
+
+        #remarkLabel {
             display: block;
             text-align: center;
         }
@@ -160,7 +167,7 @@
             </div>
 
             <label for="remark" id="remarkLabel">备注：</label><br />
-            <textarea name="remark" id="remark" cols="80" rows="20"></textarea>
+            <textarea name="remark" id="remark"></textarea>
 
             <%
                 if (type.equals(TYPE_ADD))
