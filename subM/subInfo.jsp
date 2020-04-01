@@ -20,8 +20,6 @@
 <%@ include file="../WEB-INF/dbConn.jsp" %>
 <%@ include file="../WEB-INF/types.jsp" %>
 
-<%@ page import="java.net.URLDecoder, java.nio.charset.Charset" %>
-
 <script>
     function loadVars() {}
 </script>

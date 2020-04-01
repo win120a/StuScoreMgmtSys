@@ -18,5 +18,23 @@
 package ac.adproj.scms.entity;
 
 public enum GenderEnum {
-    MALE, FEMALE;
+    MALE(1), FEMALE(0);
+
+    private int genderN;
+
+    GenderEnum (int genderN){
+        this.genderN = genderN;
+    }
+
+    public int getGenderNumber() {
+        return genderN;
+    }
+
+    public static GenderEnum getGenderEnumThroughNumber(int n) {
+        if (n < 0 || n > 1) {
+            throw new IllegalArgumentException();
+        }
+
+        return (n == 1) ? MALE : FEMALE;
+    }
 }

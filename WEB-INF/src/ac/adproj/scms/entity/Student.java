@@ -30,13 +30,17 @@ public class Student implements Entity {
     private String remark;
     private byte[] photo;
 
+    public Student(String id) {
+        super();
+        this.id = id;
+    }
+
     public Student(String name, String dob, GenderEnum gender, String id, byte[] photo
             , String major, int totalCredits, String remark) {
-        super();
+        this(id);
         this.name = name;
         this.dob = dob;
         this.gender = gender;
-        this.id = id;
         this.photo = photo;
         this.major = major;
         this.totalCredits = totalCredits;
@@ -65,6 +69,10 @@ public class Student implements Entity {
 
     public void setGender(GenderEnum gender) {
         this.gender = gender;
+    }
+
+    public void setGenderThroughNumber(int number) {
+        this.gender = GenderEnum.getGenderEnumThroughNumber(number);
     }
 
     public String getId() {
@@ -106,6 +114,8 @@ public class Student implements Entity {
         jso.addProperty("gender", getGender().toString());
         jso.addProperty("id", getId());
         jso.addProperty("dob", getDob());
+        jso.addProperty("major", getMajor());
+        jso.addProperty("remark", getRemark());
         jso.addProperty("photo", ByteArrayUtils.convertByteArrayToString(getPhoto()));
         return jso;
     }

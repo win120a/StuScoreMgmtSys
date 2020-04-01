@@ -22,14 +22,13 @@ import ac.adproj.scms.entity.Student;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class StudentDao {
-    public static Student getStudentObjectThroughDB (String stuid) {
+    public static Student getStudentObjectThroughDB(String stuid) {
         String name;
         GenderEnum gender;
         String major;
@@ -50,7 +49,7 @@ public class StudentDao {
             gender = rs.getInt("gender") == 1 ? GenderEnum.MALE : GenderEnum.FEMALE;
 
             ResultSet rs_totalC = daoO.query("select sum(credit) as c from xs_kc where stuid=? and score >= 60;"
-                                            , stuid);
+                    , stuid);
 
             Blob photoBlob = rs.getBlob("photo");
             InputStream is = photoBlob.getBinaryStream();
@@ -66,6 +65,34 @@ public class StudentDao {
         } catch (SQLException | IOException e) {
             e.printStackTrace();
             throw new ServletProcessingException(e);
+        }
+    }
+
+    public static void writeStudentObjectToDatabase(Student s) throws SQLException {
+        try (DBDao daoO = InitServlet.daoO) {
+            daoO.update("update xs set name=?, major=?, gender=?, birthdate=?, "
+                            + "remark=? where stuid=?;"
+                        , s.getName()
+                        , s.getMajor()
+                        , Integer.toString(s.getGender().getGenderNumber())
+                        , s.getDob(), s.getRemark(), s.getId());
+
+
+            if (s.getPhoto() != null && s.getPhoto().length != 0) {
+                updatePhoto(daoO.getConnection(), s.getId(), s.getPhoto());
+            }
+        }
+    }
+
+    private static void updatePhoto(Connection conn, String id, byte[] pictW) throws SQLException {
+        PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
+        if (pictW != null && pictW.length != 0) {
+            byte[] pictB = pictW;
+            ps_p.setBlob(1, new SerialBlob(pictB));
+            ps_p.setString(2, id);
+            ps_p.execute();
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 }

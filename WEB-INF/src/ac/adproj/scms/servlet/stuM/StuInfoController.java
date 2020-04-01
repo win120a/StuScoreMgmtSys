@@ -19,6 +19,7 @@ package ac.adproj.scms.servlet.stuM;
 
 import ac.adproj.scms.dao.DBDao;
 import ac.adproj.scms.dao.StudentDao;
+import ac.adproj.scms.entity.GenderEnum;
 import ac.adproj.scms.entity.Student;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
@@ -44,7 +45,7 @@ public class StuInfoController extends HttpServlet {
         String stuid = req.getParameter("id");
         Student s = StudentDao.getStudentObjectThroughDB(stuid);
         req.setAttribute("studentObject", s);
-        req.getRequestDispatcher("stuInfo.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/stuM/stuInfo.jsp").forward(req, resp);
     }
 
     @Override
@@ -102,26 +103,22 @@ public class StuInfoController extends HttpServlet {
             }
 
             if (modP != null && modP.equals("1")) {
-                PreparedStatement ps = conn.prepareStatement(
-                        "update xs set name=?, major=?, gender=?, birthdate=?, " + "remark=? where stuid=?;");
+                Student s = new Student(mpf.getStringParameter("id"));
 
-                PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
-
-                ps.setString(1, mpf.getStringParameter("name"));
-                ps.setString(2, mpf.getStringParameter("major"));
-                ps.setString(3, mpf.getStringParameter("gender"));
-                ps.setString(4, mpf.getStringParameter("dob"));
-                ps.setString(5, mpf.getStringParameter("remark"));
-                ps.setString(6, mpf.getStringParameter("id"));
-
-                ps.execute();
+                s.setName(mpf.getStringParameter("name"));
+                s.setMajor(mpf.getStringParameter("major"));
+                s.setGenderThroughNumber(Integer.parseInt(mpf.getStringParameter("gender")));
+                s.setDob(mpf.getStringParameter("dob"));
+                s.setRemark(mpf.getStringParameter("remark"));
 
                 // byte[] pictB = getUploadedFile(request, "headSet", daoO);
                 byte[] pictW = (byte[]) mpf.getNonFormFieldObject("headSet");
 
                 if (pictW != null && pictW.length != 0) {
-                    updatePhoto(conn, mpf.getStringParameter("id"), pictW);
+                    s.setPhoto(pictW);
                 }
+
+                StudentDao.writeStudentObjectToDatabase(s);
 
                 out.write("<script>");
 
