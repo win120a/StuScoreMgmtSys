@@ -15,12 +15,13 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 --%>
 
-<%@ page contentType="text/html; charset=utf-8" errorPage="../WEB-INF/errorPage.jsp" %>
+<%@ page contentType="text/html; charset=utf-8" errorPage="../errorPage.jsp" %>
 
-<%@ include file="../WEB-INF/dbConn.jsp" %>
-<%@ include file="../WEB-INF/types.jsp" %>
+<%@ include file="../dbConn.jsp" %>
+<%@ include file="../types.jsp" %>
 
-<%@ page import="java.net.URLDecoder, java.nio.charset.Charset" %>
+<%@ page import="ac.adproj.scms.entity.Student" %>
+<%@ page import="ac.adproj.scms.entity.GenderEnum" %>
 
 <%--
     stuid name major gender birthdate totalCredits photo remark
@@ -31,37 +32,40 @@
 </script>
 
 <%
+    Object stuObject = request.getAttribute("studentObject");
+    Student student = null;
+
+    if (stuObject instanceof Student) {
+        student = (Student) stuObject;
+    }
 
     String type = request.getParameter("type");
 
     if (TYPE_MODIFY.equals(type))
     {
-        ResultSet rs = stmt.executeQuery("select * from xs where stuid=" + request.getParameter("id") + ";");
-        rs.next();
-
-        int gender = rs.getInt("gender");
-
+        int gender = student.getGender() == GenderEnum.MALE ? 1 : 0;
         %>
         <script>
             // M - 1   F - 0
             function loadVars()
             {
-                document.getElementById("name").value = '<%= rs.getString("name") %>';
-                document.getElementById("id").value = '<%= rs.getString("stuid") %>';
+                document.getElementById("name").value = '<%= student.getName() %>';
+                document.getElementById("id").value = '<%= student.getId() %>';
                 document.getElementById("id").disabled = true;
-                document.getElementById("dob").value = '<%= rs.getString("birthdate") %>';
-                document.getElementById("major").value = '<%= rs.getString("major") %>';
+                document.getElementById("dob").value = '<%= student.getDob() %>';
+                document.getElementById("major").value = '<%= student.getMajor() %>';
                 <%
-                    String remark = rs.getString("remark");
+                    String remark = student.getRemark();
                     remark = remark == null ? "" : remark;
                 %>
 
                 document.getElementById("remark").value = '<%= remark %>';
 
-                if(<%= gender %> == 1)
+                if(<%= gender %> == 1) {
                     document.getElementById("genderM").checked = true;
-                else
+                } else {
                     document.getElementById("genderF").checked = true;
+                }
             }
         </script><%
     }
@@ -74,11 +78,14 @@
     <style type="text/css">
         td
         {
-            padding-right : 50px;
+            padding-right : 30px;
         }
 
-        .paneLeft, .paneRight
-        {
+        table.paneLeft {
+            width : 80%;
+        }
+
+        .paneLeft, .paneRight {
             float : left;
         }
 
@@ -98,8 +105,12 @@
             display: block;
         }
 
-        #remarkLabel
-        {
+        #remark {
+            width : 100%;
+            height : 350px;
+        }
+
+        #remarkLabel {
             display: block;
             text-align: center;
         }
@@ -107,7 +118,7 @@
     <meta charset="utf-8">
 </head>
 <body style="text-align : center;" onload="loadVars();">
-    <form action="infoProc" method="post" enctype="multipart/form-data">
+    <form action="info" method="post" enctype="multipart/form-data">
         <fieldset>
             <legend>学生信息</legend>
             
@@ -156,7 +167,7 @@
             </div>
 
             <label for="remark" id="remarkLabel">备注：</label><br />
-            <textarea name="remark" id="remark" cols="80" rows="20"></textarea>
+            <textarea name="remark" id="remark"></textarea>
 
             <%
                 if (type.equals(TYPE_ADD))

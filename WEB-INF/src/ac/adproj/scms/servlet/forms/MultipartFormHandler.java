@@ -27,6 +27,7 @@ public interface MultipartFormHandler {
     /**
      * Get a non-form field value (e.g. File).
      *
+     * @param key The key to the value in the multipart form.
      * @author Andy Cheung
      */
     Object getNonFormFieldObject(String key);
@@ -38,5 +39,4 @@ public interface MultipartFormHandler {
      * @author Andy Cheung
      */
     String getStringParameter(String key);
-
 }

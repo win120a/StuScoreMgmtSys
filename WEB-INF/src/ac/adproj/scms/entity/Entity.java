@@ -17,8 +17,8 @@
 
 package ac.adproj.scms.entity;
 
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 public interface Entity {
-    JsonElement getJSON();
+    JsonObject getJSON();
 }

@@ -18,7 +18,6 @@
 package ac.adproj.scms.entity;
 
 import ac.adproj.scms.util.ByteArrayUtils;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class Student implements Entity {
@@ -26,27 +25,54 @@ public class Student implements Entity {
     private String dob;
     private GenderEnum gender;
     private String id;
+    private String major;
+    private int totalCredits;
+    private String remark;
     private byte[] photo;
 
-    public Student(String name, String dob, GenderEnum gender, String id, byte[] photo) {
+    public Student(String id) {
         super();
+        this.id = id;
+    }
+
+    public Student(String name, String dob, GenderEnum gender, String id, byte[] photo
+            , String major, int totalCredits, String remark) {
+        this(id);
         this.name = name;
         this.dob = dob;
         this.gender = gender;
-        this.id = id;
         this.photo = photo;
+        this.major = major;
+        this.totalCredits = totalCredits;
+        this.remark = remark;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDob() {
         return dob;
     }
 
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
     public GenderEnum getGender() {
         return gender;
+    }
+
+    public void setGender(GenderEnum gender) {
+        this.gender = gender;
+    }
+
+    public void setGenderThroughNumber(int number) {
+        this.gender = GenderEnum.getGenderEnumThroughNumber(number);
     }
 
     public String getId() {
@@ -57,14 +83,54 @@ public class Student implements Entity {
         return photo;
     }
 
-    public JsonElement getJSON() {
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public int getTotalCredits() {
+        return totalCredits;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    @Override
+    public JsonObject getJSON() {
         JsonObject jso = new JsonObject();
         jso.addProperty("name", getName());
         jso.addProperty("gender", getGender().toString());
         jso.addProperty("id", getId());
         jso.addProperty("dob", getDob());
+        jso.addProperty("major", getMajor());
+        jso.addProperty("remark", getRemark());
         jso.addProperty("photo", ByteArrayUtils.convertByteArrayToString(getPhoto()));
         return jso;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Student{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", dob='").append(dob).append('\'');
+        sb.append(", gender=").append(gender);
+        sb.append(", id='").append(id).append('\'');
+        sb.append(", major='").append(major).append('\'');
+        sb.append(", totalCredits=").append(totalCredits);
+        sb.append(", remark='").append(remark).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

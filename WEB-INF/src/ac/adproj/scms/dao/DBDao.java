@@ -20,6 +20,7 @@ package ac.adproj.scms.dao;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
 import java.sql.*;
+import java.util.HashMap;
 import java.util.Properties;
 
 /**
@@ -27,8 +28,9 @@ import java.util.Properties;
  *
  * @author Andy Cheung
  */
-public class DBDao implements AutoCloseable {
+public class DBDao implements DBConnectionHandler {
     private static final String ADDR_HEAD = "jdbc:mysql://";
+    private HashMap<Connection, Integer> pool;
     private Connection connectionI;
     private String driver;
     private String serverAddr;
@@ -44,6 +46,7 @@ public class DBDao implements AutoCloseable {
         this.password = password;
         this.serverTimeZone = serverTimeZone;
         this.db = db;
+        this.pool = new HashMap<>();
     }
 
     public Connection getConnection() throws SQLException {
@@ -81,16 +84,6 @@ public class DBDao implements AutoCloseable {
 
     public String getServerTimeZone() {
         return serverTimeZone;
-    }
-
-    private PreparedStatement prepStmt(String sql, String... contents) throws SQLException {
-        PreparedStatement prepS = getConnection().prepareStatement(sql);
-
-        for (int i = 0; i < contents.length; i++) {
-            prepS.setString(i + 1, contents[i]);
-        }
-
-        return prepS;
     }
 
     public ResultSet query(String sql, String... contents) throws SQLException {

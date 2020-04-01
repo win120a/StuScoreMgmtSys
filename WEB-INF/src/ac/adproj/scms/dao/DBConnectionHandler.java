@@ -15,26 +15,22 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.entity;
+package ac.adproj.scms.dao;
 
-public enum GenderEnum {
-    MALE(1), FEMALE(0);
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-    private int genderN;
+public interface DBConnectionHandler extends AutoCloseable {
+    Connection getConnection() throws SQLException;
 
-    GenderEnum (int genderN){
-        this.genderN = genderN;
-    }
+    default PreparedStatement prepStmt(String sql, String... contents) throws SQLException {
+        PreparedStatement prepS = getConnection().prepareStatement(sql);
 
-    public int getGenderNumber() {
-        return genderN;
-    }
-
-    public static GenderEnum getGenderEnumThroughNumber(int n) {
-        if (n < 0 || n > 1) {
-            throw new IllegalArgumentException();
+        for (int i = 0; i < contents.length; i++) {
+            prepS.setString(i + 1, contents[i]);
         }
 
-        return (n == 1) ? MALE : FEMALE;
+        return prepS;
     }
 }

@@ -16,7 +16,6 @@
 --%>
 
 <%@ page contentType="text/html; charset=utf-8" errorPage="../WEB-INF/errorPage.jsp" %>
-<%@ page import="java.util.Map, java.util.HashSet" %>
 <%@ include file="../WEB-INF/dbConn.jsp" %>
 <%@ include file="../WEB-INF/types.jsp" %>
 
@@ -129,7 +128,7 @@
         <tr>
             <td>操作</td>
             <%
-                String reqS = "stuInfo.jsp?type=" + TYPE_MODIFY + "&id=";
+                String reqS = "info?type=" + TYPE_MODIFY + "&id=";
                 rs.beforeFirst();
                 while (rs.next())
                 {
@@ -144,7 +143,7 @@
             %>
         </tr>
     </table><br />
-    <input type="button" id="addStudent" onclick='openDialog("stuInfo.jsp?type=add");' value="添加">
+    <input type="button" id="addStudent" onclick='openDialog("info?type=add");' value="添加">
     <input type="submit" name="del" onclick="return checkSelection();" value="删除">
     <input type="button" name="returnButt" onclick='location.href="../"' value="返回">
     </form>
