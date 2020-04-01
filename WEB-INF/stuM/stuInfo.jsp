@@ -15,10 +15,10 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 --%>
 
-<%@ page contentType="text/html; charset=utf-8" errorPage="../WEB-INF/errorPage.jsp" %>
+<%@ page contentType="text/html; charset=utf-8" errorPage="../errorPage.jsp" %>
 
-<%@ include file="../WEB-INF/dbConn.jsp" %>
-<%@ include file="../WEB-INF/types.jsp" %>
+<%@ include file="../dbConn.jsp" %>
+<%@ include file="../types.jsp" %>
 
 <%@ page import="ac.adproj.scms.entity.Student" %>
 <%@ page import="ac.adproj.scms.entity.GenderEnum" %>
