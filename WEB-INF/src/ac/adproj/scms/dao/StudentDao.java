@@ -22,6 +22,7 @@ import ac.adproj.scms.entity.Student;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
+import javax.servlet.ServletContext;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,14 +53,20 @@ public class StudentDao {
                     , stuid);
 
             Blob photoBlob = rs.getBlob("photo");
-            InputStream is = photoBlob.getBinaryStream();
+
+            InputStream is;
+
+            if (photoBlob != null) {
+                is = photoBlob.getBinaryStream();
+                photo = is.readAllBytes();
+            } else {
+                photo = new byte[] {};
+            }
 
             remark = rs.getString("remark");
 
             rs_totalC.next();
             totalCredits = rs_totalC.getInt("c");
-
-            photo = is.readAllBytes();
 
             return new Student(name, birthdate, gender, stuid, photo, major, totalCredits, remark);
         } catch (SQLException | IOException e) {
@@ -70,14 +77,25 @@ public class StudentDao {
 
     public static void writeStudentObjectToDatabase(Student s) throws SQLException {
         try (DBDao daoO = InitServlet.daoO) {
-            daoO.update("update xs set name=?, major=?, gender=?, birthdate=?, "
-                            + "remark=? where stuid=?;"
+
+            if (daoO.query("select name from xs where stuid=?", s.getId()).next()) {
+                daoO.update("update xs set name=?, major=?, gender=?, birthdate=?, "
+                                + "remark=? where stuid=?;"
                         , s.getName()
                         , s.getMajor()
                         , Integer.toString(s.getGender().getGenderNumber())
                         , s.getDob(), s.getRemark(), s.getId());
-
-
+            } else {
+                // id name major gender dob totalCredits(=0) photo remark
+                daoO.insert("insert into xs values (?, ?, ?, ?, ?, 0, NULL, ?);"
+                            , s.getId()
+                            , s.getName()
+                            , s.getMajor()
+                            , Integer.toString(s.getGender().getGenderNumber())
+                            , s.getDob()
+                            , s.getRemark());
+            }
+            
             if (s.getPhoto() != null && s.getPhoto().length != 0) {
                 updatePhoto(daoO.getConnection(), s.getId(), s.getPhoto());
             }

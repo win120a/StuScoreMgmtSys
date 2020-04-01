@@ -19,7 +19,6 @@ package ac.adproj.scms.servlet.stuM;
 
 import ac.adproj.scms.dao.DBDao;
 import ac.adproj.scms.dao.StudentDao;
-import ac.adproj.scms.entity.GenderEnum;
 import ac.adproj.scms.entity.Student;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
@@ -27,13 +26,13 @@ import ac.adproj.scms.servlet.forms.MultipartFormHandler;
 import ac.adproj.scms.servlet.forms.MultipartFormHandlerFactory;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -66,86 +65,41 @@ public class StuInfoController extends HttpServlet {
             request.setCharacterEncoding("utf-8");
             String addP = mpf.getStringParameter("add");
             String modP = mpf.getStringParameter("modify");
-            String type = mpf.getStringParameter("type");
+
+            Student s = new Student(mpf.getStringParameter("id"));
+
+            s.setName(mpf.getStringParameter("name"));
+            s.setMajor(mpf.getStringParameter("major"));
+            s.setGenderThroughNumber(Integer.parseInt(mpf.getStringParameter("gender")));
+            s.setDob(mpf.getStringParameter("dob"));
+            s.setRemark(mpf.getStringParameter("remark"));
+
+            byte[] pictW = (byte[]) mpf.getNonFormFieldObject("headSet");
+
+            if (pictW != null && pictW.length != 0) {
+                s.setPhoto(pictW);
+            }
+
+            StudentDao.writeStudentObjectToDatabase(s);
+
+            out.write("<script>");
 
             if (addP != null && addP.equals("1")) {
-                // id name major gender dob totalCredits(=0) photo remark
-                PreparedStatement ps_a = conn.prepareStatement("insert into xs values (?, ?, ?, ?, ?, ?, NULL, ?);");
-
-                ps_a.setString(1, mpf.getStringParameter("id"));
-                ps_a.setString(2, mpf.getStringParameter("name"));
-                ps_a.setString(3, mpf.getStringParameter("major"));
-                ps_a.setString(4, mpf.getStringParameter("gender"));
-                ps_a.setString(5, mpf.getStringParameter("dob"));
-                ps_a.setString(6, "0");
-
-                ps_a.setString(7, mpf.getStringParameter("remark"));
-
-                // System.err.println(ps_a.toString());
-
-                ps_a.execute();
-
-                byte[] pictW = (byte[]) mpf.getNonFormFieldObject("headSet");
-
-                if (pictW != null && pictW.length != 0) {
-                    updatePhoto(conn, mpf.getStringParameter("id"), pictW);
-                }
-
-                out.write("<script>");
-
                 byte[] b = ("window.alert('添加成功! ');").getBytes();
-                out.write(new String(b, "utf-8"));
-
-                out.write("opener.location.reload();");
-                out.write("window.opener = null;");
-                out.write("window.close();");
-                out.write("</script>");
-            }
-
-            if (modP != null && modP.equals("1")) {
-                Student s = new Student(mpf.getStringParameter("id"));
-
-                s.setName(mpf.getStringParameter("name"));
-                s.setMajor(mpf.getStringParameter("major"));
-                s.setGenderThroughNumber(Integer.parseInt(mpf.getStringParameter("gender")));
-                s.setDob(mpf.getStringParameter("dob"));
-                s.setRemark(mpf.getStringParameter("remark"));
-
-                // byte[] pictB = getUploadedFile(request, "headSet", daoO);
-                byte[] pictW = (byte[]) mpf.getNonFormFieldObject("headSet");
-
-                if (pictW != null && pictW.length != 0) {
-                    s.setPhoto(pictW);
-                }
-
-                StudentDao.writeStudentObjectToDatabase(s);
-
-                out.write("<script>");
-
+                out.write(new String(b, StandardCharsets.UTF_8));
+            } else if (modP != null && modP.equals("1")) {
                 byte[] b = ("window.alert('修改成功! ');").getBytes();
-                out.write(new String(b, "utf-8"));
-
-                out.write("opener.location.reload();");
-                out.write("window.opener = null;");
-                out.write("window.close();");
-                out.write("</script>");
+                out.write(new String(b, StandardCharsets.UTF_8));
             }
+
+            out.write("opener.location.reload();");
+            out.write("window.opener = null;");
+            out.write("window.close();");
+            out.write("</script>");
         } catch (SQLException e) {
             e.printStackTrace();
             throw new ServletProcessingException(e);
             // response.sendRedirect("/META-INF/errorPage.jsp");
-        }
-    }
-
-    private void updatePhoto(Connection conn, String id, byte[] pictW) throws SQLException {
-        PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
-        if (pictW != null && pictW.length != 0) {
-            byte[] pictB = pictW;
-            ps_p.setBlob(1, new SerialBlob(pictB));
-            ps_p.setString(2, id);
-            ps_p.execute();
-        } else {
-            throw new IllegalArgumentException();
         }
     }
 }
