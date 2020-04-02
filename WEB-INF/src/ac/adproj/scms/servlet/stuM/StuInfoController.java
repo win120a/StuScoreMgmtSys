@@ -18,6 +18,7 @@
 package ac.adproj.scms.servlet.stuM;
 
 import ac.adproj.scms.dao.StudentDao;
+import ac.adproj.scms.entity.Entity;
 import ac.adproj.scms.entity.Student;
 import ac.adproj.scms.servlet.base.MultiPartFormControllerBase;
 
@@ -31,10 +32,8 @@ public class StuInfoController extends MultiPartFormControllerBase {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String stuid = req.getParameter("id");
-        Student s = StudentDao.getStudentObjectThroughDB(stuid);
-        req.setAttribute("studentObject", s);
-        req.getRequestDispatcher("/WEB-INF/stuM/stuInfo.jsp").forward(req, resp);
+        setViewURL("/WEB-INF/stuM/stuInfo.jsp");
+        super.doGet(req, resp);
     }
 
     @Override
@@ -54,5 +53,10 @@ public class StuInfoController extends MultiPartFormControllerBase {
         }
 
         StudentDao.writeStudentObjectToDatabase(s);
+    }
+
+    @Override
+    protected Entity readEntityObject(HttpServletRequest request, String id) {
+        return StudentDao.getStudentObjectThroughDB(id);
     }
 }

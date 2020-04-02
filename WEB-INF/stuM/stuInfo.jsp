@@ -17,7 +17,6 @@
 
 <%@ page contentType="text/html; charset=utf-8" errorPage="../errorPage.jsp" %>
 
-<%@ include file="../dbConn.jsp" %>
 <%@ include file="../types.jsp" %>
 
 <%@ page import="ac.adproj.scms.entity.GenderEnum" %>
@@ -33,7 +32,7 @@
 </script>
 
 <%
-    Object stuObject = request.getAttribute("studentObject");
+    Object stuObject = request.getAttribute("entityObject");
     Student student = null;
 
     if (stuObject instanceof Student) {
@@ -63,9 +62,7 @@
         if (<%= gender %> == 1)
         {
             document.getElementById("genderM").checked = true;
-        }
-        else
-        {
+        } else {
             document.getElementById("genderF").checked = true;
         }
     }
@@ -168,14 +165,12 @@
 
         <label for="remark" id="remarkLabel">备注：</label><br/>
         <textarea name="remark" id="remark"></textarea>
-
         <input type="hidden" name="type" value="<%= type %>"><br/><br/>
-
         <input type="submit" id="submit" value="提交"/>
         <input type="reset" id="reset" value="重置"/>
         <%
             if (type.equals(TYPE_MODIFY)) { %>
-            <input type="hidden" name="id" value='${param.id}'><%
+                <input type="hidden" name="id" value='${param.id}'><%
         %>
         <script>
             document.getElementById("reset").onclick = function () {

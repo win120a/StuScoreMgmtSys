@@ -54,7 +54,7 @@ public final class CourseDao {
     public static void writeCourseObjectToDatabase(Course c) throws SQLException {
         try (DBDao daoO = InitServlet.daoO) {
 
-            if (daoO.query("select name from kc where courseID=?;", c.getId()).next()) {
+            if (daoO.query("select term from kc where courseID=?;", c.getId()).next()) {
                 daoO.update("update kc set courseName=?, term=?, credits=?, "
                                 + "courseHours=? where courseID=?;"
                             , c.getName()

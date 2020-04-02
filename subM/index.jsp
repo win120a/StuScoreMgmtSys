@@ -106,7 +106,7 @@
         <tr>
             <td>操作</td>
             <%
-                String reqS = "subInfo.jsp?type=" + TYPE_MODIFY + "&id=";
+                String reqS = "info?type=" + TYPE_MODIFY + "&id=";
                 rs.beforeFirst();
                 while (rs.next()) {
             %>
@@ -114,8 +114,7 @@
                 删除?
                 <input name='<%= rs.getString("courseID") %>' type="checkbox" class="del"><br/>
                 <a href='javascript:void(0);'
-                   onclick='openDialog("<%= reqS %>
-                       <%= rs.getString("courseID")%>");'>编辑</a>
+                   onclick='openDialog("<%= reqS %><%= rs.getString("courseID")%>");'>编辑</a>
             </td>
             <%
                 }

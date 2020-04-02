@@ -60,15 +60,14 @@
         <url-pattern>/scoreM/infoProc</url-pattern>
     </servlet-mapping>
 
-
     <servlet>
-        <servlet-name>SubInfoProcServlet</servlet-name>
-        <servlet-class>ac.adproj.scms.servlet.subM.SubInfoProcServlet</servlet-class>
+        <servlet-name>SubjectInfoController</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.subM.SubjectInformationController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>SubInfoProcServlet</servlet-name>
-        <url-pattern>/subM/infoProc</url-pattern>
+        <servlet-name>SubjectInfoController</servlet-name>
+        <url-pattern>/subM/info</url-pattern>
     </servlet-mapping>
 
 
