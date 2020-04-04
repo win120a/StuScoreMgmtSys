@@ -20,7 +20,7 @@ package ac.adproj.scms.servlet.stuM;
 import ac.adproj.scms.dao.StudentDao;
 import ac.adproj.scms.entity.Entity;
 import ac.adproj.scms.entity.Student;
-import ac.adproj.scms.servlet.base.MultiPartFormControllerBase;
+import ac.adproj.scms.servlet.base.detailed.MultiPartDetailedFormControllerBase;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class StuInfoController extends MultiPartFormControllerBase {
+public class StudentInformationController extends MultiPartDetailedFormControllerBase {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
