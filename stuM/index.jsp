@@ -36,7 +36,8 @@
 </head>
 <body>
 <h1>学生管理</h1>
-<form action="listProc" method="post">
+<!-- <form action="listProc" method="post"> -->
+<form action="list" method="post">
     <table class="T">  <%-- JSP Scriptlet that uses SQL Commands --%>
         <%--
             stuidname major gender birthdate totalCredits photo remark
