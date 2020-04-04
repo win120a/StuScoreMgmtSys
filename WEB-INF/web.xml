@@ -72,13 +72,23 @@
 
 
     <servlet>
-        <servlet-name>StuInfoController</servlet-name>
-        <servlet-class>ac.adproj.scms.servlet.stuM.StuInfoController</servlet-class>
+        <servlet-name>StudentInformationController</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.stuM.StudentInformationController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>StuInfoController</servlet-name>
+        <servlet-name>StudentInformationController</servlet-name>
         <url-pattern>/stuM/info</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>StudentListController</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.stuM.StudentListController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>StudentListController</servlet-name>
+        <url-pattern>/stuM/list</url-pattern>
     </servlet-mapping>
 
 
