@@ -15,20 +15,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet.base;
+package ac.adproj.scms.servlet.base.detailed;
 
 import ac.adproj.scms.entity.Entity;
 import ac.adproj.scms.servlet.ServletProcessingException;
+import ac.adproj.scms.servlet.base.ControllerBase;
+import ac.adproj.scms.servlet.base.RecordModificationTypeEnum;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 
-public abstract class DetailedFormControllerBase extends HttpServlet {
+public abstract class DetailedFormControllerBase extends ControllerBase {
     private String viewURL = null;
 
     protected abstract void uploadObjectToDataBase(HttpServletRequest request) throws SQLException;
