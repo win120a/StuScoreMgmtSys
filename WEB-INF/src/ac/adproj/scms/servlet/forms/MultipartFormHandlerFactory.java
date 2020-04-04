@@ -55,7 +55,7 @@ public class MultipartFormHandlerFactory {
             Constructor<MultipartFormHandler> ctor = handlerClass.getConstructor(HttpServletRequest.class,
                     String.class);
 
-            return (MultipartFormHandler) ctor.newInstance(request, tempdir.getAbsolutePath());
+            return ctor.newInstance(request, tempdir.getAbsolutePath());
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
