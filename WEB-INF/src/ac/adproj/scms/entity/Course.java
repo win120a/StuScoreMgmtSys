@@ -38,22 +38,6 @@ public class Course implements Entity {
         this.credits = credits;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setTerm(String term) {
-        this.term = term;
-    }
-
-    public void setCourseHours(int courseHours) {
-        this.courseHours = courseHours;
-    }
-
-    public void setCredits(int credits) {
-        this.credits = credits;
-    }
-
     public String getId() {
         return id;
     }
@@ -62,16 +46,32 @@ public class Course implements Entity {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getTerm() {
         return term;
+    }
+
+    public void setTerm(String term) {
+        this.term = term;
     }
 
     public int getCourseHours() {
         return courseHours;
     }
 
+    public void setCourseHours(int courseHours) {
+        this.courseHours = courseHours;
+    }
+
     public int getCredits() {
         return credits;
+    }
+
+    public void setCredits(int credits) {
+        this.credits = credits;
     }
 
     @Override
@@ -87,10 +87,7 @@ public class Course implements Entity {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
+        return id == null ? 0 : id.hashCode();
     }
 
     @Override
@@ -103,10 +100,13 @@ public class Course implements Entity {
             return false;
         Course other = (Course) obj;
         if (id == null) {
-            if (other.id != null)
+            if (other.id != null) {
                 return false;
-        } else if (!id.equals(other.id))
+            }
+        } else if (!id.equals(other.id)) {
             return false;
+        }
+
         return true;
     }
 }

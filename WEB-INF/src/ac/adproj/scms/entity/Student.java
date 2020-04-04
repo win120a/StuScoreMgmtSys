@@ -108,6 +108,31 @@ public class Student implements Entity {
     }
 
     @Override
+    public int hashCode() {
+        return id == null ? 0 : id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (this.getClass() == obj.getClass()) {
+            Student other = (Student) obj;
+            if (this.getId() != null) {
+                return this.getId().equals(other.getId());
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public JsonObject getJSON() {
         JsonObject jso = new JsonObject();
         jso.addProperty("name", getName());
@@ -116,6 +141,7 @@ public class Student implements Entity {
         jso.addProperty("dob", getDob());
         jso.addProperty("major", getMajor());
         jso.addProperty("remark", getRemark());
+        jso.addProperty("totalCredits", getTotalCredits());
         jso.addProperty("photo", ByteArrayUtils.convertByteArrayToString(getPhoto()));
         return jso;
     }
