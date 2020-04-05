@@ -21,4 +21,5 @@ import com.google.gson.JsonObject;
 
 public interface Entity {
     JsonObject getJSON();
+    String getId();
 }

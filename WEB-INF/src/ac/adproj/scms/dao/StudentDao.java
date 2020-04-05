@@ -17,6 +17,7 @@
 
 package ac.adproj.scms.dao;
 
+import ac.adproj.scms.entity.Entity;
 import ac.adproj.scms.entity.GenderEnum;
 import ac.adproj.scms.entity.Student;
 import ac.adproj.scms.servlet.InitServlet;
@@ -130,5 +131,15 @@ public final class StudentDao {
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    public static void deleteObject(String id) throws SQLException {
+        try (DBDao daoO = InitServlet.daoO) {
+            daoO.delete("delete from xs where xs.stuid=?;", id);
+        }
+    }
+
+    public static void deleteObject(Entity e) throws SQLException {
+        deleteObject(e.getId());
     }
 }

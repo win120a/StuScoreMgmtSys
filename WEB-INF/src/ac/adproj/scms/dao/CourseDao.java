@@ -18,6 +18,7 @@
 package ac.adproj.scms.dao;
 
 import ac.adproj.scms.entity.Course;
+import ac.adproj.scms.entity.Entity;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
@@ -87,5 +88,15 @@ public final class CourseDao {
                             , Integer.toString(c.getCredits()));
             }
         }
+    }
+
+    public static void deleteObject(String id) throws SQLException {
+        try (DBDao daoO = InitServlet.daoO) {
+            daoO.delete("delete from kc where kc.courseId=?;", id);
+        }
+    }
+
+    public static void deleteObject(Entity e) throws SQLException {
+        deleteObject(e.getId());
     }
 }
