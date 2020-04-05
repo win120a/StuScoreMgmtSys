@@ -24,16 +24,14 @@ import ac.adproj.scms.servlet.base.ControllerBase;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public abstract class ListFormControllerBase extends ControllerBase {
     protected abstract void deleteDBEntry(String id)
-            throws SQLIntegrityConstraintViolationException, SQLException;
+            throws SQLException;
 
     protected void onPartialSuccess(HttpServletRequest request,
                                     HttpServletResponse response,

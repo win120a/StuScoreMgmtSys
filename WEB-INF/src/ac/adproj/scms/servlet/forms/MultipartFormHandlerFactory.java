@@ -39,7 +39,7 @@ public class MultipartFormHandlerFactory {
      * Factory method of form handler.
      *
      * @param request The HTTP Request.
-     * @return Instance of the class which name is {@link #FORM_HANDLER_CLASS_NAME}.
+     * @return Instance of the class which name is the value of {@link #FORM_HANDLER_CLASS_NAME}.
      * @author Andy Cheung
      * @see #FORM_HANDLER_CLASS_NAME
      */

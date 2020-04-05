@@ -31,7 +31,7 @@ public class Course implements Entity {
     }
 
     public Course(String id, String name, String term, int courseHours, int credits) {
-        this.id = id;
+        this(id);
         this.name = name;
         this.term = term;
         this.courseHours = courseHours;

@@ -24,6 +24,8 @@
          version="4.0"
          metadata-complete="true">
 
+    <!-- Web App Configurations -->
+
     <display-name>Student Score Enrolling System</display-name>
     <description>
         Student Score Enrolling System (ISA Assignment)
@@ -38,6 +40,7 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <!-- Index Page Dispacher -->
 
     <servlet>
         <servlet-name>PageDispatcher</servlet-name>
@@ -50,6 +53,8 @@
     </servlet-mapping>
 
 
+    <!-- Score related -->
+
     <servlet>
         <servlet-name>ScoreInfoProc</servlet-name>
         <servlet-class>ac.adproj.scms.servlet.scoreM.ScoreInfoServlet</servlet-class>
@@ -59,6 +64,8 @@
         <servlet-name>ScoreInfoProc</servlet-name>
         <url-pattern>/scoreM/infoProc</url-pattern>
     </servlet-mapping>
+
+    <!-- Subject related -->
 
     <servlet>
         <servlet-name>SubjectInfoController</servlet-name>
@@ -70,6 +77,30 @@
         <url-pattern>/subM/info</url-pattern>
     </servlet-mapping>
 
+
+    <servlet>
+        <servlet-name>SubjectListController</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.subM.SubjectListController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SubjectListController</servlet-name>
+        <url-pattern>/subM/list</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>SubjectListProcServlet</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.subM.SubjectListProcServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SubjectListProcServlet</servlet-name>
+        <url-pattern>/subM/listProc</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- Student information related -->
 
     <servlet>
         <servlet-name>StudentInformationController</servlet-name>
@@ -101,17 +132,6 @@
         <servlet-name>PhotoServlet</servlet-name>
         <url-pattern>/stuPhoto.png</url-pattern>
     </servlet-mapping>
-
-    <servlet>
-        <servlet-name>SubjectListProcServlet</servlet-name>
-        <servlet-class>ac.adproj.scms.servlet.subM.SubjectListProcServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>SubjectListProcServlet</servlet-name>
-        <url-pattern>/subM/listProc</url-pattern>
-    </servlet-mapping>
-
 
     <!-- Context (Application) Configurations -->
 

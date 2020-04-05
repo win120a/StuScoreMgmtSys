@@ -58,7 +58,7 @@ public abstract class DetailedFormControllerBase extends ControllerBase {
         String id = req.getParameter("id");
         Entity e = readEntityObject(req, id);
         req.setAttribute("entityObject", e);
-        req.getRequestDispatcher(viewURL).forward(req, resp);
+        req.getRequestDispatcher(getViewURL()).forward(req, resp);
     }
 
     @Override

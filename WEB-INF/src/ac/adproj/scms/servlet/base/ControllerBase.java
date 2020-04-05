@@ -43,12 +43,14 @@ public abstract class ControllerBase extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        setEncodingToUTF8(req, resp);
         status = ControllerStatusEnum.EXECUTING;
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        setEncodingToUTF8(req, resp);
         status = ControllerStatusEnum.EXECUTING;
     }
 }
