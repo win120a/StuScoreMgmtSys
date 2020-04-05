@@ -38,7 +38,7 @@ public class SubjectInformationController extends TextOnlyDetailedFormController
 
     @Override
     protected void uploadObjectToDataBase(HttpServletRequest request) throws SQLException {
-        Course c = new Course(getParameter(request, "id"));
+        Course c = new Course(getParameter(request, "courseID"));
 
         c.setName(getParameter(request, "courseName"));
         c.setTerm(getParameter(request, "term"));

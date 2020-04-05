@@ -122,7 +122,7 @@
         </tr>
     </table>
     <br/>
-    <input type="button" id="addStudent" onclick='openDialog("subInfo.jsp?type=add");' value="添加">
+    <input type="button" id="addStudent" onclick='openDialog("info?type=add");' value="添加">
     <input type="submit" name="del" onclick="return checkSelection();" value="删除">
     <input type="button" name="returnButt" onclick='location.href="../"' value="返回">
 </form>
