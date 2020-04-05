@@ -17,6 +17,7 @@
 
 package ac.adproj.scms.servlet.subM;
 
+import ac.adproj.scms.dao.CourseDao;
 import ac.adproj.scms.dao.DBDao;
 import ac.adproj.scms.servlet.ControllerStatusEnum;
 import ac.adproj.scms.servlet.InitServlet;
@@ -35,9 +36,7 @@ public class SubjectListController extends ListFormControllerBase {
     @Override
     protected void deleteDBEntry(String id)
             throws SQLException {
-        try (DBDao daoO = InitServlet.daoO) {
-            daoO.delete("delete from kc where xs.courseId=?;", id);
-        }
+        CourseDao.deleteObject(id);
     }
 
     @Override

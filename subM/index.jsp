@@ -37,7 +37,7 @@
 </head>
 <body>
 <h1>课程管理</h1>
-<form action="listProc" method="post">
+<form action="list" method="post">
     <table class="T">  <%-- JSP Scriptlet that uses SQL Commands --%>
         <tr>
             <td>课程号</td>
