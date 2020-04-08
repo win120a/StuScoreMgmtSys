@@ -125,7 +125,7 @@
 
     <servlet>
         <servlet-name>PhotoServlet</servlet-name>
-        <servlet-class>ac.adproj.scms.servlet.StudentPhotoServlet</servlet-class>
+        <servlet-class>ac.adproj.scms.servlet.photo.StudentPhotoServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -133,7 +133,7 @@
         <url-pattern>/stuPhoto.png</url-pattern>
     </servlet-mapping>
 
-    <!-- Context (Application) Configurations -->
+    <!-- Database Configurations -->
 
     <context-param>
         <param-name>driver</param-name>
@@ -163,5 +163,12 @@
     <context-param>
         <param-name>password</param-name>
         <param-value>1</param-value>
+    </context-param>
+
+    <!-- Photo Service Configurations -->
+
+    <context-param>
+        <param-name>photoServiceClass</param-name>
+        <param-value>ac.adproj.scms.servlet.photo.SQLBlobPhotoServiceImpl</param-value>
     </context-param>
 </web-app>
