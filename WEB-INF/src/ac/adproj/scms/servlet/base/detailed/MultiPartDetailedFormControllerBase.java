@@ -17,8 +17,8 @@
 
 package ac.adproj.scms.servlet.base.detailed;
 
-import ac.adproj.scms.servlet.forms.MultipartFormHandler;
-import ac.adproj.scms.servlet.forms.MultipartFormHandlerFactory;
+import ac.adproj.scms.servlet.multipartform.MultipartFormHandler;
+import ac.adproj.scms.servlet.multipartform.MultipartFormHandlerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 
