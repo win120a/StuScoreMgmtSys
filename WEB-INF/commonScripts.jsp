@@ -16,31 +16,18 @@
 --%>
 
 <%@ page contentType="text/html; charset=utf-8" %>
-<link rel="stylesheet" href="../stylesheet/tableCSS.css"/>
-<script type="text/javascript">
 
-    function checkSelection() {
-        let objects = document.getElementsByClassName("del");
-        let flag = false;
-
-        for (let i = objects.length - 1; i >= 0; i--) {
-            if (objects[i].checked) {
-                flag = true;
-                break;
-            }
-        }
-
-        if (!flag || objects.length == 0) {
-            alert("没有选择的项目！");
-            return false;
-        }
-
-        if (confirm("确认删除？")) {
-            return true;
-        }
-
-        return false;
-    }
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+<script type="text/javascript" src="<%= application.getContextPath() %>/scripts/jquery-3.4.1.js">
 </script>
 
-<%@ include file="commonScripts.jsp" %>
+<script type="text/javascript">
+    $(function() {
+        let e = document.createElement("h6");
+        e.style.textAlign = "center";
+        e.innerHTML = "<br \/><br \/>Copyright (C) 2011-2020 Andy Cheung<br \/><br \/>";
+        e.innerHTML += "Open source project, licensed under GNU Public License, Version 3<br \/><br />";
+        e.innerHTML += "<a href='https://github.com/win120a/StuScoreMgmtSys'>GitHub Repo</a>";
+        document.body.appendChild(e);
+    });
+</script>

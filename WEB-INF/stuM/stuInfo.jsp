@@ -112,6 +112,7 @@
             text-align: center;
         }
     </style>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
     <meta charset="utf-8">
 </head>
 <body style="text-align : center;" onload="loadVars();">

@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>程序出错啦！</title>
+    <%@ include file="commonScripts.jsp" %>
 </head>
 <body style="text-align : center;">
 <%

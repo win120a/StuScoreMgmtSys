@@ -21,6 +21,7 @@
 <html>
 <head>
     <title>学生成绩管理系统</title>
+    <%@ include file="WEB-INF/commonScripts.jsp" %>
 </head>
 <body style="text-align: center;">
 <h1>系统主页</h1>

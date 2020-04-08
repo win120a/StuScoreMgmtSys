@@ -27,6 +27,7 @@
 <html>
 <head>
     <title>成绩管理</title>
+    <%@ include file="../WEB-INF/commonScripts.jsp" %>
     <link rel="stylesheet" href="../stylesheet/tableCSS.css"/>
     <script>
         function openDialog(url) {
