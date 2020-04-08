@@ -15,7 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet.forms;
+package ac.adproj.scms.servlet.multipartform;
 
 import ac.adproj.scms.servlet.ServletProcessingException;
 import org.apache.commons.fileupload.FileItem;
@@ -37,7 +37,7 @@ import java.util.Map;
  *
  * @author Andy Cheung
  */
-public class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
+class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
     /**
      * The Map of storing form contents.
      *
@@ -66,7 +66,7 @@ public class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandl
     private static Map<String, DataWrap> getFormContents(HttpServletRequest request, String tempdir)
             throws UnsupportedEncodingException, FileNotFoundException {
 
-        HashMap<String, DataWrap> contents = new HashMap<String, DataWrap>();
+        HashMap<String, DataWrap> contents = new HashMap<>();
 
         if (!ServletFileUpload.isMultipartContent(request))
             throw new IllegalArgumentException();

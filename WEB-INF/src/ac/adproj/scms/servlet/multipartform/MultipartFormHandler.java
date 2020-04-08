@@ -15,7 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet.forms;
+package ac.adproj.scms.servlet.multipartform;
 
 /**
  * Represents a multipart form handler.

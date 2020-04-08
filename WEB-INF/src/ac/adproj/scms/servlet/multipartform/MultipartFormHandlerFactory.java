@@ -15,7 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet.forms;
+package ac.adproj.scms.servlet.multipartform;
 
 import ac.adproj.scms.servlet.ServletProcessingException;
 
@@ -29,7 +29,7 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Andy Cheung
  */
-public class MultipartFormHandlerFactory {
+public final class MultipartFormHandlerFactory {
     /**
      * Class name of the handler.
      */
