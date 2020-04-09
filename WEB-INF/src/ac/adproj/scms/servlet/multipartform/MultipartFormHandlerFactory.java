@@ -15,7 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet.forms;
+package ac.adproj.scms.servlet.multipartform;
 
 import ac.adproj.scms.servlet.ServletProcessingException;
 
@@ -29,17 +29,17 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @author Andy Cheung
  */
-public class MultipartFormHandlerFactory {
+public final class MultipartFormHandlerFactory {
     /**
      * Class name of the handler.
      */
-    private static final String FORM_HANDLER_CLASS_NAME = "ac.adproj.scms.servlet.forms.MultipartFormHandlerApacheCommonsImpl";
+    private static final String FORM_HANDLER_CLASS_NAME = "ac.adproj.scms.servlet.multipartform.MultipartFormHandlerApacheCommonsImpl";
 
     /**
      * Factory method of form handler.
      *
      * @param request The HTTP Request.
-     * @return Instance of the class which name is {@link #FORM_HANDLER_CLASS_NAME}.
+     * @return Instance of the class which name is the value of {@link #FORM_HANDLER_CLASS_NAME}.
      * @author Andy Cheung
      * @see #FORM_HANDLER_CLASS_NAME
      */
@@ -55,7 +55,7 @@ public class MultipartFormHandlerFactory {
             Constructor<MultipartFormHandler> ctor = handlerClass.getConstructor(HttpServletRequest.class,
                     String.class);
 
-            return (MultipartFormHandler) ctor.newInstance(request, tempdir.getAbsolutePath());
+            return ctor.newInstance(request, tempdir.getAbsolutePath());
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException
                 | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {

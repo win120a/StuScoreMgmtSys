@@ -15,25 +15,31 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet.stuM;
+package ac.adproj.scms.servlet.base.list;
 
-import ac.adproj.scms.dao.DBDao;
-import ac.adproj.scms.servlet.InitServlet;
+import ac.adproj.scms.servlet.ControllerStatusEnum;
 import ac.adproj.scms.servlet.ServletProcessingException;
+import ac.adproj.scms.servlet.base.ControllerBase;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-public class StuListProcServlet extends HttpServlet {   //    /scms/stuM/listProc
+public abstract class ListFormControllerBase extends ControllerBase {
+    protected abstract void deleteDBEntry(String id)
+            throws SQLException;
+
+    protected void onPartialSuccess(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    Set<String> undoneIDs) { }
+
+    protected void onSuccess(HttpServletRequest request,
+                             HttpServletResponse response) { }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
@@ -42,15 +48,10 @@ public class StuListProcServlet extends HttpServlet {   //    /scms/stuM/listPro
         response.setCharacterEncoding("utf-8");
         response.setContentType("text/html; charset=utf-8");
 
-        try (
-                DBDao daoO = InitServlet.daoO;
-                Connection conn = daoO.getConnection();
-                PreparedStatement ps = conn.prepareStatement("delete from xs where xs.stuid = ?;");
-                Writer out = response.getWriter()) {
+        try {
 
             String delF = request.getParameter("del");
-            StringBuilder undoneMessageBuilder = new StringBuilder();
-            undoneMessageBuilder.append("如下学生由于此前输入了成绩，不能删除。\\n\\n学号：\\n");
+            HashSet<String> undoneIDs = new HashSet<>();
             boolean notFullyDel = false;
 
             if (delF != null) {
@@ -59,45 +60,35 @@ public class StuListProcServlet extends HttpServlet {   //    /scms/stuM/listPro
                 HashSet<String> delKeys = new HashSet<>();
 
                 for (Map.Entry<String, String[]> s : paramMap.entrySet()) {
-                    if (s.getKey().equals("del"))
+                    if ("del".equals(s.getKey())) {
                         continue;
-                    if (s.getValue()[0].toLowerCase().equals("on"))
+                    }
+                    if ("on".equals(s.getValue()[0].toLowerCase())) {
                         delKeys.add(s.getKey());
+                    }
                 }
 
                 for (String s : delKeys) {
-                    ps.setString(1, s);
                     try {
-                        ps.execute();
+                        deleteDBEntry(s);
                     } catch (java.sql.SQLIntegrityConstraintViolationException sicve) {
                         notFullyDel = true;
-                        undoneMessageBuilder.append(s);
-                        undoneMessageBuilder.append("\\n");
+                        undoneIDs.add(s);
                     }
                 }
 
                 if (notFullyDel) {
-                    out.write("<script>alert(\"" + new String(undoneMessageBuilder.toString().getBytes(), "utf-8") + "\"); location.href=\"index.jsp\";</script>");
+                    status = ControllerStatusEnum.PARTIAL_SUCCESS;
+                    onPartialSuccess(request, response, undoneIDs);
                 } else {
-                    out.write(new String(("<script>alert(\"删除成功! \"); location.href=\"index.jsp\";</script>").getBytes(), "utf-8"));
+                    status = ControllerStatusEnum.SUCCESS;
+                    onSuccess(request, response);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            status = ControllerStatusEnum.FAIL;
             throw new ServletProcessingException(e);
         }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setHeader("Allow", "GET, HEAD, POST, OPTIONS");
-        request.setCharacterEncoding("utf-8");
-        response.setBufferSize(8192);
-        response.setContentType("text/html; charset=utf-8");
-
-        byte[] b = ("<p>测试 Test:" + request.getParameter("test") + "</p>").getBytes();
-
-        response.getWriter().print(new String(b, "utf-8"));
     }
 }

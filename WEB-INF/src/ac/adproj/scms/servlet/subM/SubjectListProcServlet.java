@@ -62,10 +62,12 @@ public class SubjectListProcServlet extends HttpServlet {
                 HashSet<String> delKeys = new HashSet<>();
 
                 for (Map.Entry<String, String[]> s : paramMap.entrySet()) {
-                    if (s.getKey().equals("del"))
+                    if ("del".equals(s.getKey())) {
                         continue;
-                    if (s.getValue()[0].toLowerCase().equals("on"))
+                    }
+                    if ("on".equals(s.getValue()[0].toLowerCase())) {
                         delKeys.add(s.getKey());
+                    }
                 }
 
                 for (String s : delKeys) {

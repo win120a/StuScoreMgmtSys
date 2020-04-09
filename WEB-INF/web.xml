@@ -24,6 +24,8 @@
          version="4.0"
          metadata-complete="true">
 
+    <!-- Web App Configurations -->
+
     <display-name>Student Score Enrolling System</display-name>
     <description>
         Student Score Enrolling System (ISA Assignment)
@@ -38,6 +40,7 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <!-- Index Page Dispacher -->
 
     <servlet>
         <servlet-name>PageDispatcher</servlet-name>
@@ -50,6 +53,8 @@
     </servlet-mapping>
 
 
+    <!-- Score related -->
+
     <servlet>
         <servlet-name>ScoreInfoProc</servlet-name>
         <servlet-class>ac.adproj.scms.servlet.scoreM.ScoreInfoServlet</servlet-class>
@@ -60,48 +65,27 @@
         <url-pattern>/scoreM/infoProc</url-pattern>
     </servlet-mapping>
 
+    <!-- Subject related -->
 
     <servlet>
-        <servlet-name>SubInfoProcServlet</servlet-name>
-        <servlet-class>ac.adproj.scms.servlet.subM.SubInfoProcServlet</servlet-class>
+        <servlet-name>SubjectInfoController</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.subM.SubjectInformationController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>SubInfoProcServlet</servlet-name>
-        <url-pattern>/subM/infoProc</url-pattern>
+        <servlet-name>SubjectInfoController</servlet-name>
+        <url-pattern>/subM/info</url-pattern>
     </servlet-mapping>
 
 
     <servlet>
-        <servlet-name>StuInfoController</servlet-name>
-        <servlet-class>ac.adproj.scms.servlet.stuM.StuInfoController</servlet-class>
+        <servlet-name>SubjectListController</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.subM.SubjectListController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>StuInfoController</servlet-name>
-        <url-pattern>/stuM/info</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
-        <servlet-name>PhotoServlet</servlet-name>
-        <servlet-class>ac.adproj.scms.servlet.StudentPhotoServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>PhotoServlet</servlet-name>
-        <url-pattern>/stuPhoto.png</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet>
-        <servlet-name>StuListProcServlet</servlet-name>
-        <servlet-class>ac.adproj.scms.servlet.stuM.StuListProcServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>StuListProcServlet</servlet-name>
-        <url-pattern>/stuM/listProc</url-pattern>
+        <servlet-name>SubjectListController</servlet-name>
+        <url-pattern>/subM/list</url-pattern>
     </servlet-mapping>
 
 
@@ -116,7 +100,40 @@
     </servlet-mapping>
 
 
-    <!-- Context (Application) Configurations -->
+    <!-- Student information related -->
+
+    <servlet>
+        <servlet-name>StudentInformationController</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.stuM.StudentInformationController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>StudentInformationController</servlet-name>
+        <url-pattern>/stuM/info</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>StudentListController</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.stuM.StudentListController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>StudentListController</servlet-name>
+        <url-pattern>/stuM/list</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>PhotoServlet</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.photo.StudentPhotoServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>PhotoServlet</servlet-name>
+        <url-pattern>/stuPhoto.png</url-pattern>
+    </servlet-mapping>
+
+    <!-- Database Configurations -->
 
     <context-param>
         <param-name>driver</param-name>
@@ -146,5 +163,12 @@
     <context-param>
         <param-name>password</param-name>
         <param-value>1</param-value>
+    </context-param>
+
+    <!-- Photo Service Configurations -->
+
+    <context-param>
+        <param-name>photoServiceClass</param-name>
+        <param-value>ac.adproj.scms.servlet.photo.SQLBlobPhotoServiceImpl</param-value>
     </context-param>
 </web-app>

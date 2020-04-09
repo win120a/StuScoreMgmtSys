@@ -17,18 +17,25 @@
 
 package ac.adproj.scms.dao;
 
+import ac.adproj.scms.entity.Entity;
 import ac.adproj.scms.entity.GenderEnum;
 import ac.adproj.scms.entity.Student;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
-import javax.servlet.ServletContext;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 
-public class StudentDao {
+public final class StudentDao {
+    private StudentDao() { }
+
+    /**
+     * Returns a Student object according to the DB's record.
+     * @param stuid The student ID.
+     * @return The Student object, or null if the student object did not exist.
+     */
     public static Student getStudentObjectThroughDB(String stuid) {
         String name;
         GenderEnum gender;
@@ -41,8 +48,9 @@ public class StudentDao {
         try (DBDao daoO = InitServlet.daoO) {
             ResultSet rs = daoO.query("select * from xs where stuid=?;", stuid);
 
-            if (!rs.next())
+            if (!rs.next()) {
                 return null;
+            }
 
             name = rs.getString("name");
             birthdate = rs.getString("birthdate");
@@ -60,7 +68,7 @@ public class StudentDao {
                 is = photoBlob.getBinaryStream();
                 photo = is.readAllBytes();
             } else {
-                photo = new byte[] {};
+                photo = new byte[]{};
             }
 
             remark = rs.getString("remark");
@@ -75,6 +83,11 @@ public class StudentDao {
         }
     }
 
+    /**
+     * Upload the Student object to the database.
+     * @param s The student object that needs to upload.
+     * @exception SQLException If database ran into error.
+     */
     public static void writeStudentObjectToDatabase(Student s) throws SQLException {
         try (DBDao daoO = InitServlet.daoO) {
 
@@ -88,20 +101,27 @@ public class StudentDao {
             } else {
                 // id name major gender dob totalCredits(=0) photo remark
                 daoO.insert("insert into xs values (?, ?, ?, ?, ?, 0, NULL, ?);"
-                            , s.getId()
-                            , s.getName()
-                            , s.getMajor()
-                            , Integer.toString(s.getGender().getGenderNumber())
-                            , s.getDob()
-                            , s.getRemark());
+                        , s.getId()
+                        , s.getName()
+                        , s.getMajor()
+                        , Integer.toString(s.getGender().getGenderNumber())
+                        , s.getDob()
+                        , s.getRemark());
             }
-            
+
             if (s.getPhoto() != null && s.getPhoto().length != 0) {
                 updatePhoto(daoO.getConnection(), s.getId(), s.getPhoto());
             }
         }
     }
 
+    /**
+     * Updates the photo.
+     * @param conn The DB Connection.
+     * @param id The student ID.
+     * @param pictW The picture array.
+     * @throws SQLException If DB ran into error.
+     */
     private static void updatePhoto(Connection conn, String id, byte[] pictW) throws SQLException {
         PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
         if (pictW != null && pictW.length != 0) {
@@ -112,5 +132,15 @@ public class StudentDao {
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    public static void deleteObject(String id) throws SQLException {
+        try (DBDao daoO = InitServlet.daoO) {
+            daoO.delete("delete from xs where xs.stuid=?;", id);
+        }
+    }
+
+    public static void deleteObject(Entity e) throws SQLException {
+        deleteObject(e.getId());
     }
 }

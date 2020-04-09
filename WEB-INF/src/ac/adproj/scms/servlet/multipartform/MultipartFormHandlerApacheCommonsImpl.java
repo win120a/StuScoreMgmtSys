@@ -15,7 +15,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet.forms;
+package ac.adproj.scms.servlet.multipartform;
 
 import ac.adproj.scms.servlet.ServletProcessingException;
 import org.apache.commons.fileupload.FileItem;
@@ -37,7 +37,7 @@ import java.util.Map;
  *
  * @author Andy Cheung
  */
-public class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
+class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
     /**
      * The Map of storing form contents.
      *
@@ -66,10 +66,11 @@ public class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandl
     private static Map<String, DataWrap> getFormContents(HttpServletRequest request, String tempdir)
             throws UnsupportedEncodingException, FileNotFoundException {
 
-        HashMap<String, DataWrap> contents = new HashMap<String, DataWrap>();
+        HashMap<String, DataWrap> contents = new HashMap<>();
 
-        if (!ServletFileUpload.isMultipartContent(request))
+        if (!ServletFileUpload.isMultipartContent(request)) {
             throw new IllegalArgumentException();
+        }
 
         // Create a factory for disk-based file items
         DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -109,11 +110,13 @@ public class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandl
      */
     @Override
     public Object getNonFormFieldObject(String key) {
-        if (formContents.get(key) == null)
+        if (formContents.get(key) == null) {
             return null;
+        }
 
-        if (formContents.get(key).isFormField())
+        if (formContents.get(key).isFormField()) {
             throw new IllegalArgumentException();
+        }
 
         return formContents.get(key).getObject();
     }
@@ -126,11 +129,13 @@ public class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandl
      */
     @Override
     public String getStringParameter(String key) {
-        if (formContents.get(key) == null)
+        if (formContents.get(key) == null) {
             return null;
+        }
 
-        if (!formContents.get(key).isFormField())
+        if (!formContents.get(key).isFormField()) {
             throw new IllegalArgumentException();
+        }
 
         return (String) formContents.get(key).getObject();
     }
