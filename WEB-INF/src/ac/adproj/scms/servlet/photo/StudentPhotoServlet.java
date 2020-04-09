@@ -22,7 +22,9 @@ import ac.adproj.scms.servlet.ServletProcessingException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
 
@@ -35,8 +37,15 @@ public class StudentPhotoServlet extends HttpServlet {
         String id = request.getParameter("id");
 
         try (PhotoService ps = PhotoServiceFactory.getPhotoService(request);
-             OutputStream out = response.getOutputStream()) {
-            byte[] photoB = ps.getPhoto(id);
+             OutputStream out = response.getOutputStream();
+             InputStream placeholderStream = new FileInputStream(getServletContext().getRealPath(PhotoService.PHOTO_PLACEHOLDER_RELATIVE_PATH))) {
+            byte[] photoB;
+            if (ps.isPhotoExists(id)) {
+                photoB = ps.getPhoto(id);
+            } else {
+                photoB = placeholderStream.readAllBytes();
+            }
+
             response.setContentType("image/png");
             out.write(photoB);
         } catch (SQLException | IOException e) {

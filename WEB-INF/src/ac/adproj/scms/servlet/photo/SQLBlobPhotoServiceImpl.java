@@ -89,7 +89,9 @@ final class SQLBlobPhotoServiceImpl implements PhotoService {
      */
     @Override
     public boolean isPhotoExists(String id) throws SQLException {
-        return InitServlet.daoO.query(QUERY_SQL, id).getBlob("p") == null;
+        ResultSet rs = InitServlet.daoO.query(QUERY_SQL, id);
+        rs.next();
+        return rs.getBlob("p") != null;
     }
 
     @Override
