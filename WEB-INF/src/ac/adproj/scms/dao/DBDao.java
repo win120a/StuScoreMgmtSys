@@ -49,6 +49,7 @@ public class DBDao implements DBConnectionHandler {
         this.pool = new HashMap<>();
     }
 
+    @Override
     public Connection getConnection() throws SQLException {
         if (connectionI == null || connectionI.isClosed()) {
             try {
@@ -78,7 +79,7 @@ public class DBDao implements DBConnectionHandler {
         return driver;
     }
 
-    public String getDBName() {
+    public String getDatabaseName() {
         return db;
     }
 

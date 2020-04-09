@@ -38,6 +38,7 @@ public class Course implements Entity {
         this.credits = credits;
     }
 
+    @Override
     public String getId() {
         return id;
     }
@@ -92,12 +93,15 @@ public class Course implements Entity {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Course other = (Course) obj;
         if (id == null) {
             if (other.id != null) {

@@ -25,8 +25,8 @@ import ac.adproj.scms.servlet.ServletProcessingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public final class CourseDao {
-    private CourseDao() {
+public final class CourseDAO {
+    private CourseDAO() {
     }
 
     /**
@@ -40,8 +40,9 @@ public final class CourseDao {
             ResultSet rs = daoO.query("select * from kc where courseID=?;"
                     , courseid);
 
-            if (!rs.next())
+            if (!rs.next()) {
                 return null;
+            }
 
             String courseName = rs.getString("courseName");
             String courseID = rs.getString("courseID");

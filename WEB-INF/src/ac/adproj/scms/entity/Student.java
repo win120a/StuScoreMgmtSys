@@ -75,6 +75,7 @@ public class Student implements Entity {
         this.gender = GenderEnum.getGenderEnumThroughNumber(number);
     }
 
+    @Override
     public String getId() {
         return id;
     }

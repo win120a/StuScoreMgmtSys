@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 
+/**
+ * @author Andy Cheung
+ */
 public final class StudentDao {
     private StudentDao() { }
 
@@ -48,8 +51,9 @@ public final class StudentDao {
         try (DBDao daoO = InitServlet.daoO) {
             ResultSet rs = daoO.query("select * from xs where stuid=?;", stuid);
 
-            if (!rs.next())
+            if (!rs.next()) {
                 return null;
+            }
 
             name = rs.getString("name");
             birthdate = rs.getString("birthdate");
