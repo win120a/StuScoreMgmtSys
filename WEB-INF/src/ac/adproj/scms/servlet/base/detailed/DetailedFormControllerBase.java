@@ -30,7 +30,7 @@ import java.io.Writer;
 import java.sql.SQLException;
 
 public abstract class DetailedFormControllerBase extends ControllerBase {
-    private String viewURL = null;
+    private String viewUrl = null;
 
     protected abstract void uploadObjectToDataBase(HttpServletRequest request) throws SQLException;
     protected abstract String getParameter(HttpServletRequest request, String key);
@@ -40,25 +40,25 @@ public abstract class DetailedFormControllerBase extends ControllerBase {
     protected void beforeDoingPOST(HttpServletRequest request) { }
     protected void afterDoPOST(HttpServletRequest request) { }
 
-    public String getViewURL() {
-        return viewURL;
+    public String getViewUrl() {
+        return viewUrl;
     }
 
-    public void setViewURL(String dispatchTo) {
-        this.viewURL = dispatchTo;
+    public void setViewUrl(String dispatchTo) {
+        this.viewUrl = dispatchTo;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        if (viewURL == null) {
+        if (viewUrl == null) {
             throw new IllegalArgumentException();
         }
 
         String id = req.getParameter("id");
         Entity e = readEntityObject(req, id);
         req.setAttribute("entityObject", e);
-        req.getRequestDispatcher(getViewURL()).forward(req, resp);
+        req.getRequestDispatcher(getViewUrl()).forward(req, resp);
     }
 
     @Override

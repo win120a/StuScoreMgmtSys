@@ -68,8 +68,9 @@ class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
 
         HashMap<String, DataWrap> contents = new HashMap<>();
 
-        if (!ServletFileUpload.isMultipartContent(request))
+        if (!ServletFileUpload.isMultipartContent(request)) {
             throw new IllegalArgumentException();
+        }
 
         // Create a factory for disk-based file items
         DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -109,11 +110,13 @@ class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
      */
     @Override
     public Object getNonFormFieldObject(String key) {
-        if (formContents.get(key) == null)
+        if (formContents.get(key) == null) {
             return null;
+        }
 
-        if (formContents.get(key).isFormField())
+        if (formContents.get(key).isFormField()) {
             throw new IllegalArgumentException();
+        }
 
         return formContents.get(key).getObject();
     }
@@ -126,11 +129,13 @@ class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
      */
     @Override
     public String getStringParameter(String key) {
-        if (formContents.get(key) == null)
+        if (formContents.get(key) == null) {
             return null;
+        }
 
-        if (!formContents.get(key).isFormField())
+        if (!formContents.get(key).isFormField()) {
             throw new IllegalArgumentException();
+        }
 
         return (String) formContents.get(key).getObject();
     }

@@ -33,7 +33,7 @@ public final class MultipartFormHandlerFactory {
     /**
      * Class name of the handler.
      */
-    private static final String FORM_HANDLER_CLASS_NAME = "ac.adproj.scms.servlet.forms.MultipartFormHandlerApacheCommonsImpl";
+    private static final String FORM_HANDLER_CLASS_NAME = "ac.adproj.scms.servlet.multipartform.MultipartFormHandlerApacheCommonsImpl";
 
     /**
      * Factory method of form handler.

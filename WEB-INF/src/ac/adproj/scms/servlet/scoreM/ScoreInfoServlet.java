@@ -61,15 +61,17 @@ public class ScoreInfoServlet extends HttpServlet {
             ps_i.setString(2, request.getParameter("id"));
             String updateP = request.getParameter("update");
 
-            if (updateP != null && updateP.equals("1")) {
+            if (updateP != null && "1".equals(updateP)) {
                 Map<String, String[]> paramMap = request.getParameterMap();
                 Map<String, String> scoreMap = new HashMap<>(paramMap.size());
 
                 for (Map.Entry<String, String[]> s : paramMap.entrySet()) {
-                    if (s.getKey().equals("update") || s.getKey().equals("id"))
+                    if ("update".equals(s.getKey()) || "id".equals(s.getKey())) {
                         continue;
-                    if (s.getKey().contains("score_"))
+                    }
+                    if (s.getKey().contains("score_")) {
                         scoreMap.put(s.getKey(), s.getValue()[0]);
+                    }
                 }
 
                 for (Map.Entry<String, String> s : scoreMap.entrySet()) // "score_" + StuID, score
@@ -108,14 +110,12 @@ public class ScoreInfoServlet extends HttpServlet {
                             ps_d.setString(1, s.getKey().replace("score_", ""));
                             ps_d.setString(2, request.getParameter("id"));
                             ps_d.execute();
-                            // out.print("<script>alert(\"D: " + ps_d.toString() + "\");</script>");
                         } else {
                             ps_u.setString(1, score);
                             ps_u.setString(2, credits);
                             ps_u.setString(3, s.getKey().replace("score_", ""));
                             ps_u.setString(4, request.getParameter("id"));
                             ps_u.execute();
-                            // out.print("<script>alert(\"U: " + ps_u.toString() + "\");</script>");
                         }
                     }
 
