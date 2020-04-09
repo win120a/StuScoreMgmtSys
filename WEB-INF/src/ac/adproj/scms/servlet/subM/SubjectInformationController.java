@@ -17,7 +17,7 @@
 
 package ac.adproj.scms.servlet.subM;
 
-import ac.adproj.scms.dao.CourseDao;
+import ac.adproj.scms.dao.CourseDAO;
 import ac.adproj.scms.entity.Course;
 import ac.adproj.scms.entity.Entity;
 import ac.adproj.scms.servlet.base.detailed.TextOnlyDetailedFormControllerBase;
@@ -32,7 +32,7 @@ public class SubjectInformationController extends TextOnlyDetailedFormController
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        setViewURL("/WEB-INF/subM/subInfo.jsp");
+        setViewUrl("/WEB-INF/subM/subInfo.jsp");
         super.doGet(req, resp);
     }
 
@@ -50,11 +50,11 @@ public class SubjectInformationController extends TextOnlyDetailedFormController
         c.setCourseHours(Integer.parseInt(getParameter(request,"courseHours")));
         c.setCredits(Integer.parseInt(getParameter(request, "credits")));
 
-        CourseDao.writeCourseObjectToDatabase(c);
+        CourseDAO.writeCourseObjectToDatabase(c);
     }
 
     @Override
     protected Entity readEntityObject(HttpServletRequest request, String id) {
-        return CourseDao.getCourseObjectThroughDB(id);
+        return CourseDAO.getCourseObjectThroughDB(id);
     }
 }

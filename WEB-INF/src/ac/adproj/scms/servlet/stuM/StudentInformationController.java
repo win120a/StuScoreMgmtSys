@@ -32,7 +32,7 @@ public class StudentInformationController extends MultiPartDetailedFormControlle
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        setViewURL("/WEB-INF/stuM/stuInfo.jsp");
+        setViewUrl("/WEB-INF/stuM/stuInfo.jsp");
         super.doGet(req, resp);
     }
 

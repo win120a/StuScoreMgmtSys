@@ -13,7 +13,7 @@
 
     <tag>
         <name>TestTag</name>
-        <tag-class>ac.adproj.scms.taglibs.DataRowsTag</tag-class>
+        <tag-class>ac.adproj.scms.taglib.DataRowsTag</tag-class>
         <body-content>empty</body-content>
     </tag>
 </taglib>
