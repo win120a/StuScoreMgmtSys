@@ -47,7 +47,7 @@ public class SubjectInformationController extends TextOnlyDetailedFormController
 
         c.setName(getParameter(request, "courseName"));
         c.setTerm(getParameter(request, "term"));
-        c.setCourseHours(Integer.parseInt(getParameter(request,"courseHours")));
+        c.setCourseHours(Integer.parseInt(getParameter(request, "courseHours")));
         c.setCredits(Integer.parseInt(getParameter(request, "credits")));
 
         CourseDAO.writeCourseObjectToDatabase(c);

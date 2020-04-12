@@ -18,6 +18,7 @@
 package ac.adproj.scms.servlet.stuM;
 
 import ac.adproj.scms.dao.DBDao;
+import ac.adproj.scms.service.photo.PhotoServiceFactory;
 import ac.adproj.scms.servlet.ControllerStatusEnum;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
@@ -27,16 +28,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Set;
 
+/**
+ * @author Andy Cheung
+ */
 public class StudentListController extends ListFormControllerBase {
 
     @Override
-    protected void deleteDBEntry(String id)
+    protected void deleteDatabaseEntry(String id)
             throws SQLException {
         try (DBDao daoO = InitServlet.daoO) {
+            PhotoServiceFactory.getPhotoService().deletePhoto(id);
             daoO.delete("delete from xs where xs.stuId=?;", id);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new ServletProcessingException(e);
         }
     }
 
@@ -45,13 +54,13 @@ public class StudentListController extends ListFormControllerBase {
         StringBuilder undoneMessageBuilder = new StringBuilder();
         undoneMessageBuilder.append("如下学生由于此前输入了成绩，不能删除。\\n\\n学号：\\n");
 
-        for(String id : undoneIDs) {
+        for (String id : undoneIDs) {
             undoneMessageBuilder.append(id);
             undoneMessageBuilder.append("\\n");
         }
 
-        try (Writer out = response.getWriter();) {
-            out.write("<script>alert(\"" + new String(undoneMessageBuilder.toString().getBytes(), "utf-8") + "\"); location.href=\"index.jsp\";</script>");
+        try (Writer out = response.getWriter()) {
+            out.write("<script>alert(\"" + new String(undoneMessageBuilder.toString().getBytes(), StandardCharsets.UTF_8) + "\"); location.href=\"index.jsp\";</script>");
         } catch (IOException e) {
             e.printStackTrace();
             status = ControllerStatusEnum.FAIL;
@@ -61,11 +70,11 @@ public class StudentListController extends ListFormControllerBase {
 
     @Override
     protected void onSuccess(HttpServletRequest request, HttpServletResponse response) {
-        try (Writer out = response.getWriter();) {
+        try (Writer out = response.getWriter()) {
             out.write(new String(
-                            ("<script>alert(\"删除成功! \");"
-                                    + "location.href=\"index.jsp\";</script>").getBytes()
-                                    , "utf-8"));
+                    ("<script>alert(\"删除成功! \");"
+                            + "location.href=\"index.jsp\";</script>").getBytes()
+                    , StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
             status = ControllerStatusEnum.FAIL;

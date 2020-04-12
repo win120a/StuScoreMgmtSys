@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -83,9 +84,9 @@ public class SubjectListProcServlet extends HttpServlet {
                 }
 
                 if (notFullyDel) {
-                    out.write("<script>alert(\"" + new String(undoneMessageBuilder.toString().getBytes(), "utf-8") + "\"); location.href=\"index.jsp\";</script>");
+                    out.write("<script>alert(\"" + new String(undoneMessageBuilder.toString().getBytes(), StandardCharsets.UTF_8) + "\"); location.href=\"index.jsp\";</script>");
                 } else {
-                    out.write(new String(("<script>alert(\"删除成功! \"); location.href=\"index.jsp\";</script>").getBytes(), "utf-8"));
+                    out.write(new String(("<script>alert(\"删除成功! \"); location.href=\"index.jsp\";</script>").getBytes(), StandardCharsets.UTF_8));
                 }
             }
 
@@ -105,6 +106,6 @@ public class SubjectListProcServlet extends HttpServlet {
 
         byte[] b = ("<p>测试 Test:" + request.getParameter("test") + "</p>").getBytes();
 
-        response.getWriter().print(new String(b, "utf-8"));
+        response.getWriter().print(new String(b, StandardCharsets.UTF_8));
     }
 }

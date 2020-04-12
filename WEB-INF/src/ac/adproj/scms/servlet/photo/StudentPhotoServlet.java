@@ -17,6 +17,8 @@
 
 package ac.adproj.scms.servlet.photo;
 
+import ac.adproj.scms.service.photo.PhotoService;
+import ac.adproj.scms.service.photo.PhotoServiceFactory;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
 import javax.servlet.http.HttpServlet;
@@ -36,11 +38,11 @@ public class StudentPhotoServlet extends HttpServlet {
     public void service(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("id");
 
-        try (PhotoService ps = PhotoServiceFactory.getPhotoService(request);
+        try (PhotoService ps = PhotoServiceFactory.getPhotoService();
              OutputStream out = response.getOutputStream();
              InputStream placeholderStream = new FileInputStream(getServletContext().getRealPath(PhotoService.PHOTO_PLACEHOLDER_RELATIVE_PATH))) {
             byte[] photoB;
-            if (ps.isPhotoExists(id)) {
+            if (ps.doesPhotoExist(id)) {
                 photoB = ps.getPhoto(id);
             } else {
                 photoB = placeholderStream.readAllBytes();

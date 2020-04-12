@@ -30,14 +30,14 @@ import java.util.Properties;
  */
 public class DBDao implements DBConnectionHandler {
     private static final String ADDR_HEAD = "jdbc:mysql://";
-    private HashMap<Connection, Integer> pool;
+    private final HashMap<Connection, Integer> pool;
+    private final String driver;
+    private final String serverAddr;
+    private final String userName;
+    private final String password;
+    private final String serverTimeZone;
+    private final String db;
     private Connection connectionI;
-    private String driver;
-    private String serverAddr;
-    private String userName;
-    private String password;
-    private String serverTimeZone;
-    private String db;
 
     public DBDao(String driver, String serverAddr, String userName, String password, String serverTimeZone, String db) {
         this.driver = driver;

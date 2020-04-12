@@ -21,10 +21,10 @@ import ac.adproj.scms.util.ByteArrayUtils;
 import com.google.gson.JsonObject;
 
 public class Student implements Entity {
+    private final String id;
     private String name;
     private String dob;
     private GenderEnum gender;
-    private String id;
     private String major;
     private int totalCredits;
     private String remark;

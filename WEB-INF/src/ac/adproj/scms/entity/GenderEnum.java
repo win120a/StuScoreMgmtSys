@@ -20,7 +20,7 @@ package ac.adproj.scms.entity;
 public enum GenderEnum {
     MALE(1), FEMALE(0);
 
-    private int genderN;
+    private final int genderN;
 
     GenderEnum(int genderN) {
         this.genderN = genderN;
