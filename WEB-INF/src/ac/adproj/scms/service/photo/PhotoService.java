@@ -15,13 +15,13 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet.photo;
+package ac.adproj.scms.service.photo;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Represents a photo service.
+ * Represents a photo service, which is able to retrieve, upload, and delete photo.
  *
  * @author Andy Cheung
  */
@@ -44,10 +44,26 @@ public interface PhotoService extends AutoCloseable {
      * Check the photo corresponding to the student id whether exists or not.
      * @param id The student ID.
      * @return Exists, true. Not exist, false.
-     * @throws IOException If IO Error encountered.
+     * @throws IOException If I/O Error encountered.
      * @throws SQLException If SQL Error encountered.
      */
-    boolean isPhotoExists(String id) throws IOException, SQLException;
+    boolean doesPhotoExist(String id) throws IOException, SQLException;
 
+    /**
+     * Upload the photo to the server.
+     * @param id The student ID.
+     * @param photoArray The byte array represents a photo.
+     * @throws IOException If I/O Error encountered.
+     * @throws SQLException If SQL Error encountered.
+     */
     void uploadPhoto(String id, byte[] photoArray) throws IOException, SQLException;
+
+
+    /**
+     * Delete the photo from the server.
+     * @param id The student ID.
+     * @throws IOException If I/O Error encountered.
+     * @throws SQLException If SQL Error encountered.
+     */
+    void deletePhoto(String id) throws IOException, SQLException;
 }

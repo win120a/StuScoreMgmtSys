@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -120,25 +121,12 @@ public class ScoreInfoServlet extends HttpServlet {
                     }
 
                     byte[] b = ("<script>alert(\"更新成绩成功!\"); opener = null; close();</script>").getBytes();
-                    out.write(new String(b, "utf-8"));
+                    out.write(new String(b, StandardCharsets.UTF_8));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new ServletProcessingException(e);
         }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setHeader("Allow", "GET, HEAD, POST, OPTIONS");
-        request.setCharacterEncoding("utf-8");
-        response.setBufferSize(8192);
-        response.setContentType("text/html; charset=utf-8");
-
-        byte[] b = ("<p>测试1 Test:" + request.getParameter("test") + "</p>").getBytes();
-
-        response.getWriter().print(new String(b, "utf-8"));
     }
 }

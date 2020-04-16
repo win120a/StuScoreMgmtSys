@@ -20,7 +20,7 @@ package ac.adproj.scms.entity;
 import com.google.gson.JsonObject;
 
 public class Course implements Entity {
-    private String id;
+    private final String id;
     private String name;
     private String term;
     private int courseHours;
@@ -104,13 +104,7 @@ public class Course implements Entity {
         }
         Course other = (Course) obj;
         if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-
-        return true;
+            return other.id == null;
+        } else return id.equals(other.id);
     }
 }

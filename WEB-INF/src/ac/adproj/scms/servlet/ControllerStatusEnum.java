@@ -18,5 +18,5 @@
 package ac.adproj.scms.servlet;
 
 public enum ControllerStatusEnum {
-    PENDING, EXECUTING, SUCCESS, PARTIAL_SUCCESS, FAIL;
+    PENDING, EXECUTING, SUCCESS, PARTIAL_SUCCESS, FAIL
 }

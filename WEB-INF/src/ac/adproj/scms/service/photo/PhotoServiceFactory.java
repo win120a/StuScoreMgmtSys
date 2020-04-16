@@ -15,13 +15,12 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet.photo;
+package ac.adproj.scms.service.photo;
 
+import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import javax.servlet.ServletContext;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -34,19 +33,20 @@ public final class PhotoServiceFactory {
     /**
      * Factory method of form handler.
      *
-     * @param request The HTTP Request.
+     * @param context The servlet context.
      * @return Instance of the class.
      * @author Andy Cheung
      */
-    public static PhotoService getPhotoService(HttpServletRequest request) {
-        final String CLASSNAME = request.getServletContext().getInitParameter("photoServiceClass");
+    public static PhotoService getPhotoService(ServletContext context) {
+        final String CLASSNAME = context.getInitParameter("photoServiceClass");
 
         PhotoService service = null;
 
         try {
+            @SuppressWarnings("unchecked")
             Class<PhotoService> photoServiceClass = (Class<PhotoService>) Class.forName(CLASSNAME);
-            Constructor<PhotoService> ctor = photoServiceClass.getConstructor(HttpServletRequest.class);
-            service = ctor.newInstance(request);
+            Constructor<PhotoService> ctor = photoServiceClass.getConstructor(ServletContext.class);
+            service = ctor.newInstance(context);
         } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException
                 | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
@@ -54,5 +54,9 @@ public final class PhotoServiceFactory {
         }
 
         return service;
+    }
+
+    public static PhotoService getPhotoService() {
+        return getPhotoService(InitServlet.context);
     }
 }

@@ -27,18 +27,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 
 public abstract class DetailedFormControllerBase extends ControllerBase {
     private String viewUrl = null;
 
-    protected abstract void uploadObjectToDataBase(HttpServletRequest request) throws SQLException;
+    protected abstract void uploadObjectToDataBase(HttpServletRequest request) throws SQLException, IOException;
+
     protected abstract String getParameter(HttpServletRequest request, String key);
 
     protected abstract Entity readEntityObject(HttpServletRequest request, String id);
 
-    protected void beforeDoingPOST(HttpServletRequest request) { }
-    protected void afterDoPOST(HttpServletRequest request) { }
+    protected void beforeDoingPOST(HttpServletRequest request) {
+    }
+
+    protected void afterDoPOST(HttpServletRequest request) {
+    }
 
     public String getViewUrl() {
         return viewUrl;
@@ -81,16 +86,16 @@ public abstract class DetailedFormControllerBase extends ControllerBase {
             }
 
             RecordModificationTypeEnum type = RecordModificationTypeEnum
-                                            .getEnumByTypeName(typeString);
+                    .getEnumByTypeName(typeString);
 
             uploadObjectToDataBase(request);
 
             out.write("<script>");
 
             if (type == RecordModificationTypeEnum.ADD) {
-                out.write(new String("window.alert('添加成功! ');".getBytes(), "utf-8"));
+                out.write(new String("window.alert('添加成功! ');".getBytes(), StandardCharsets.UTF_8));
             } else if (type == RecordModificationTypeEnum.MODIFY) {
-                out.write(new String("window.alert('修改成功! ');".getBytes(), "utf-8"));
+                out.write(new String("window.alert('修改成功! ');".getBytes(), StandardCharsets.UTF_8));
             }
 
             out.write("opener.location.reload();");

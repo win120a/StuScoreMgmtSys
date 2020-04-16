@@ -15,13 +15,12 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package ac.adproj.scms.servlet.photo;
+package ac.adproj.scms.service.photo;
 
 import ac.adproj.scms.dao.DBDao;
 import ac.adproj.scms.servlet.InitServlet;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,14 +38,13 @@ import java.sql.SQLException;
  */
 final class SQLBlobPhotoServiceImpl implements PhotoService {
     private static final String QUERY_SQL = "select photo as p from xs where stuid=?;";
-    private final HttpServletRequest request;
+    private final ServletContext ctx;
 
-    public SQLBlobPhotoServiceImpl(HttpServletRequest request) {
-        this.request = request;
+    public SQLBlobPhotoServiceImpl(ServletContext ctx) {
+        this.ctx = ctx;
     }
 
     private byte[] getNone() throws IOException {
-        ServletContext ctx = request.getServletContext();
         String rPath = ctx.getRealPath(PHOTO_PLACEHOLDER_RELATIVE_PATH);
         FileInputStream photoS = new FileInputStream(new File(rPath));
 
@@ -55,9 +53,10 @@ final class SQLBlobPhotoServiceImpl implements PhotoService {
 
     /**
      * Get the byte array of photo.
+     *
      * @param id The Student ID.
      * @return The byte array of the photo.
-     * @throws IOException If IO Error encountered.
+     * @throws IOException  If IO Error encountered.
      * @throws SQLException If SQL Error encountered.
      */
     @Override
@@ -82,13 +81,14 @@ final class SQLBlobPhotoServiceImpl implements PhotoService {
 
     /**
      * Check the photo corresponding to the student id whether exists or not.
+     *
      * @param id The student ID.
      * @return Exists, true. Not exist, false.
-     * @throws IOException If IO Error encountered.
+     * @throws IOException  If IO Error encountered.
      * @throws SQLException If SQL Error encountered.
      */
     @Override
-    public boolean isPhotoExists(String id) throws SQLException {
+    public boolean doesPhotoExist(String id) throws SQLException {
         ResultSet rs = InitServlet.daoO.query(QUERY_SQL, id);
         rs.next();
         return rs.getBlob("p") != null;
@@ -97,8 +97,8 @@ final class SQLBlobPhotoServiceImpl implements PhotoService {
     @Override
     public void uploadPhoto(String id, byte[] photoArray) throws SQLException {
         PreparedStatement ps_p = InitServlet.daoO
-                                .getConnection()
-                                .prepareStatement("update xs set photo=? where stuid=?;");
+                .getConnection()
+                .prepareStatement("update xs set photo=? where stuid=?;");
 
         if (photoArray != null && photoArray.length != 0) {
             ps_p.setBlob(1, new SerialBlob(photoArray));
@@ -107,6 +107,15 @@ final class SQLBlobPhotoServiceImpl implements PhotoService {
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public void deletePhoto(String id) throws SQLException {
+        PreparedStatement deletingStatement = InitServlet.daoO
+                .getConnection()
+                .prepareStatement("update xs set photo=NULL where stuid=?;");
+
+        deletingStatement.execute();
     }
 
     @Override

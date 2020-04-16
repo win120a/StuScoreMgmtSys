@@ -37,7 +37,7 @@ public class StudentInformationController extends MultiPartDetailedFormControlle
     }
 
     @Override
-    protected void uploadObjectToDataBase(HttpServletRequest request) throws SQLException {
+    protected void uploadObjectToDataBase(HttpServletRequest request) throws SQLException, IOException {
         Student s = new Student(getStringParameter(request, "id"));
 
         s.setName(getStringParameter(request, "name"));

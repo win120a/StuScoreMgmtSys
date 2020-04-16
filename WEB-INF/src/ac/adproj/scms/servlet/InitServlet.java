@@ -30,10 +30,12 @@ import java.sql.SQLException;
  */
 public class InitServlet extends HttpServlet {
     public static DBDao daoO;
+    public static ServletContext context;
 
     @Override
     public void init() {
         ServletContext application = getServletContext();
+        context = getServletContext();
 
         String driver = application.getInitParameter("driver");
         driver = driver != null ? driver : "";

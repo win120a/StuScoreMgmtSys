@@ -26,13 +26,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.Set;
 
 public class SubjectListController extends ListFormControllerBase {
 
     @Override
-    protected void deleteDBEntry(String id)
+    protected void deleteDatabaseEntry(String id)
             throws SQLException {
         CourseDAO.deleteObject(id);
     }
@@ -42,13 +43,13 @@ public class SubjectListController extends ListFormControllerBase {
         StringBuilder undoneMessageBuilder = new StringBuilder();
         undoneMessageBuilder.append("如下课程由于此前输入了成绩，不能删除。\\n\\n课程号：\\n");
 
-        for(String id : undoneIDs) {
+        for (String id : undoneIDs) {
             undoneMessageBuilder.append(id);
             undoneMessageBuilder.append("\\n");
         }
 
-        try (Writer out = response.getWriter();) {
-            out.write("<script>alert(\"" + new String(undoneMessageBuilder.toString().getBytes(), "utf-8") + "\"); location.href=\"index.jsp\";</script>");
+        try (Writer out = response.getWriter()) {
+            out.write("<script>alert(\"" + new String(undoneMessageBuilder.toString().getBytes(), StandardCharsets.UTF_8) + "\"); location.href=\"index.jsp\";</script>");
         } catch (IOException e) {
             e.printStackTrace();
             status = ControllerStatusEnum.FAIL;
@@ -58,11 +59,11 @@ public class SubjectListController extends ListFormControllerBase {
 
     @Override
     protected void onSuccess(HttpServletRequest request, HttpServletResponse response) {
-        try (Writer out = response.getWriter();) {
+        try (Writer out = response.getWriter()) {
             out.write(new String(
-                            ("<script>alert(\"删除成功! \");"
-                                    + "location.href=\"index.jsp\";</script>").getBytes()
-                                    , "utf-8"));
+                    ("<script>alert(\"删除成功! \");"
+                            + "location.href=\"index.jsp\";</script>").getBytes()
+                    , StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
             status = ControllerStatusEnum.FAIL;

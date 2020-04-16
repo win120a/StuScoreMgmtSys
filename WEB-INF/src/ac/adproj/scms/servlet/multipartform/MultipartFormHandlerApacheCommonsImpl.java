@@ -43,7 +43,7 @@ class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
      *
      * @author Andy Cheung
      */
-    private Map<String, DataWrap> formContents;
+    private final Map<String, DataWrap> formContents;
 
     /**
      * Constructs the MultipartForm Object from HttpServletRequest object.
@@ -146,8 +146,8 @@ class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
      * @author Andy Cheung
      */
     private static class DataWrap {
-        private Object object;
-        private boolean formField;
+        private final Object object;
+        private final boolean formField;
 
         public DataWrap(Object object, boolean formField) {
             super();

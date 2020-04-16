@@ -20,19 +20,24 @@ package ac.adproj.scms.dao;
 import ac.adproj.scms.entity.Entity;
 import ac.adproj.scms.entity.GenderEnum;
 import ac.adproj.scms.entity.Student;
+import ac.adproj.scms.service.photo.PhotoService;
+import ac.adproj.scms.service.photo.PhotoServiceFactory;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.*;
+import java.sql.Blob;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public final class StudentDao {
-    private StudentDao() { }
+    private StudentDao() {
+    }
 
     /**
      * Returns a Student object according to the DB's record.
+     *
      * @param stuid The student ID.
      * @return The Student object, or null if the student object did not exist.
      */
@@ -85,10 +90,11 @@ public final class StudentDao {
 
     /**
      * Upload the Student object to the database.
+     *
      * @param s The student object that needs to upload.
-     * @exception SQLException If database ran into error.
+     * @throws SQLException If database ran into error.
      */
-    public static void writeStudentObjectToDatabase(Student s) throws SQLException {
+    public static void writeStudentObjectToDatabase(Student s) throws SQLException, IOException {
         try (DBDao daoO = InitServlet.daoO) {
 
             if (daoO.query("select name from xs where stuid=?", s.getId()).next()) {
@@ -110,27 +116,22 @@ public final class StudentDao {
             }
 
             if (s.getPhoto() != null && s.getPhoto().length != 0) {
-                updatePhoto(daoO.getConnection(), s.getId(), s.getPhoto());
+                updatePhoto(s.getId(), s.getPhoto());
             }
         }
     }
 
     /**
      * Updates the photo.
-     * @param conn The DB Connection.
-     * @param id The student ID.
+     *
+     * @param id    The student ID.
      * @param pictW The picture array.
      * @throws SQLException If DB ran into error.
      */
-    private static void updatePhoto(Connection conn, String id, byte[] pictW) throws SQLException {
-        PreparedStatement ps_p = conn.prepareStatement("update xs set photo=? where stuid=?;");
+    private static void updatePhoto(String id, byte[] pictW) throws SQLException, IOException {
         if (pictW != null && pictW.length != 0) {
-            byte[] pictB = pictW;
-            ps_p.setBlob(1, new SerialBlob(pictB));
-            ps_p.setString(2, id);
-            ps_p.execute();
-        } else {
-            throw new IllegalArgumentException();
+            PhotoService ps = PhotoServiceFactory.getPhotoService();
+            ps.uploadPhoto(id, pictW);
         }
     }
 

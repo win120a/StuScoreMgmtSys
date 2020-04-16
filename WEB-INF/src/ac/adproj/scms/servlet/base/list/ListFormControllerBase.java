@@ -30,15 +30,17 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class ListFormControllerBase extends ControllerBase {
-    protected abstract void deleteDBEntry(String id)
+    protected abstract void deleteDatabaseEntry(String id)
             throws SQLException;
 
     protected void onPartialSuccess(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    Set<String> undoneIDs) { }
+                                    Set<String> undoneIDs) {
+    }
 
     protected void onSuccess(HttpServletRequest request,
-                             HttpServletResponse response) { }
+                             HttpServletResponse response) {
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -70,7 +72,7 @@ public abstract class ListFormControllerBase extends ControllerBase {
 
                 for (String s : delKeys) {
                     try {
-                        deleteDBEntry(s);
+                        deleteDatabaseEntry(s);
                     } catch (java.sql.SQLIntegrityConstraintViolationException sicve) {
                         notFullyDel = true;
                         undoneIDs.add(s);

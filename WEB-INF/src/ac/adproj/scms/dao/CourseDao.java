@@ -75,18 +75,18 @@ public final class CourseDAO {
             if (daoO.query("select term from kc where courseID=?;", c.getId()).next()) {
                 daoO.update("update kc set courseName=?, term=?, credits=?, "
                                 + "courseHours=? where courseID=?;"
-                            , c.getName()
-                            , c.getTerm()
-                            , Integer.toString(c.getCredits())
-                            , Integer.toString(c.getCourseHours())
-                            , c.getId());
+                        , c.getName()
+                        , c.getTerm()
+                        , Integer.toString(c.getCredits())
+                        , Integer.toString(c.getCourseHours())
+                        , c.getId());
             } else {
                 daoO.insert("insert into kc values (?, ?, ?, ?, ?);"
-                            , c.getId()
-                            , c.getName()
-                            , c.getTerm()
-                            , Integer.toString(c.getCourseHours())
-                            , Integer.toString(c.getCredits()));
+                        , c.getId()
+                        , c.getName()
+                        , c.getTerm()
+                        , Integer.toString(c.getCourseHours())
+                        , Integer.toString(c.getCredits()));
             }
         }
     }
