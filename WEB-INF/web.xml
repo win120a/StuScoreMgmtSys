@@ -169,6 +169,7 @@
 
     <context-param>
         <param-name>photoServiceClass</param-name>
-        <param-value>ac.adproj.scms.servlet.photo.SQLBlobPhotoServiceImpl</param-value>
+        <param-value>ac.adproj.scms.service.photo.SQLBlobPhotoServiceImpl</param-value>
     </context-param>
+
 </web-app>
