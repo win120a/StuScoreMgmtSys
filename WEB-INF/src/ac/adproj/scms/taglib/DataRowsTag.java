@@ -17,14 +17,60 @@
 
 package ac.adproj.scms.taglib;
 
+import ac.adproj.scms.entity.Entity;
+import ac.adproj.scms.entity.Student;
+import ac.adproj.scms.entity.StudentScore;
+import ac.adproj.scms.servlet.ServletProcessingException;
+
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Set;
 
 public class DataRowsTag extends SimpleTagSupport {
+    private String content;
+    private String type;
+
+    private static final String ENTITY_PKG_NAME = "ac.adproj.scms.entity";
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     @Override
     public void doTag() throws JspException, IOException {
-        this.getJspContext().getOut().print("<p>TAG " + getClass().getName() + "ATTACHED! </p>");
+        Set<Entity> entitySet = (Set<Entity>) getJspContext().getAttribute("entitySet");
+
+        JspWriter writer = getJspContext().getOut();
+
+        for(Entity e : entitySet) {
+            try {
+                Class<?> typeClass = Class.forName(ENTITY_PKG_NAME + "." +
+                                                    type.substring(0, 1).toUpperCase() + type.substring(1));
+
+                Class<?> targetClass = e.getClass().asSubclass(typeClass);
+
+                String methodName = "get" + content.substring(0, 1).toUpperCase() + content.substring(1);
+                Method getter = targetClass.getMethod(methodName);
+                getJspContext().setAttribute("current", getter.invoke(e));
+            } catch (ClassNotFoundException | NoSuchMethodException |
+                    IllegalAccessException | InvocationTargetException | ClassCastException ex) {
+                ex.printStackTrace();
+                throw new ServletProcessingException(ex);
+            }
+
+            writer.print("<td>");
+
+            getJspBody().invoke(null);
+
+            writer.print("</td>");
+        }
     }
 }

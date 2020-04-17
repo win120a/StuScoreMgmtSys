@@ -30,9 +30,12 @@ import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
-public final class StudentDao {
-    private StudentDao() {
+public final class StudentDAO {
+    private StudentDAO() {
+        // NOOP
     }
 
     /**
@@ -143,5 +146,30 @@ public final class StudentDao {
 
     public static void deleteObject(Entity e) throws SQLException {
         deleteObject(e.getId());
+    }
+
+    public static Set<String> getStudentIDSet() throws SQLException {
+        HashSet<String> studentSet = new HashSet<>();
+
+        try (DBDao daoO = InitServlet.daoO) {
+            ResultSet rs = daoO.query("select stuid from xs;");
+
+            while (rs.next()) {
+                studentSet.add(rs.getString("stuid"));
+            }
+        }
+
+        return studentSet;
+    }
+
+    public static Set<Student> getStudentObjectSet() throws SQLException {
+        Set<Student> studentSet = new HashSet<>();
+        Set<String> idSet = getStudentIDSet();
+
+        for (String id : idSet) {
+            studentSet.add(getStudentObjectThroughDB(id));
+        }
+
+        return studentSet;
     }
 }
