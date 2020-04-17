@@ -80,6 +80,11 @@ public class Student implements Entity {
         return id;
     }
 
+    @Override
+    public boolean isFullyObtained() {
+        return getId() != null && getName() != null && getMajor() != null;
+    }
+
     public byte[] getPhoto() {
         return photo;
     }

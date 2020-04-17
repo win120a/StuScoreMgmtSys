@@ -23,4 +23,6 @@ public interface Entity {
     JsonObject getJSON();
 
     String getId();
+
+    boolean isFullyObtained();
 }

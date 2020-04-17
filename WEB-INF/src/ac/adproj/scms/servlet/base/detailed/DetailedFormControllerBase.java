@@ -92,10 +92,18 @@ public abstract class DetailedFormControllerBase extends ControllerBase {
 
             out.write("<script>");
 
-            if (type == RecordModificationTypeEnum.ADD) {
-                out.write(new String("window.alert('添加成功! ');".getBytes(), StandardCharsets.UTF_8));
-            } else if (type == RecordModificationTypeEnum.MODIFY) {
-                out.write(new String("window.alert('修改成功! ');".getBytes(), StandardCharsets.UTF_8));
+            switch (type) {
+                case ADD:
+                    out.write(new String("window.alert('添加成功! ');".getBytes(), StandardCharsets.UTF_8));
+                    break;
+                case MODIFY:
+                    out.write(new String("window.alert('修改成功! ');".getBytes(), StandardCharsets.UTF_8));
+                    break;
+                case UPDATE:
+                    out.write(new String("window.alert('更新成绩成功! ');".getBytes(), StandardCharsets.UTF_8));
+                    break;
+                default:
+                    throw new IllegalArgumentException("[" + getClass().getName() + "] Illegal Type. ");
             }
 
             out.write("opener.location.reload();");

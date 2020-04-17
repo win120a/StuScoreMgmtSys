@@ -76,6 +76,11 @@ public class Course implements Entity {
     }
 
     @Override
+    public boolean isFullyObtained() {
+        return getId() != null && getName() != null && getTerm() != null;
+    }
+
+    @Override
     public JsonObject getJSON() {
         JsonObject jso = new JsonObject();
         jso.addProperty("name", getName());
