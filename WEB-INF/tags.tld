@@ -12,8 +12,38 @@
     <!-- Invoke 'Generate' action to add tags or functions -->
 
     <tag>
-        <name>TestTag</name>
+        <name>dataRows</name>
         <tag-class>ac.adproj.scms.taglib.DataRowsTag</tag-class>
-        <body-content>empty</body-content>
+        <body-content>scriptless</body-content>
+
+        <attribute>
+            <name>type</name>
+            <required>true</required>
+            <fragment>false</fragment>
+        </attribute>
+
+        <attribute>
+            <name>content</name>
+            <required>true</required>
+            <fragment>false</fragment>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>entityPropInScore</name>
+        <tag-class>ac.adproj.scms.taglib.ScoreInformationTag</tag-class>
+        <body-content>scriptless</body-content>
+
+        <attribute>
+            <name>type</name>
+            <required>true</required>
+            <fragment>false</fragment>
+        </attribute>
+
+        <attribute>
+            <name>content</name>
+            <required>true</required>
+            <fragment>false</fragment>
+        </attribute>
     </tag>
 </taglib>
