@@ -16,7 +16,6 @@
 --%>
 
 <%@ page contentType="text/html; charset=utf-8" errorPage="../WEB-INF/errorPage.jsp" %>
-<%@ include file="../WEB-INF/dbConn.jsp" %>
 <%@ include file="../WEB-INF/types.jsp" %>
 <%@ page import="ac.adproj.scms.dao.StudentDAO" %>
 <%@ page import="ac.adproj.scms.entity.Student" %>
