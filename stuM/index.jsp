@@ -18,9 +18,15 @@
 <%@ page contentType="text/html; charset=utf-8" errorPage="../WEB-INF/errorPage.jsp" %>
 <%@ include file="../WEB-INF/dbConn.jsp" %>
 <%@ include file="../WEB-INF/types.jsp" %>
+<%@ page import="ac.adproj.scms.dao.StudentDAO" %>
+<%@ page import="ac.adproj.scms.entity.Student" %>
+<%@ page import="java.util.Set" %>
+<%@ taglib prefix="scms" uri="http://tags.scms.projs.ac.net" %>
 
 <%
-    ResultSet rs = stmt.executeQuery("select * from xs;");   // Put here to query data after the delete process.
+    Set<Student> entitySet = StudentDAO.getStudentObjectSet();
+    pageContext.setAttribute("entitySet", entitySet);
+    pageContext.setAttribute("classname", getClass().getName(), PageContext.PAGE_SCOPE);
 %>
 
 <!DOCTYPE html>
@@ -38,124 +44,66 @@
 <h1>学生管理</h1>
 
 <form action="list" method="post">
-    <table class="T">  <%-- JSP Scriptlet that uses SQL Commands --%>
-        <%--
-            stuidname major gender birthdate totalCredits photo remark
-        --%>
+    <table class="T">
         <tr>
             <td>姓名</td>
-            <%
-                while (rs.next()) {
-            %>
-            <td><%= rs.getString("name") %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="name" type="student">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>性别</td>
-            <%
-                rs.beforeFirst();
-                while (rs.next()) {
-            %>
-            <td><%= rs.getInt("gender") == 1 ? "男" : "女" %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="gender" type="student">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>学号</td>
-            <%
-                rs.beforeFirst();
-                while (rs.next()) {
-            %>
-            <td><%= rs.getString("stuid") %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="id" type="student">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>专业</td>
-            <%
-                rs.beforeFirst();
-                while (rs.next()) {
-            %>
-            <td><%= rs.getString("major") %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="major" type="student">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>生日</td>
-            <%
-                rs.beforeFirst();
-                while (rs.next()) {
-            %>
-            <td><%= rs.getString("birthdate") %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="dob" type="student">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>总学分</td>
-            <%
-                PreparedStatement creditsPS = conn.prepareStatement("select sum(credit) as c from xs_kc where stuid=? and score >= 60;");
-
-                rs.beforeFirst();
-                while (rs.next()) {
-                    creditsPS.setString(1, rs.getString("stuid"));
-                    ResultSet creditsRS = creditsPS.executeQuery();
-                    creditsRS.next();
-                    String credits = creditsRS.getString("c");
-            %>
-            <td><%= credits == null ? "0" : credits %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="totalCredits" type="student">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>备注</td>
-            <%
-                rs.beforeFirst();
-                while (rs.next()) {
-                    String remark = rs.getString("remark");
-            %>
-            <td><%= remark == null ? "" : remark %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="remark" type="student">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>操作</td>
-            <%
-                String reqS = "info?type=" + TYPE_MODIFY + "&id=";
-                rs.beforeFirst();
-                while (rs.next()) {
-            %>
-            <td>
-                <label for='score_<%= rs.getString("stuid") %>'>删除? </label>
-                <input name='<%= rs.getString("stuid") %>' type="checkbox" class="del"
-                       id='score_<%= rs.getString("stuid") %>'><br/>
+
+            <scms:dataRows content="id" type="student">
+                <label for='${pageScope.current}'>删除? </label>
+                <input name='${pageScope.current}' type="checkbox" class="del"
+                       id='${pageScope.current}'><br/>
                 <a href='javascript:void(0);'
-                   onclick='openDialog("<%= reqS %><%= rs.getString("stuid")%>");'>编辑</a>
-            </td>
-            <%
-                }
-            %>
+                   onclick='openDialog("info?type=modify&id=${pageScope.current}");'>编辑</a>
+            </scms:dataRows>
         </tr>
     </table>
     <br/>

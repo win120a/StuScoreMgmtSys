@@ -16,7 +16,7 @@
 --%>
 
 <%@ page contentType="text/html; charset=UTF-8" language="java" errorPage="WEB-INF/errorPage.jsp" %>
-<%@ page import="ac.adproj.scms.dao.StudentDao" %>
+<%@ page import="ac.adproj.scms.dao.StudentDAO" %>
 <%@ page import="java.util.Date" %>
 
 <%--
@@ -163,7 +163,7 @@
     </tr>
 </table>
 
-<p><%= StudentDao.getStudentObjectThroughDB("123456") %>
+<p><%= StudentDAO.getStudentObjectThroughDB("123456") %>
 </p>
 </body>
 </html>

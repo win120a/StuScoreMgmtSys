@@ -106,7 +106,7 @@
         <tr>
             <td>成绩编辑</td>
             <%
-                String reqS = "scoreInfo.jsp?id=";
+                String reqS = "info?id=";
                 rs.beforeFirst();
                 while (rs.next()) {
             %>
