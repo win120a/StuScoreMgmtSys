@@ -18,8 +18,6 @@
 package ac.adproj.scms.taglib;
 
 import ac.adproj.scms.entity.Entity;
-import ac.adproj.scms.entity.Student;
-import ac.adproj.scms.entity.StudentScore;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
 import javax.servlet.jsp.JspException;
@@ -31,10 +29,9 @@ import java.lang.reflect.Method;
 import java.util.Set;
 
 public class DataRowsTag extends SimpleTagSupport {
+    private static final String ENTITY_PKG_NAME = "ac.adproj.scms.entity";
     private String content;
     private String type;
-
-    private static final String ENTITY_PKG_NAME = "ac.adproj.scms.entity";
 
     public void setContent(String content) {
         this.content = content;
@@ -50,10 +47,10 @@ public class DataRowsTag extends SimpleTagSupport {
 
         JspWriter writer = getJspContext().getOut();
 
-        for(Entity e : entitySet) {
+        for (Entity e : entitySet) {
             try {
                 Class<?> typeClass = Class.forName(ENTITY_PKG_NAME + "." +
-                                                    type.substring(0, 1).toUpperCase() + type.substring(1));
+                        type.substring(0, 1).toUpperCase() + type.substring(1));
 
                 Class<?> targetClass = e.getClass().asSubclass(typeClass);
 
@@ -63,7 +60,8 @@ public class DataRowsTag extends SimpleTagSupport {
             } catch (ClassNotFoundException | NoSuchMethodException |
                     IllegalAccessException | InvocationTargetException | ClassCastException ex) {
                 ex.printStackTrace();
-                throw new ServletProcessingException(ex);
+                throw new ServletProcessingException(ex.getMessage() + ENTITY_PKG_NAME + "." +
+                        type.substring(0, 1).toUpperCase() + type.substring(1), ex);
             }
 
             writer.print("<td>");

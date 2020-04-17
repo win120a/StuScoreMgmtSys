@@ -49,7 +49,7 @@ public class ScoreInformationTag extends SimpleTagSupport {
 
         JspWriter writer = getJspContext().getOut();
 
-        for(Entity e : scoreSet) {
+        for (Entity e : scoreSet) {
             StudentScore studentScore = (StudentScore) e;
 
             writer.print("<td>");

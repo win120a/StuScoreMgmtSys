@@ -117,4 +117,15 @@ public final class CourseDAO {
 
         return courseIDSet;
     }
+
+    public static Set<Course> getCourseObjectSet() throws SQLException {
+        Set<Course> courseSet = new HashSet<>();
+        Set<String> idSet = getCourseIDSet();
+
+        for (String id : idSet) {
+            courseSet.add(getCourseObjectThroughDB(id));
+        }
+
+        return courseSet;
+    }
 }
