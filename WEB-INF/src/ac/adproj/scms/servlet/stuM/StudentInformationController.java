@@ -17,7 +17,7 @@
 
 package ac.adproj.scms.servlet.stuM;
 
-import ac.adproj.scms.dao.StudentDao;
+import ac.adproj.scms.dao.StudentDAO;
 import ac.adproj.scms.entity.Entity;
 import ac.adproj.scms.entity.Student;
 import ac.adproj.scms.servlet.base.detailed.MultiPartDetailedFormControllerBase;
@@ -52,11 +52,11 @@ public class StudentInformationController extends MultiPartDetailedFormControlle
             s.setPhoto(pictW);
         }
 
-        StudentDao.writeStudentObjectToDatabase(s);
+        StudentDAO.writeStudentObjectToDatabase(s);
     }
 
     @Override
     protected Entity readEntityObject(HttpServletRequest request, String id) {
-        return StudentDao.getStudentObjectThroughDB(id);
+        return StudentDAO.getStudentObjectThroughDB(id);
     }
 }
