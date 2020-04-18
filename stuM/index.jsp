@@ -17,10 +17,10 @@
 
 <%@ page contentType="text/html; charset=utf-8" errorPage="../WEB-INF/errorPage.jsp" %>
 <%@ include file="../WEB-INF/types.jsp" %>
+<%@ taglib prefix="scms" uri="http://tags.scms.projs.ac.net" %>
 <%@ page import="ac.adproj.scms.dao.StudentDAO" %>
 <%@ page import="ac.adproj.scms.entity.Student" %>
 <%@ page import="java.util.Set" %>
-<%@ taglib prefix="scms" uri="http://tags.scms.projs.ac.net" %>
 
 <%
     Set<Student> entitySet = StudentDAO.getStudentObjectSet();
@@ -108,7 +108,7 @@
     <br/>
     <input type="button" id="addStudent" onclick='openDialog("info?type=add");' value="添加">
     <input type="submit" name="del" onclick="return checkSelection();" value="删除">
-    <input type="button" name="returnButt" onclick='location.href="../"' value="返回">
+    <input type="button" id="returnButt" onclick='location.href="../"' value="返回">
 </form>
 </body>
 </html>

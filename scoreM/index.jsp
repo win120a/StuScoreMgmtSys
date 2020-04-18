@@ -91,7 +91,7 @@
         </tr>
     </table>
     <br/>
-    <input type="button" name="returnButt" onclick='location.href="../"' value="返回">
+    <input type="button" id="returnButt" onclick='location.href="../"' value="返回">
 </form>
 </body>
 </html>

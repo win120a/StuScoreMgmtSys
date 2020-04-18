@@ -10,7 +10,7 @@ GPLv3
 2. `.gitignore` is based on `Java.gitignore` in https://github.com/github/gitignore, which is licensed under Creative Commons Zero v1.0 Universal License (CC0-1.0).
 3. `WEB-INF/lib/commons-fileupload-1.4.jar` and `WEB-INF/lib/commons-io-2.6.jar` are files of the Apache Commons Project (http://commons.apache.org/), which is licensed under Apache License.
 4. Gson project (https://github.com/google/gson) is used (`WEB-INF/lib/gson-2.8.6.jar`). It is licensed under Apache License.
-5. Open-source JavaScript library - jQuery (`scripts/jquery-3.4.1`, licensed under MIT License)
+5. Open-source JavaScript library - jQuery (`scripts/jquery-3.4.1.js`, licensed under MIT License)
 
 # Structure
 1. The building system of the Servlet Part of this project (a.k.a. `WEB-INF/src` and `WEB-INF/classes`) is driven by Ant. The build file is located in the root of the project.

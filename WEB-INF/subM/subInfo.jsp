@@ -1,4 +1,4 @@
-<%@ page import="ac.adproj.scms.entity.Course" %><%--
+<%--
     Copyright (C) 2011-2020 Andy Cheung
 
     This program is free software: you can redistribute it and/or modify
@@ -17,6 +17,7 @@
 
 <%@ page contentType="text/html; charset=utf-8" errorPage="../errorPage.jsp" %>
 <%@ include file="../types.jsp" %>
+<%@ page import="ac.adproj.scms.entity.Course" %>
 
 <script>
     function loadVars() {
@@ -103,8 +104,8 @@
         <input type="reset" id="reset" value="重置"/>
         <%
             if (type.equals(TYPE_MODIFY)) { %>
-                <input type="hidden" name="id" value='${param.id}'><%
-        %>
+        <input type="hidden" name="id" value='${param.id}'><%
+    %>
         <script>
             document.getElementById("reset").onclick = function () {
                 loadVars();
