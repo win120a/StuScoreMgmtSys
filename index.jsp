@@ -86,7 +86,7 @@
     </style>
 
     <script>
-        $().ready(() => $(".panel")[0].style.height = (window.screen.availHeight / 2 + 50) + "px");
+        $().ready(() => $(".panel").css("height", window.screen.availHeight / 2 + 50 + "px"));
     </script>
 </head>
 <body style="text-align: center;">
@@ -100,12 +100,13 @@
                 <a href="javascript:void(0);" onclick="$('#right-frame')[0].src = 'stuM/index.jsp';">学生管理</a><br />
                 <a href="javascript:void(0);" onclick="$('#right-frame')[0].src = 'subM/index.jsp';">学科管理</a><br />
                 <a href="javascript:void(0);" onclick="$('#right-frame')[0].src = 'scoreM/index.jsp';">成绩管理</a><br />
+                <br />
                 <input type="submit" name="test" value="测试">
             </form>
         </div>
 
         <div class="right-panel">
-            <iframe id="right-frame" class="right-frame">
+            <iframe id="right-frame" class="right-frame" src="welcome.jsp">
             </iframe>
         </div>
     </div>

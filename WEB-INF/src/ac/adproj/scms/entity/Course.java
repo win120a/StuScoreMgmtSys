@@ -110,6 +110,8 @@ public class Course implements Entity {
         Course other = (Course) obj;
         if (id == null) {
             return other.id == null;
-        } else return id.equals(other.id);
+        } else {
+            return id.equals(other.id);
+        }
     }
 }
