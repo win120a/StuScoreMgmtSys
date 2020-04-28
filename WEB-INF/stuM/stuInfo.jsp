@@ -26,48 +26,12 @@
     stuid name major gender birthdate totalCredits photo remark
 --%>
 
-<script>
-    function loadVars() {
-    }
-</script>
-
 <%
     Object stuObject = request.getAttribute("entityObject");
     Student student = null;
 
     if (stuObject instanceof Student) {
         student = (Student) stuObject;
-    }
-
-    String type = request.getParameter("type");
-
-    if (TYPE_MODIFY.equals(type)) {
-        int gender = student.getGender() == GenderEnum.MALE ? 1 : 0;
-%>
-<script>
-    // M - 1   F - 0
-    function loadVars() {
-        document.getElementById("name").value = '<%= student.getName() %>';
-        document.getElementById("id").value = '<%= student.getId() %>';
-        document.getElementById("id").disabled = true;
-        document.getElementById("dob").value = '<%= student.getDob() %>';
-        document.getElementById("major").value = '<%= student.getMajor() %>';
-        <%
-            String remark = student.getRemark();
-            remark = remark == null ? "" : remark;
-        %>
-
-        document.getElementById("remark").value = '<%= remark %>';
-
-        if (<%= gender %> == 1)
-        {
-            document.getElementById("genderM").checked = true;
-        } else {
-            document.getElementById("genderF").checked = true;
-        }
-    }
-</script>
-<%
     }
 %>
 
@@ -112,8 +76,48 @@
             text-align: center;
         }
     </style>
-    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, user-scalable=no"/>
     <meta charset="utf-8">
+
+    <%
+        String type = request.getParameter("type");
+
+        if (TYPE_MODIFY.equals(type)) {
+            int gender = student.getGender() == GenderEnum.MALE ? 1 : 0;
+    %>
+    <script>
+        // M - 1   F - 0
+        function loadVars() {
+            document.getElementById("name").value = '<%= student.getName() %>';
+            document.getElementById("id").value = '<%= student.getId() %>';
+            document.getElementById("id").disabled = true;
+            document.getElementById("dob").value = '<%= student.getDob() %>';
+            document.getElementById("major").value = '<%= student.getMajor() %>';
+            <%
+                String remark = student.getRemark();
+                remark = remark == null ? "" : remark;
+            %>
+
+            document.getElementById("remark").value = '<%= remark %>';
+
+            if ((<%= gender %>) === 1) {
+                document.getElementById("genderM").checked = true;
+            } else {
+                document.getElementById("genderF").checked = true;
+            }
+        }
+    </script>
+    <%
+    } else {
+    %>
+    <script>
+        function loadVars() {
+        }
+    </script>
+
+    <%
+        }
+    %>
 </head>
 <body style="text-align : center;" onload="loadVars();">
 <form action="info" method="post" enctype="multipart/form-data">
@@ -171,8 +175,8 @@
         <input type="reset" id="reset" value="重置"/>
         <%
             if (type.equals(TYPE_MODIFY)) { %>
-                <input type="hidden" name="id" value='${param.id}'><%
-        %>
+        <input type="hidden" name="id" value='${param.id}'><%
+    %>
         <script>
             document.getElementById("reset").onclick = function () {
                 loadVars();

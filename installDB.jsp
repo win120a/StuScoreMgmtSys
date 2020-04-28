@@ -33,23 +33,23 @@
 %>
 
 <%
-    driver = (String) request.getParameter("driver");
-    driver = driver != null ? (String) driver : JDBC_DRIVER;
+    driver = request.getParameter("driver");
+    driver = driver != null ? driver : JDBC_DRIVER;
 
-    serverAddr = (String) request.getParameter("serverAddr");
-    serverAddr = serverAddr != null ? (String) serverAddr : "";
+    serverAddr = request.getParameter("serverAddr");
+    serverAddr = serverAddr != null ? serverAddr : "";
 
-    userName = (String) request.getParameter("userName");
-    userName = userName != null ? (String) userName : "";
+    userName = request.getParameter("userName");
+    userName = userName != null ? userName : "";
 
-    password = (String) request.getParameter("password");
-    password = password != null ? (String) password : "";
+    password = request.getParameter("password");
+    password = password != null ? password : "";
 
-    serverTimeZone = (String) request.getParameter("serverTimeZone");
-    serverTimeZone = serverTimeZone != null ? (String) serverTimeZone : "";
+    serverTimeZone = request.getParameter("serverTimeZone");
+    serverTimeZone = serverTimeZone != null ? serverTimeZone : "";
 
-    db = (String) request.getParameter("db");
-    db = db != null ? (String) db : "";
+    db = request.getParameter("db");
+    db = db != null ? db : "";
 %>
 
 <%

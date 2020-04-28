@@ -1,4 +1,4 @@
-/*
+<%--
     Copyright (C) 2011-2020 Andy Cheung
 
     This program is free software: you can redistribute it and/or modify
@@ -13,16 +13,21 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+--%>
 
-package ac.adproj.scms.entity;
+<%@ page contentType="text/html; charset=utf-8" errorPage="WEB-INF/errorPage.jsp" %>
 
-import com.google.gson.JsonObject;
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
 
-public interface Entity {
-    JsonObject getJSON();
+    <script src="scripts/ua.js"></script>
 
-    String getId();
-
-    boolean isFullyObtained();
-}
+    <%@ include file="WEB-INF/commonScripts.jsp" %>
+</head>
+<body style="text-align: center;">
+    <h2>欢迎使用学生成绩管理系统！</h2>
+    <p>请在左边菜单栏中选择一个项目继续……</p>
+</body>
+</html>

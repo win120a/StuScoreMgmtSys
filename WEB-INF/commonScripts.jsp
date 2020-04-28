@@ -17,17 +17,26 @@
 
 <%@ page contentType="text/html; charset=utf-8" %>
 
-<meta name="viewport" content="width=device-width, user-scalable=no" />
+<meta name="viewport" content="width=device-width, user-scalable=no"/>
 <script type="text/javascript" src="<%= application.getContextPath() %>/scripts/jquery-3.4.1.js">
 </script>
 
 <script type="text/javascript">
-    $(function() {
-        let e = document.createElement("h6");
-        e.style.textAlign = "center";
-        e.innerHTML = "<br \/><br \/>Copyright (C) 2011-2020 Andy Cheung<br \/><br \/>";
-        e.innerHTML += "Open source project, licensed under GNU Public License, Version 3<br \/><br />";
-        e.innerHTML += "<a href='https://github.com/win120a/StuScoreMgmtSys'>GitHub Repo</a>";
-        document.body.appendChild(e);
+    $(function () {
+        if (window.top === window) {
+            let e = document.createElement("h6");
+            e.style.textAlign = "center";
+            e.innerHTML = "<br \/><br \/>Copyright (C) 2011-2020 Andy Cheung<br \/><br \/>";
+            e.innerHTML += "Open source project, licensed under GNU Public License, Version 3<br \/><br />";
+            e.innerHTML += "<a href='https://github.com/win120a/StuScoreMgmtSys'>GitHub Repo</a>";
+            document.body.appendChild(e);
+        } else {
+            $("#returnButt").css("visibility", "hidden");
+
+            let h1 = $("h1");
+
+            h1.css("display", "none");
+            window.top.$("h1")[0].innerHTML = h1[0].innerHTML;
+        }
     });
 </script>

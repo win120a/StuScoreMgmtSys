@@ -15,33 +15,28 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 --%>
 
-<%@ page contentType="text/html; charset=utf-8" isErrorPage="true" %>
+<%@ page contentType="text/html; charset=utf-8" errorPage="WEB-INF/errorPage.jsp" %>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>程序出错啦！</title>
-    <%@ include file="commonScripts.jsp" %>
-</head>
-<body style="text-align : center;">
-<%
-    if (exception.getClass().getName().contains("CommunicationsException")) { %>
-<h1>服务器连接失败!</h1>
-<p>请稍后重试。</p><br/>
-<% } %>
+    <title>学生成绩管理系统</title>
 
-<h1>程序出现错误。</h1>
-<p>错误类：<%= exception.getClass().getName() %>
-</p>
-<p>错误信息：<%= exception.getMessage() %>
-</p>
-<p>
-    调用堆栈：
-    <%
-        for (StackTraceElement ste : exception.getStackTrace()) {
-            out.write(ste.toString() + "<br />");
+    <script src="scripts/ua.js"></script>
+    <script>
+        if (!isMobileDevice()) {
+            location.href = "index.jsp";
         }
-    %>
-</p>
+    </script>
+    <%@ include file="WEB-INF/commonScripts.jsp" %>
+</head>
+<body style="text-align: center;">
+<h1>系统主页</h1>
+<form action="dispatcher" method="post">
+    <input type="submit" name="stuM" value="学生管理">
+    <input type="submit" name="subM" value="学科管理">
+    <input type="submit" name="scoreM" value="成绩管理">
+    <input type="submit" name="test" value="测试">
+</form>
 </body>
 </html>

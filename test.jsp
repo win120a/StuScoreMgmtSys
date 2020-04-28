@@ -16,8 +16,17 @@
 --%>
 
 <%@ page contentType="text/html; charset=UTF-8" language="java" errorPage="WEB-INF/errorPage.jsp" %>
-<%@ page import="ac.adproj.scms.dao.StudentDao" %>
+<%@ page import="ac.adproj.scms.dao.StudentDAO" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="ac.adproj.scms.entity.Student" %>
+<%@ page import="java.util.Set" %>
+<%@ taglib prefix="scms" uri="http://tags.scms.projs.ac.net" %>
+
+<%
+    Set<Student> entitySet = StudentDAO.getStudentObjectSet();
+    pageContext.setAttribute("entitySet", entitySet);
+    pageContext.setAttribute("classname", getClass().getName(), PageContext.PAGE_SCOPE);
+%>
 
 <%--
     Class.forName("c");  // To Test error page.
@@ -43,127 +52,60 @@
 <body>
 <h1>Test.</h1>
 
-<%@ include file="WEB-INF/dbConn.jsp" %>
-<%
-    ResultSet rs = stmt.executeQuery("select * from xs;");
-%>
+<p><%= new Date().toString() %></p>
 
-<p><%= new Date().toString() %>
-</p> <%-- NO ';' in the expression block --%>
-
-<p>
-    <%
-        out.println("Another block");
-    %>
-</p>
-
-<%-- JSP Comment, which the users can't see it in the HTML source code. --%>
-
-<!-- HTML Comment -->
-
-<table class="T">  <%-- JSP Scriptlet. --%>
-    <%
-        for (int i = 0; i < 5; i++) {
-    %>
-    <tr><%
-        for (int j = 0; j < 5; j++) {
-    %>
-        <td><%=j %>, <%=i %>
-        </td>
-        <%
-            }%>
-    </tr>
-    <%
-        }
-    %>
-</table>
-<br/>
-
-<table class="T">  <%-- JSP Scriptlet that uses SQL Commands (not yet) --%>
-    <%--
-        stuidname major gender birthdate totalCredits photo remark
-    --%>
-
+<table class="T">
     <tr>
         <td>姓名</td>
-        <%
-            while (rs.next()) {
-        %>
-        <td><%= rs.getString("name") %>
-        </td>
-        <%
-            }
-        %>
+        <scms:dataRows content="name" type="student">
+            ${pageScope.current}
+        </scms:dataRows>
+    </tr>
+
+    <tr>
+        <td>性别</td>
+        <scms:dataRows content="gender" type="student">
+            ${pageScope.current}
+        </scms:dataRows>
     </tr>
 
     <tr>
         <td>学号</td>
-        <%
-            rs.beforeFirst();
-            while (rs.next()) {
-        %>
-        <td><%= rs.getString("stuid") %>
-        </td>
-        <%
-            }
-        %>
+        <scms:dataRows content="id" type="student">
+            ${pageScope.current}
+        </scms:dataRows>
     </tr>
 
     <tr>
         <td>专业</td>
-        <%
-            rs.beforeFirst();
-            while (rs.next()) {
-        %>
-        <td><%= rs.getString("major") %>
-        </td>
-        <%
-            }
-        %>
+        <scms:dataRows content="major" type="student">
+            ${pageScope.current}
+        </scms:dataRows>
     </tr>
 
     <tr>
         <td>生日</td>
-        <%
-            rs.beforeFirst();
-            while (rs.next()) {
-        %>
-        <td><%= rs.getString("birthdate") %>
-        </td>
-        <%
-            }
-        %>
+        <scms:dataRows content="dob" type="student">
+            ${pageScope.current}
+        </scms:dataRows>
     </tr>
 
     <tr>
         <td>总学分</td>
-        <%
-            rs.beforeFirst();
-            while (rs.next()) {
-        %>
-        <td><%= rs.getString("totalcredits") %>
-        </td>
-        <%
-            }
-        %>
+        <scms:dataRows content="totalCredits" type="student">
+            ${pageScope.current}
+        </scms:dataRows>
     </tr>
 
     <tr>
         <td>备注</td>
-        <%
-            rs.beforeFirst();
-            while (rs.next()) {
-                String remark = rs.getString("remark");
-        %>
-        <td><%= remark == null ? "" : remark %>
-        </td>
-        <%
-            }
-        %>
+        <scms:dataRows content="remark" type="student">
+            ${pageScope.current}
+        </scms:dataRows>
     </tr>
 </table>
 
-<p><%= StudentDao.getStudentObjectThroughDB("123456") %>
+<p><%= StudentDAO.getStudentObjectThroughDB("123456") %>
 </p>
 </body>
 </html>

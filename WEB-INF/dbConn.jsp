@@ -16,7 +16,6 @@
 --%>
 
 <%@ page import="ac.adproj.scms.dao.DBDao, ac.adproj.scms.servlet.InitServlet, java.sql.Connection" %>
-<%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.sql.Statement" %>
 

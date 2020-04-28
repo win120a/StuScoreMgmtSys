@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class SubjectInformationController extends TextOnlyDetailedFormControllerBase {
+public final class SubjectInformationController extends TextOnlyDetailedFormControllerBase {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

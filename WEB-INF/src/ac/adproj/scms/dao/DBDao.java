@@ -103,8 +103,8 @@ public class DBDao implements DBConnectionHandler {
         return prepStmt(sql, contents).executeUpdate();
     }
 
-    public void delete(String sql, String... contents) throws SQLException {
-        prepStmt(sql, contents).execute();
+    public int delete(String sql, String... contents) throws SQLException {
+        return prepStmt(sql, contents).executeUpdate();
     }
 
     @Override

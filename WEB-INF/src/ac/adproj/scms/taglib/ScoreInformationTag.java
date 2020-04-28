@@ -18,6 +18,8 @@
 package ac.adproj.scms.taglib;
 
 import ac.adproj.scms.entity.Entity;
+import ac.adproj.scms.entity.Student;
+import ac.adproj.scms.entity.StudentScore;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
 import javax.servlet.jsp.JspException;
@@ -28,10 +30,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-public class DataRowsTag extends SimpleTagSupport {
-    private static final String ENTITY_PKG_NAME = "ac.adproj.scms.entity";
+public class ScoreInformationTag extends SimpleTagSupport {
     private String content;
     private String type;
+
 
     public void setContent(String content) {
         this.content = content;
@@ -43,28 +45,32 @@ public class DataRowsTag extends SimpleTagSupport {
 
     @Override
     public void doTag() throws JspException, IOException {
-        Set<Entity> entitySet = (Set<Entity>) getJspContext().getAttribute("entitySet");
+        Set<Entity> scoreSet = (Set<Entity>) getJspContext().getAttribute("scoreSet");
 
         JspWriter writer = getJspContext().getOut();
 
-        for (Entity e : entitySet) {
-            try {
-                Class<?> typeClass = Class.forName(ENTITY_PKG_NAME + "." +
-                        type.substring(0, 1).toUpperCase() + type.substring(1));
-
-                Class<?> targetClass = e.getClass().asSubclass(typeClass);
-
-                String methodName = "get" + content.substring(0, 1).toUpperCase() + content.substring(1);
-                Method getter = targetClass.getMethod(methodName);
-                getJspContext().setAttribute("current", getter.invoke(e));
-            } catch (ClassNotFoundException | NoSuchMethodException |
-                    IllegalAccessException | InvocationTargetException | ClassCastException ex) {
-                ex.printStackTrace();
-                throw new ServletProcessingException(ex.getMessage() + ENTITY_PKG_NAME + "." +
-                        type.substring(0, 1).toUpperCase() + type.substring(1), ex);
-            }
+        for (Entity e : scoreSet) {
+            StudentScore studentScore = (StudentScore) e;
 
             writer.print("<td>");
+
+            Class<StudentScore> stuSC = StudentScore.class;
+            Class<Student> stuC = Student.class;
+
+            String methodName = "get" + content.substring(0, 1).toUpperCase() + content.substring(1);
+            String getTypeMethodName = "get" + type.substring(0, 1).toUpperCase() + type.substring(1);
+
+            try {
+                Method typGetter = stuSC.getMethod(getTypeMethodName);
+                Student s = (Student) typGetter.invoke(studentScore);
+
+                Method getter = stuC.getMethod(methodName);
+
+                getJspContext().setAttribute("current", getter.invoke(s));
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+                ex.printStackTrace();
+                throw new ServletProcessingException(ex);
+            }
 
             getJspBody().invoke(null);
 

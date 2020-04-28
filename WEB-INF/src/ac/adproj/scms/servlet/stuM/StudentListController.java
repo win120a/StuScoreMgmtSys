@@ -40,9 +40,12 @@ public class StudentListController extends ListFormControllerBase {
     @Override
     protected void deleteDatabaseEntry(String id)
             throws SQLException {
+        final String deletingSQL = "delete from xs where xs.stuId=?;";
+
         try (DBDao daoO = InitServlet.daoO) {
-            PhotoServiceFactory.getPhotoService().deletePhoto(id);
-            daoO.delete("delete from xs where xs.stuId=?;", id);
+            if (daoO.delete(deletingSQL, id) != 0) {
+                PhotoServiceFactory.getPhotoService().deletePhoto(id);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             throw new ServletProcessingException(e);

@@ -33,27 +33,30 @@ public interface PhotoService extends AutoCloseable {
 
     /**
      * Get the byte array of photo.
+     *
      * @param id The Student ID.
      * @return The byte array of the photo.
-     * @throws IOException If IO Error encountered.
+     * @throws IOException  If IO Error encountered.
      * @throws SQLException If SQL Error encountered.
      */
     byte[] getPhoto(String id) throws IOException, SQLException;
 
     /**
      * Check the photo corresponding to the student id whether exists or not.
+     *
      * @param id The student ID.
      * @return Exists, true. Not exist, false.
-     * @throws IOException If I/O Error encountered.
+     * @throws IOException  If I/O Error encountered.
      * @throws SQLException If SQL Error encountered.
      */
     boolean doesPhotoExist(String id) throws IOException, SQLException;
 
     /**
      * Upload the photo to the server.
-     * @param id The student ID.
+     *
+     * @param id         The student ID.
      * @param photoArray The byte array represents a photo.
-     * @throws IOException If I/O Error encountered.
+     * @throws IOException  If I/O Error encountered.
      * @throws SQLException If SQL Error encountered.
      */
     void uploadPhoto(String id, byte[] photoArray) throws IOException, SQLException;
@@ -61,8 +64,9 @@ public interface PhotoService extends AutoCloseable {
 
     /**
      * Delete the photo from the server.
+     *
      * @param id The student ID.
-     * @throws IOException If I/O Error encountered.
+     * @throws IOException  If I/O Error encountered.
      * @throws SQLException If SQL Error encountered.
      */
     void deletePhoto(String id) throws IOException, SQLException;

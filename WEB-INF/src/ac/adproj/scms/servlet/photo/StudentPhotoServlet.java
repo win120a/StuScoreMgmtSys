@@ -32,6 +32,8 @@ import java.sql.SQLException;
 
 /**
  * Servlet that transfer the photo array to the client.
+ *
+ * @author Andy Cheung
  */
 public class StudentPhotoServlet extends HttpServlet {
     @Override

@@ -29,4 +29,9 @@ public class ServletProcessingException extends RuntimeException {
     public ServletProcessingException(Throwable cause) {
         super(cause);
     }
+
+    public ServletProcessingException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

@@ -16,11 +16,18 @@
 --%>
 
 <%@ page contentType="text/html; charset=utf-8" errorPage="../WEB-INF/errorPage.jsp" %>
-<%@ include file="../WEB-INF/dbConn.jsp" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="ac.adproj.scms.entity.Course" %>
+<%@ page import="ac.adproj.scms.dao.CourseDAO" %>
+
+<%@ taglib prefix="scms" uri="http://tags.scms.projs.ac.net" %>
+
 <%@ include file="../WEB-INF/types.jsp" %>
 
 <%
-    ResultSet rs = stmt.executeQuery("select * from kc;");   // Put here to query data after the delete process.
+    Set<Course> entitySet = CourseDAO.getCourseObjectSet();
+    pageContext.setAttribute("entitySet", entitySet);
+    pageContext.setAttribute("classname", getClass().getName(), PageContext.PAGE_SCOPE);
 %>
 
 <!DOCTYPE html>
@@ -41,90 +48,53 @@
     <table class="T">  <%-- JSP Scriptlet that uses SQL Commands --%>
         <tr>
             <td>课程号</td>
-            <%
-                while (rs.next()) {
-            %>
-            <td><%= rs.getString("courseID") %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="id" type="course">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>课程名</td>
-            <%
-                rs.beforeFirst();
-                while (rs.next()) {
-            %>
-            <td><%= rs.getString("courseName") %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="name" type="course">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>开课学期</td>
-            <%
-                rs.beforeFirst();
-                while (rs.next()) {
-            %>
-            <td><%= rs.getString("term") %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="term" type="course">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>学时</td>
-            <%
-                rs.beforeFirst();
-                while (rs.next()) {
-            %>
-            <td><%= rs.getString("courseHours") %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="courseHours" type="course">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>学分</td>
-            <%
-                rs.beforeFirst();
-                while (rs.next()) {
-            %>
-            <td><%= rs.getString("credits") %>
-            </td>
-            <%
-                }
-            %>
+            <scms:dataRows content="credits" type="course">
+                ${pageScope.current}
+            </scms:dataRows>
         </tr>
 
         <tr>
             <td>操作</td>
-            <%
-                String reqS = "info?type=" + TYPE_MODIFY + "&id=";
-                rs.beforeFirst();
-                while (rs.next()) {
-            %>
-            <td>
+            <scms:dataRows content="id" type="course">
                 删除?
-                <input name='<%= rs.getString("courseID") %>' type="checkbox" class="del"><br/>
+                <input name='${pageScope.current}' type="checkbox" class="del"><br/>
                 <a href='javascript:void(0);'
-                   onclick='openDialog("<%= reqS %><%= rs.getString("courseID")%>");'>编辑</a>
-            </td>
-            <%
-                }
-            %>
+                   onclick='openDialog("info?type=modify&id=${pageScope.current}");'>编辑</a>
+            </scms:dataRows>
         </tr>
     </table>
     <br/>
     <input type="button" id="addStudent" onclick='openDialog("info?type=add");' value="添加">
     <input type="submit" name="del" onclick="return checkSelection();" value="删除">
-    <input type="button" name="returnButt" onclick='location.href="../"' value="返回">
+    <input type="button" id="returnButt" onclick='location.href="../"' value="返回">
 </form>
 </body>
 </html>

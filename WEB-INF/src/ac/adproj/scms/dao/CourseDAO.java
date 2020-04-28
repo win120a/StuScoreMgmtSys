@@ -24,9 +24,12 @@ import ac.adproj.scms.servlet.ServletProcessingException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class CourseDAO {
     private CourseDAO() {
+        // NOOP
     }
 
     /**
@@ -99,5 +102,30 @@ public final class CourseDAO {
 
     public static void deleteObject(Entity e) throws SQLException {
         deleteObject(e.getId());
+    }
+
+    public static Set<String> getCourseIDSet() throws SQLException {
+        HashSet<String> courseIDSet = new HashSet<>();
+
+        try (DBDao daoO = InitServlet.daoO) {
+            ResultSet rs = daoO.query("select courseID from kc;");
+
+            while (rs.next()) {
+                courseIDSet.add(rs.getString("courseID"));
+            }
+        }
+
+        return courseIDSet;
+    }
+
+    public static Set<Course> getCourseObjectSet() throws SQLException {
+        Set<Course> courseSet = new HashSet<>();
+        Set<String> idSet = getCourseIDSet();
+
+        for (String id : idSet) {
+            courseSet.add(getCourseObjectThroughDB(id));
+        }
+
+        return courseSet;
     }
 }
