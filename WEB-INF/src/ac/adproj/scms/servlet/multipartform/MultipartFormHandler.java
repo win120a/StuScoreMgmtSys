@@ -28,7 +28,7 @@ public interface MultipartFormHandler {
      * Get a non-form field value (e.g. File).
      *
      * @param key The key to the value in the multipart form.
-     * @author Andy Cheung
+     * @return The non-form field value (usually the byte array of file) to the key.
      */
     Object getNonFormFieldObject(String key);
 
@@ -36,7 +36,7 @@ public interface MultipartFormHandler {
      * Get a form field value.
      *
      * @param key The key to the value in the multipart form.
-     * @author Andy Cheung
+     * @return The form field value to the key.
      */
     String getStringParameter(String key);
 }

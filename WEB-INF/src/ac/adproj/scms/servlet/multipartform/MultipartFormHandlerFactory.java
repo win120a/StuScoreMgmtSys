@@ -31,6 +31,13 @@ import java.lang.reflect.InvocationTargetException;
  */
 public final class MultipartFormHandlerFactory {
     /**
+     * NO-OP constructor.
+     */
+    private MultipartFormHandlerFactory() {
+        throw new UnsupportedOperationException("No instance for you! ");
+    }
+
+    /**
      * Class name of the handler.
      */
     private static final String FORM_HANDLER_CLASS_NAME = "ac.adproj.scms.servlet.multipartform.MultipartFormHandlerApacheCommonsImpl";
@@ -40,7 +47,6 @@ public final class MultipartFormHandlerFactory {
      *
      * @param request The HTTP Request.
      * @return Instance of the class which name is the value of {@link #FORM_HANDLER_CLASS_NAME}.
-     * @author Andy Cheung
      * @see #FORM_HANDLER_CLASS_NAME
      */
     public static MultipartFormHandler getFormHandler(HttpServletRequest request) {
