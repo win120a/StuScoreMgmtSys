@@ -26,10 +26,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * The implementation of photo service through SQL Blob Object.
@@ -114,6 +111,8 @@ final class SQLBlobPhotoServiceImpl implements PhotoService {
         PreparedStatement deletingStatement = InitServlet.daoO
                 .getConnection()
                 .prepareStatement("update xs set photo=NULL where stuid=?;");
+
+        deletingStatement.setString(1, id);
 
         deletingStatement.execute();
     }
