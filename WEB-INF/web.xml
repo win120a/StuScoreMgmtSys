@@ -121,6 +121,39 @@
         <url-pattern>/stuPhoto.png</url-pattern>
     </servlet-mapping>
 
+    <!-- Json Backends -->
+
+    <servlet>
+        <servlet-name>StudentInfoJsonServlet</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.json.StudentInfoJsonServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>StudentInfoJsonServlet</servlet-name>
+        <url-pattern>/api/student</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>StudentListJsonServlet</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.json.StudentListJsonServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>StudentListJsonServlet</servlet-name>
+        <url-pattern>/api/studentList</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CourseListJsonServlet</servlet-name>
+        <servlet-class>ac.adproj.scms.servlet.json.CourseListJsonServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CourseListJsonServlet</servlet-name>
+        <url-pattern>/api/courseList</url-pattern>
+    </servlet-mapping>
+
+
     <!-- Database Configurations -->
 
     <context-param>
@@ -159,5 +192,4 @@
         <param-name>photoServiceClass</param-name>
         <param-value>ac.adproj.scms.service.photo.SQLBlobPhotoServiceImpl</param-value>
     </context-param>
-
 </web-app>
