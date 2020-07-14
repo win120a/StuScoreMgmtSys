@@ -31,6 +31,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * Controller of student score information page.
+ *
+ * @author Andy Cheung
+ */
 public class StudentScoreInfoController extends MultipleStudentsTextOnlyDetailedControllerBase {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
