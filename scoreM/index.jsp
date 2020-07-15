@@ -40,56 +40,56 @@
         function openDialog(url) {
             window.open(url, "info", "width=670 height=270 left=300 top=50");
         }
+
+        $(() => {
+            $.getJSON("../api/courseList", (e) => {
+                let array = e.info;
+
+                for (let i = 0; i < e.info.length; i++) {
+                    let ele = document.createElement("tr");
+
+                    updChild(ele, array[i].id);
+                    updChild(ele, array[i].name);
+                    updChild(ele, array[i].term);
+                    updChild(ele, array[i].courseHours);
+                    updChild(ele, array[i].credits);
+
+                    let tr = document.createElement("td");
+                    let html = `<a href='javascript:void(0);'
+                                                onclick='openDialog("info?id=%%");'>编辑</a>`;
+
+                    while (html.indexOf("%%") !== -1) {
+                        html = html.replace("%%", array[i].id);
+                    }
+
+                    tr.innerHTML = html;
+
+                    ele.appendChild(tr);
+
+                    $("#information")[0].appendChild(ele);
+                }
+            })
+        });
     </script>
 </head>
-<body>
+<body class="container">
 <h1>课程成绩管理</h1>
 <form action="" method="post">
-    <table class="T">  <%-- JSP Scriptlet that uses SQL Commands --%>
-        <tr>
-            <td>课程号</td>
-            <scms:dataRows content="id" type="course">
-                ${pageScope.current}
-            </scms:dataRows>
-        </tr>
-
-        <tr>
-            <td>课程名</td>
-            <scms:dataRows content="name" type="course">
-                ${pageScope.current}
-            </scms:dataRows>
-        </tr>
-
-        <tr>
-            <td>开课学期</td>
-            <scms:dataRows content="term" type="course">
-                ${pageScope.current}
-            </scms:dataRows>
-        </tr>
-
-        <tr>
-            <td>学时</td>
-            <scms:dataRows content="courseHours" type="course">
-                ${pageScope.current}
-            </scms:dataRows>
-        </tr>
-
-        <tr>
-            <td>学分</td>
-            <scms:dataRows content="credits" type="course">
-                ${pageScope.current}
-            </scms:dataRows>
-        </tr>
-
-        <tr>
-            <td>成绩编辑</td>
-
-            <scms:dataRows content="id" type="course">
-                <a href='javascript:void(0);'
-                   onclick='openDialog("info?id=${pageScope.current}");'>编辑</a>
-            </scms:dataRows>
-        </tr>
-    </table>
+    <br />
+    <div class="table-responsive-lg">
+        <table class="table table-collapse table-striped table-hover">
+            <tbody id="information">
+                <tr>
+                    <th>课程号</th>
+                    <th>课程名</th>
+                    <th>开课学期</th>
+                    <th>学时</th>
+                    <th>学分</th>
+                    <th>成绩编辑</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <br/>
     <input type="button" id="returnButt" onclick='location.href="../"' value="返回">
 </form>

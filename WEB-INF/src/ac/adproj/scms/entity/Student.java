@@ -148,7 +148,6 @@ public class Student implements Entity {
         jso.addProperty("major", getMajor());
         jso.addProperty("remark", getRemark());
         jso.addProperty("totalCredits", getTotalCredits());
-        jso.addProperty("photo", ByteArrayUtils.convertByteArrayToString(getPhoto()));
         return jso;
     }
 

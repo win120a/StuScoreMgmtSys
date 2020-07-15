@@ -40,8 +40,6 @@ import java.util.Map;
 class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
     /**
      * The Map of storing form contents.
-     *
-     * @author Andy Cheung
      */
     private final Map<String, DataWrap> formContents;
 
@@ -50,21 +48,18 @@ class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
      *
      * @param request The request from client.
      * @param tempdir The temporary directory.
-     * @author Andy Cheung
      */
     public MultipartFormHandlerApacheCommonsImpl(HttpServletRequest request, String tempdir)
-            throws UnsupportedEncodingException, FileNotFoundException {
+            throws UnsupportedEncodingException {
 
         this.formContents = getFormContents(request, tempdir);
     }
 
     /**
      * Core method to gather the multipart/form-data form's data.
-     *
-     * @author Andy Cheung
      */
     private static Map<String, DataWrap> getFormContents(HttpServletRequest request, String tempdir)
-            throws UnsupportedEncodingException, FileNotFoundException {
+            throws UnsupportedEncodingException {
 
         HashMap<String, DataWrap> contents = new HashMap<>();
 
@@ -103,11 +98,6 @@ class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
         return contents;
     }
 
-    /**
-     * Get a non-form field value (e.g. File).
-     *
-     * @author Andy Cheung
-     */
     @Override
     public Object getNonFormFieldObject(String key) {
         if (formContents.get(key) == null) {
@@ -121,12 +111,6 @@ class MultipartFormHandlerApacheCommonsImpl implements MultipartFormHandler {
         return formContents.get(key).getObject();
     }
 
-    /**
-     * Get a form field value.
-     *
-     * @param key The key to the value in the multipart form.
-     * @author Andy Cheung
-     */
     @Override
     public String getStringParameter(String key) {
         if (formContents.get(key) == null) {

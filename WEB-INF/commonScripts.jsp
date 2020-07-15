@@ -40,3 +40,19 @@
         }
     });
 </script>
+
+
+<script>
+    let updChild = (ele, data) => {
+        content = document.createElement("td");
+        content.innerText = data;
+        ele.appendChild(content);
+    };
+</script>
+
+<script type="text/javascript" src="<%= application.getContextPath() %>/scripts/bootstrap.bundle.js">
+</script>
+
+<link rel="stylesheet" href="<%= application.getContextPath() %>/stylesheet/bootstrap.css">
+
+<script src="<%= application.getContextPath() %>/scripts/bslib.js"></script>

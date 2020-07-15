@@ -36,7 +36,7 @@ public final class CourseDAO {
      * Returns a Course object according to the DB's record.
      *
      * @param courseid The course ID.
-     * @return The Student object, or null if the student object did not exist.
+     * @return The Course object, or null if the student object did not exist.
      */
     public static Course getCourseObjectThroughDB(String courseid) {
         try (DBDao daoO = InitServlet.daoO) {

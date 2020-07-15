@@ -44,7 +44,8 @@ public class StudentPhotoServlet extends HttpServlet {
              OutputStream out = response.getOutputStream();
              InputStream placeholderStream = new FileInputStream(getServletContext().getRealPath(PhotoService.PHOTO_PLACEHOLDER_RELATIVE_PATH))) {
             byte[] photoB;
-            if (ps.doesPhotoExist(id)) {
+
+            if (!id.isEmpty() && ps.doesPhotoExist(id)) {
                 photoB = ps.getPhoto(id);
             } else {
                 photoB = placeholderStream.readAllBytes();

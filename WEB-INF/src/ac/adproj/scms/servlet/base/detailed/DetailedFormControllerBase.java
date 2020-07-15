@@ -69,9 +69,8 @@ public abstract class DetailedFormControllerBase extends ControllerBase {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        request.setCharacterEncoding("utf-8");
-        response.setCharacterEncoding("utf-8");
-        response.setContentType("text/html; charset=utf-8");
+
+        super.doPost(request, response);
 
         try {
             Writer out = response.getWriter();

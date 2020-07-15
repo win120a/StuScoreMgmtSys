@@ -30,12 +30,15 @@ import java.lang.reflect.InvocationTargetException;
  * @author Andy Cheung
  */
 public final class PhotoServiceFactory {
+    private PhotoServiceFactory() {
+        throw new UnsupportedOperationException("No 'PhotoServiceFactory' instance for you! ");
+    }
+
     /**
-     * Factory method of form handler.
+     * Factory method of photo service.
      *
      * @param context The servlet context.
      * @return Instance of the class.
-     * @author Andy Cheung
      */
     public static PhotoService getPhotoService(ServletContext context) {
         final String CLASSNAME = context.getInitParameter("photoServiceClass");
@@ -56,6 +59,11 @@ public final class PhotoServiceFactory {
         return service;
     }
 
+    /**
+     * Factory method of photo service using InitServlet.context as ServletContext.
+     *
+     * @return Instance of the class.
+     */
     public static PhotoService getPhotoService() {
         return getPhotoService(InitServlet.context);
     }
