@@ -100,16 +100,6 @@
         <url-pattern>/stuM/info</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>StudentListController</servlet-name>
-        <servlet-class>ac.adproj.scms.servlet.stuM.StudentListController</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>StudentListController</servlet-name>
-        <url-pattern>/stuM/list</url-pattern>
-    </servlet-mapping>
-
 
     <servlet>
         <servlet-name>PhotoServlet</servlet-name>

@@ -25,10 +25,15 @@
     <%@ include file="../WEB-INF/mgmtCommon.jsp" %>
     <script>
         function openDialog(url) {
-            window.open(url, "info", "width=690 height=520 left=300 top=50");
+            if (!isMobileDevice()) {
+                window.top.frameBox("学生信息", url);
+            } else {
+                window.open(url, "info", "width=690 height=520 left=300 top=50");
+            }
         }
 
-        $(() => {
+        let loadStudentList = () => {
+            removeItemsInList();
             $.getJSON("../api/studentList", (e) => {
                 let array = e.info;
 
@@ -44,10 +49,10 @@
                     updChild(ele, array[i].remark);
 
                     let tr = document.createElement("td");
-                    let html = `<label for='%%'>删除? </label>\n
-                                           <input name='%%' type="checkbox" class="del"id='%%'>
+                    let html = `<a href='javascript:void(0);'
+                                                onclick='if (confirm("确定删除这名学生吗？（学号：%%）")) deleteStudent([%%])'>删除</a>
                                             &nbsp;&nbsp;<a href='javascript:void(0);'
-                                                onclick='openDialog("info?type=modify&id=%%");'>编辑</a>`;
+                                                onclick='openDialog("<%= application.getContextPath() %>/stuM/info?type=modify&id=%%");'>编辑</a>`;
 
                     while (html.indexOf("%%") !== -1) {
                         html = html.replace("%%", array[i].id);
@@ -60,7 +65,7 @@
                     $("#information")[0].appendChild(ele);
                 }
             })
-        });
+        };
 
         let deleteStudent = (id) => {
             let xhr = new XMLHttpRequest();
@@ -76,39 +81,58 @@
                 if (parseInt(obj.status) === -1) {
                     alertBar("因输入了成绩，删除失败！学生号：" + obj.failedID.toString(), true, 3000);
                 } else {
-                    alertBar("删除成功。" , true, 3000);
+                    alertBar("删除成功。", true, 3000);
                 }
+
+                loadStudentList();
             };
 
             xhr.send("{id : [" + str + "]}");
-        }
+        };
+
+        let removeItemsInList = () => {
+            let infoO = $("#information");
+
+            let children = infoO.children();
+
+            for (let i = 0; i < children.length; i++) {
+
+                let ele = $(children[i]);
+
+                if (children[i].id.toString() === "name") {
+                    continue;
+                }
+
+                ele.remove();
+            }
+        };
+
+        $(() => loadStudentList());
     </script>
 </head>
-<body class="container">
+<body class="container" style="text-align: center;">
 <h1>学生管理</h1>
 
-<form action="list" method="post">
-    <br />
-    <div class="table-responsive-lg">
-        <table class="table table-collapse table-striped table-hover">
-            <tbody id="information">
-            <tr id="name">
-                <th>学号</th>
-                <th>姓名</th>
-                <th>性别</th>
-                <th>专业</th>
-                <th>生日</th>
-                <th>总学分</th>
-                <th>备注</th>
-                <th>操作</th>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <br/>
-    <input type="button" class="btn btn-primary" id="addStudent" onclick='openDialog("info?type=add");' value="添加">
-    <input type="submit" class="btn btn-danger" name="del" onclick="return checkSelection();" value="删除">
-    <input type="button" class="btn btn-info" id="returnButt" onclick='location.href="../"' value="返回">
-</form>
+<br/>
+<div class="table-responsive-lg">
+    <table class="table table-collapse table-striped table-hover">
+        <tbody id="information">
+        <tr id="name">
+            <th>学号</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>专业</th>
+            <th>生日</th>
+            <th>总学分</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<br/>
+<input type="button" class="btn btn-primary" id="addStudent"
+       onclick='openDialog("<%= application.getContextPath() %>/stuM/info?type=add");' value="添加">
+<input type="button" class="btn btn-secondary" id="returnButt" onclick='location.href="../"' value="返回">
 </body>
 </html>

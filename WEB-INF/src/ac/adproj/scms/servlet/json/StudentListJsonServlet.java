@@ -17,71 +17,25 @@
 
 package ac.adproj.scms.servlet.json;
 
-import ac.adproj.scms.dao.CourseDAO;
 import ac.adproj.scms.dao.StudentDAO;
-import ac.adproj.scms.entity.Student;
+import ac.adproj.scms.entity.Entity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.JspWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Scanner;
 import java.util.Set;
 
-public class StudentListJsonServlet extends HttpServlet {
-
+public class StudentListJsonServlet extends AbstractListJsonServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Set<Student> s = null;
-
-        try {
-            s = StudentDAO.getStudentObjectSet();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        String json;
-        if (s == null) {
-            json = "{\"error\" : \"NO Student.\"}";
-        } else {
-            JsonObject jso = new JsonObject();
-            JsonArray jsa = new JsonArray();
-            jso.add("info", jsa);
-
-            s.forEach(v -> jsa.add(v.getJSON()));
-            json = jso.toString();
-        }
-
-        resp.setCharacterEncoding("utf-8");
-        resp.setContentType("application/json");
-        try (Writer w = resp.getWriter()) {
-            w.write(json);
-        }
+    protected Set<? extends Entity> getEntitySet() throws SQLException {
+        return StudentDAO.getStudentObjectSet();
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        StringBuilder jsonTextBuilder = new StringBuilder();
-
-        try (Scanner s = new Scanner(req.getReader())) {
-            while (s.hasNext()) {
-                jsonTextBuilder.append(s.nextLine());
-            }
-        }
-
-        JsonObject requestContent = (JsonObject) JsonParser.parseString(jsonTextBuilder.toString());
+    protected String handleDeleteRequest(JsonObject requestContent) {
 
         JsonArray jsa = requestContent.getAsJsonArray("id");
 
@@ -116,14 +70,6 @@ public class StudentListJsonServlet extends HttpServlet {
             notificationJson.addProperty("status", "0");
         }
 
-        notifyClient(resp, notificationJson.toString());
-    }
-
-    private void notifyClient(HttpServletResponse resp, String content) {
-        try (PrintWriter w = resp.getWriter()) {
-            w.print(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return notificationJson.toString();
     }
 }

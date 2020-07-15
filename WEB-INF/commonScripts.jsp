@@ -56,3 +56,5 @@
 <link rel="stylesheet" href="<%= application.getContextPath() %>/stylesheet/bootstrap.css">
 
 <script src="<%= application.getContextPath() %>/scripts/bslib.js"></script>
+
+<script src="<%= application.getContextPath() %>/scripts/ua.js"></script>
