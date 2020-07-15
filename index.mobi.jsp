@@ -22,13 +22,51 @@
 <head>
     <title>学生成绩管理系统</title>
 
-    <script src="scripts/ua.js"></script>
+    <%@ include file="WEB-INF/commonScripts.jsp" %>
     <script>
         if (!isMobileDevice()) {
             location.href = "index.jsp";
         }
     </script>
-    <%@ include file="WEB-INF/commonScripts.jsp" %>
+
+    <style>
+        /*  Undo Bootstrap style. (According to Firefox 79)  */
+        h6 {
+            text-align: center;
+            margin: 0;
+            border-top: unset;
+            display: block;
+            font-size: 0.67em;
+            font-weight: bold;
+            margin-block-start: 2.33em;
+            margin-block-end: 2.33em;
+            font-family: unset;
+        }
+
+        h1 {
+            display: block;
+            font-size: 2em;
+            font-weight: bold;
+            margin-block-start: .67em;
+            margin-block-end: .67em;
+            text-align: center;
+            font-family: unset;
+        }
+
+        h2 {
+            display: block;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-block-start: .83em;
+            margin-block-end: .83em;
+            text-align: center;
+            font-family: unset;
+        }
+
+        p {
+            font-family: unset;
+        }
+    </style>
 </head>
 <body style="text-align: center;">
 <h1>系统主页</h1>

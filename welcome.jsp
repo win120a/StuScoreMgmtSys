@@ -25,6 +25,45 @@
     <script src="scripts/ua.js"></script>
 
     <%@ include file="WEB-INF/commonScripts.jsp" %>
+
+    <style>
+        /*  Undo Bootstrap style. (According to Firefox 79)  */
+        h6 {
+            text-align: center;
+            margin: 0;
+            border-top: 1px #424242 solid;
+            display: block;
+            font-size: 0.67em;
+            font-weight: bold;
+            margin-block-start: 2.33em;
+            margin-block-end: 2.33em;
+            font-family: unset;
+        }
+
+        h1 {
+            display: block;
+            font-size: 2em;
+            font-weight: bold;
+            margin-block-start: .67em;
+            margin-block-end: .67em;
+            text-align: center;
+            font-family: unset;
+        }
+
+        h2 {
+            display: block;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-block-start: .83em;
+            margin-block-end: .83em;
+            text-align: center;
+            font-family: unset;
+        }
+
+        p {
+            font-family: unset;
+        }
+    </style>
 </head>
 <body style="text-align: center;">
     <h2>欢迎使用学生成绩管理系统！</h2>
