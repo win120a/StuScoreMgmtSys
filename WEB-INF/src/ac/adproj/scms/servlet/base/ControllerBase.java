@@ -33,11 +33,14 @@ public abstract class ControllerBase extends HttpServlet {
         return status;
     }
 
-    private void setEncodingToUTF8(HttpServletRequest request, HttpServletResponse response)
-            throws UnsupportedEncodingException {
-        request.setCharacterEncoding("utf-8");
-        response.setCharacterEncoding("utf-8");
-        response.setContentType("text/html; charset=utf-8");
+    private void setEncodingToUTF8(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            request.setCharacterEncoding("utf-8");
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("text/html; charset=utf-8");
+        } catch (UnsupportedEncodingException ignored) {
+            throw new AssertionError("Shouldn't happen, since UTF-8 is widely supported.");
+        }
     }
 
     @Override
@@ -49,7 +52,7 @@ public abstract class ControllerBase extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws IOException {
         setEncodingToUTF8(req, resp);
         status = ControllerStatusEnum.EXECUTING;
     }

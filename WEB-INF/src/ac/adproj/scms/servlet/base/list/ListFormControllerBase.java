@@ -46,9 +46,7 @@ public abstract class ListFormControllerBase extends ControllerBase {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        request.setCharacterEncoding("utf-8");
-        response.setCharacterEncoding("utf-8");
-        response.setContentType("text/html; charset=utf-8");
+        super.doPost(request, response);
 
         try {
 
@@ -62,10 +60,10 @@ public abstract class ListFormControllerBase extends ControllerBase {
                 HashSet<String> delKeys = new HashSet<>();
 
                 for (Map.Entry<String, String[]> s : paramMap.entrySet()) {
-                    if ("del".equals(s.getKey())) {
+                    if ("del".equalsIgnoreCase(s.getKey())) {
                         continue;
                     }
-                    if ("on".equals(s.getValue()[0].toLowerCase())) {
+                    if ("on".equalsIgnoreCase(s.getValue()[0])) {
                         delKeys.add(s.getKey());
                     }
                 }
