@@ -18,10 +18,13 @@
 package ac.adproj.scms.dao;
 
 import ac.adproj.scms.servlet.ServletProcessingException;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
-import java.sql.*;
-import java.util.HashMap;
-import java.util.Properties;
+import java.beans.PropertyVetoException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Object that represents an connection to Database.
@@ -30,14 +33,13 @@ import java.util.Properties;
  */
 public class DBDao implements DBConnectionHandler {
     private static final String ADDR_HEAD = "jdbc:mysql://";
-    private final HashMap<Connection, Integer> pool;
     private final String driver;
     private final String serverAddr;
     private final String userName;
     private final String password;
     private final String serverTimeZone;
     private final String db;
-    private Connection connectionI;
+    private final ComboPooledDataSource cpds = new ComboPooledDataSource();
 
     public DBDao(String driver, String serverAddr, String userName, String password, String serverTimeZone, String db) {
         this.driver = driver;
@@ -46,33 +48,35 @@ public class DBDao implements DBConnectionHandler {
         this.password = password;
         this.serverTimeZone = serverTimeZone;
         this.db = db;
-        this.pool = new HashMap<>();
+
+        init();
+    }
+
+    public void init() {
+        try {
+            Class.forName(driver);
+        } catch (ClassNotFoundException nfe) {
+            throw new ServletProcessingException(nfe);
+        }
+
+        try {
+            cpds.setDriverClass(driver);
+        } catch (PropertyVetoException ignored) {
+            // ignore
+        }
+
+        cpds.setJdbcUrl(ADDR_HEAD + serverAddr + "/" + db);
+        cpds.setAcquireIncrement(2);
+        cpds.setMinPoolSize(5);
+        cpds.setMaxPoolSize(100);
+
+        cpds.setUser(userName);
+        cpds.setPassword(password);
     }
 
     @Override
     public Connection getConnection() throws SQLException {
-        if (connectionI == null || connectionI.isClosed()) {
-            try {
-                Class.forName(driver);
-            } catch (ClassNotFoundException nfe) {
-                throw new ServletProcessingException(nfe);
-            }
-
-
-            Properties p = new Properties();
-
-            p.put("user", userName);
-            p.put("password", password);
-            p.put("timezone", serverTimeZone);
-
-            String dbAddress = ADDR_HEAD + serverAddr + "/";
-
-            Connection conn = DriverManager.getConnection(dbAddress + db, p);
-
-            connectionI = conn;
-        }
-
-        return connectionI;
+        return cpds.getConnection();
     }
 
     public String getDriverClassName() {
@@ -87,28 +91,42 @@ public class DBDao implements DBConnectionHandler {
         return serverTimeZone;
     }
 
-    public ResultSet query(String sql, String... contents) throws SQLException {
-        PreparedStatement prepS = prepStmt(sql, contents);
+    private PreparedStatement prepStmt(Connection conn, String sql, String... contents) throws SQLException {
+        if (conn == null) {
+            conn = getConnection();
+        }
+
+        PreparedStatement prepS = conn.prepareStatement(sql);
+
+        for (int i = 0; i < contents.length; i++) {
+            prepS.setString(i + 1, contents[i]);
+        }
+
+        return prepS;
+    }
+
+    public ResultSet query(Connection conn, String sql, String... contents) throws SQLException {
+        PreparedStatement prepS = prepStmt(conn, sql, contents);
 
         ResultSet results = prepS.executeQuery();
 
         return results;
     }
 
-    public void insert(String sql, String... contents) throws SQLException {
-        prepStmt(sql, contents).execute();
+    public void insert(Connection c, String sql, String... contents) throws SQLException {
+        prepStmt(c, sql, contents).execute();
     }
 
-    public int update(String sql, String... contents) throws SQLException {
-        return prepStmt(sql, contents).executeUpdate();
+    public int update(Connection conn, String sql, String... contents) throws SQLException {
+        return prepStmt(conn, sql, contents).executeUpdate();
     }
 
-    public int delete(String sql, String... contents) throws SQLException {
-        return prepStmt(sql, contents).executeUpdate();
+    public int delete(Connection conn, String sql, String... contents) throws SQLException {
+        return prepStmt(conn, sql, contents).executeUpdate();
     }
 
     @Override
     public void close() throws SQLException {
-        connectionI.close();
+        cpds.close();
     }
 }

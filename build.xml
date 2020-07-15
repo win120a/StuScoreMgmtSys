@@ -25,7 +25,7 @@
     <target name="build">
         <mkdir dir="classes"/>
         <javac srcdir="src" destdir="classes" fork="yes" executable="${JAVA}\\javac.exe"
-               classpath="${CLASSPATH}" debug="on" includeantruntime="false"/>
+            classpath="${CLASSPATH}" debug="on" includeantruntime="false"/>
     </target>
 
     <target name="clean">

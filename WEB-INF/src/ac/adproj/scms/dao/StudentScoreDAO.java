@@ -23,6 +23,7 @@ import ac.adproj.scms.entity.StudentScore;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -34,15 +35,17 @@ public final class StudentScoreDAO {
     }
 
     public static void writeScoreObjectToDatabase(StudentScore studentScore) {
-        try (DBDao daoO = InitServlet.daoO) {
-            ResultSet creditsS = daoO.query("select credits from kc where courseID=?;",
+        DBDao daoO = InitServlet.daoO;
+
+        try (Connection c = daoO.getConnection()) {
+            ResultSet creditsS = daoO.query(c, "select credits from kc where courseID=?;",
                     studentScore.getCourseId());
             creditsS.next();
 
             String credits = creditsS.getString("credits");
             String score = Integer.toString(studentScore.getScore());
 
-            ResultSet selectRS = daoO.query("select * from xs_kc where stuid=? and courseID=?",
+            ResultSet selectRS = daoO.query(c, "select * from xs_kc where stuid=? and courseID=?",
                     studentScore.getStudentId(), studentScore.getCourseId());
 
             if (!selectRS.next()) {
@@ -51,17 +54,17 @@ public final class StudentScoreDAO {
                     return; // Do not do insert statement if the value is empty.
                 }
 
-                daoO.insert("insert into xs_kc values (?, ?, ?, ?);",
+                daoO.insert(c, "insert into xs_kc values (?, ?, ?, ?);",
                         studentScore.getStudentId(), studentScore.getCourseId(),
                         score, credits);
 
             } else { // In case the data was inserted (i.e exists).
                 // s c i
                 if (studentScore.isDeletePending()) {
-                    daoO.delete("delete from xs_kc where stuid=? and courseID=?;",
+                    daoO.delete(c, "delete from xs_kc where stuid=? and courseID=?;",
                             studentScore.getStudentId(), studentScore.getCourseId());
                 } else {
-                    daoO.update("update xs_kc set score=?, credit=? where stuid=? and courseID=?;",
+                    daoO.update(c, "update xs_kc set score=?, credit=? where stuid=? and courseID=?;",
                             score, credits, studentScore.getStudentId(), studentScore.getCourseId());
                 }
             }
@@ -72,8 +75,10 @@ public final class StudentScoreDAO {
     }
 
     public static StudentScore getScoreObjectThroughDatabase(Student student, Course c) {
-        try (DBDao daoO = InitServlet.daoO) {
-            ResultSet rs = daoO.query("select score from xs_kc where stuid=? and courseid=?;",
+        DBDao daoO = InitServlet.daoO;
+
+        try (Connection conn = daoO.getConnection()) {
+            ResultSet rs = daoO.query(conn, "select score from xs_kc where stuid=? and courseid=?;",
                     student.getId(), c.getId());
 
             int score = EMPTY_SCORE_VALUE;

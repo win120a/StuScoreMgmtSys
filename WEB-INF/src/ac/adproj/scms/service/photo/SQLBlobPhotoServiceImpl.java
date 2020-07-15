@@ -17,7 +17,6 @@
 
 package ac.adproj.scms.service.photo;
 
-import ac.adproj.scms.dao.DBDao;
 import ac.adproj.scms.servlet.InitServlet;
 
 import javax.servlet.ServletContext;
@@ -37,15 +36,24 @@ final class SQLBlobPhotoServiceImpl implements PhotoService {
     private static final String QUERY_SQL = "select photo as p from xs where stuid=?;";
     private final ServletContext ctx;
 
+    private Connection connection;
+
     public SQLBlobPhotoServiceImpl(ServletContext ctx) {
         this.ctx = ctx;
+
+        try {
+            connection = InitServlet.daoO.getConnection();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
     }
 
     private byte[] getNone() throws IOException {
         String rPath = ctx.getRealPath(PHOTO_PLACEHOLDER_RELATIVE_PATH);
-        FileInputStream photoS = new FileInputStream(new File(rPath));
 
-        return photoS.readAllBytes();
+        try (FileInputStream photoS = new FileInputStream(new File(rPath))) {
+            return photoS.readAllBytes();
+        }
     }
 
     /**
@@ -58,13 +66,12 @@ final class SQLBlobPhotoServiceImpl implements PhotoService {
      */
     @Override
     public byte[] getPhoto(String id) throws SQLException, IOException {
-        DBDao daoO = InitServlet.daoO;
 
         if (id == null || id.isEmpty()) {
             return getNone();
         }
 
-        ResultSet resSet = daoO.query(QUERY_SQL, id);
+        ResultSet resSet = InitServlet.daoO.query(connection, QUERY_SQL, id);
         resSet.next();
         Blob photoO = resSet.getBlob("p");
 
@@ -86,16 +93,14 @@ final class SQLBlobPhotoServiceImpl implements PhotoService {
      */
     @Override
     public boolean doesPhotoExist(String id) throws SQLException {
-        ResultSet rs = InitServlet.daoO.query(QUERY_SQL, id);
+        ResultSet rs = InitServlet.daoO.query(connection, QUERY_SQL, id);
 
         return rs.next() && rs.getBlob("p") != null;
     }
 
     @Override
     public void uploadPhoto(String id, byte[] photoArray) throws SQLException {
-        PreparedStatement ps_p = InitServlet.daoO
-                .getConnection()
-                .prepareStatement("update xs set photo=? where stuid=?;");
+        PreparedStatement ps_p = connection.prepareStatement("update xs set photo=? where stuid=?;");
 
         if (photoArray != null && photoArray.length != 0) {
             ps_p.setBlob(1, new SerialBlob(photoArray));
@@ -108,9 +113,7 @@ final class SQLBlobPhotoServiceImpl implements PhotoService {
 
     @Override
     public void deletePhoto(String id) throws SQLException {
-        PreparedStatement deletingStatement = InitServlet.daoO
-                .getConnection()
-                .prepareStatement("update xs set photo=NULL where stuid=?;");
+        PreparedStatement deletingStatement = connection.prepareStatement("update xs set photo=NULL where stuid=?;");
 
         deletingStatement.setString(1, id);
 
@@ -119,6 +122,6 @@ final class SQLBlobPhotoServiceImpl implements PhotoService {
 
     @Override
     public void close() throws Exception {
-        InitServlet.daoO.close();
+        connection.close();
     }
 }

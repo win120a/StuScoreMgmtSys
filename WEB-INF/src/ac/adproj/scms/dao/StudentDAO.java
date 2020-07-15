@@ -28,6 +28,7 @@ import ac.adproj.scms.servlet.ServletProcessingException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -53,8 +54,10 @@ public final class StudentDAO {
         byte[] photo;
         int totalCredits;
 
-        try (DBDao daoO = InitServlet.daoO) {
-            ResultSet rs = daoO.query("select * from xs where stuid=?;", stuid);
+        DBDao daoO = InitServlet.daoO;
+
+        try (Connection c = daoO.getConnection()) {
+            ResultSet rs = daoO.query(c, "select * from xs where stuid=?;", stuid);
 
             if (!rs.next()) {
                 return null;
@@ -65,7 +68,7 @@ public final class StudentDAO {
             major = rs.getString("major");
             gender = rs.getInt("gender") == 1 ? GenderEnum.MALE : GenderEnum.FEMALE;
 
-            ResultSet rs_totalC = daoO.query("select sum(credit) as c from xs_kc where stuid=? and score >= 60;"
+            ResultSet rs_totalC = daoO.query(c, "select sum(credit) as c from xs_kc where stuid=? and score >= 60;"
                     , stuid);
 
             Blob photoBlob = rs.getBlob("photo");
@@ -98,10 +101,12 @@ public final class StudentDAO {
      * @throws SQLException If database ran into error.
      */
     public static void writeStudentObjectToDatabase(Student s) throws SQLException, IOException {
-        try (DBDao daoO = InitServlet.daoO) {
+        DBDao daoO = InitServlet.daoO;
 
-            if (daoO.query("select name from xs where stuid=?", s.getId()).next()) {
-                daoO.update("update xs set name=?, major=?, gender=?, birthdate=?, "
+        try (Connection c = daoO.getConnection()) {
+
+            if (daoO.query(c, "select name from xs where stuid=?", s.getId()).next()) {
+                daoO.update(c, "update xs set name=?, major=?, gender=?, birthdate=?, "
                                 + "remark=? where stuid=?;"
                         , s.getName()
                         , s.getMajor()
@@ -109,7 +114,7 @@ public final class StudentDAO {
                         , s.getDob(), s.getRemark(), s.getId());
             } else {
                 // id name major gender dob totalCredits(=0) photo remark
-                daoO.insert("insert into xs values (?, ?, ?, ?, ?, 0, NULL, ?);"
+                daoO.insert(c, "insert into xs values (?, ?, ?, ?, ?, 0, NULL, ?);"
                         , s.getId()
                         , s.getName()
                         , s.getMajor()
@@ -139,8 +144,10 @@ public final class StudentDAO {
     }
 
     public static void deleteObject(String id) throws SQLException {
-        try (DBDao daoO = InitServlet.daoO) {
-            daoO.delete("delete from xs where xs.stuid=?;", id);
+        DBDao daoO = InitServlet.daoO;
+
+        try (Connection c = daoO.getConnection()) {
+            daoO.delete(c, "delete from xs where xs.stuid=?;", id);
         }
     }
 
@@ -151,8 +158,10 @@ public final class StudentDAO {
     public static Set<String> getStudentIDSet() throws SQLException {
         HashSet<String> studentSet = new HashSet<>();
 
-        try (DBDao daoO = InitServlet.daoO) {
-            ResultSet rs = daoO.query("select stuid from xs;");
+        DBDao daoO = InitServlet.daoO;
+
+        try (Connection c = daoO.getConnection()) {
+            ResultSet rs = daoO.query(c, "select stuid from xs;");
 
             while (rs.next()) {
                 studentSet.add(rs.getString("stuid"));

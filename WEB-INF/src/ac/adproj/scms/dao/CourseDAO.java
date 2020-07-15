@@ -22,6 +22,7 @@ import ac.adproj.scms.entity.Entity;
 import ac.adproj.scms.servlet.InitServlet;
 import ac.adproj.scms.servlet.ServletProcessingException;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -39,8 +40,10 @@ public final class CourseDAO {
      * @return The Course object, or null if the student object did not exist.
      */
     public static Course getCourseObjectThroughDB(String courseid) {
-        try (DBDao daoO = InitServlet.daoO) {
-            ResultSet rs = daoO.query("select * from kc where courseID=?;"
+        DBDao daoO = InitServlet.daoO;
+
+        try (Connection conn = daoO.getConnection()) {
+            ResultSet rs = daoO.query(conn, "select * from kc where courseID=?;"
                     , courseid);
 
             if (!rs.next()) {
@@ -73,10 +76,12 @@ public final class CourseDAO {
      * @throws SQLException If SQL ran into error.
      */
     public static void writeCourseObjectToDatabase(Course c) throws SQLException {
-        try (DBDao daoO = InitServlet.daoO) {
+        DBDao daoO = InitServlet.daoO;
 
-            if (daoO.query("select term from kc where courseID=?;", c.getId()).next()) {
-                daoO.update("update kc set courseName=?, term=?, credits=?, "
+        try (Connection conn = daoO.getConnection()) {
+
+            if (daoO.query(conn, "select term from kc where courseID=?;", c.getId()).next()) {
+                daoO.update(conn, "update kc set courseName=?, term=?, credits=?, "
                                 + "courseHours=? where courseID=?;"
                         , c.getName()
                         , c.getTerm()
@@ -84,7 +89,7 @@ public final class CourseDAO {
                         , Integer.toString(c.getCourseHours())
                         , c.getId());
             } else {
-                daoO.insert("insert into kc values (?, ?, ?, ?, ?);"
+                daoO.insert(conn, "insert into kc values (?, ?, ?, ?, ?);"
                         , c.getId()
                         , c.getName()
                         , c.getTerm()
@@ -95,8 +100,10 @@ public final class CourseDAO {
     }
 
     public static void deleteObject(String id) throws SQLException {
-        try (DBDao daoO = InitServlet.daoO) {
-            daoO.delete("delete from kc where kc.courseId=?;", id);
+        DBDao daoO = InitServlet.daoO;
+
+        try (Connection c = daoO.getConnection()) {
+            daoO.delete(c, "delete from kc where kc.courseId=?;", id);
         }
     }
 
@@ -107,8 +114,10 @@ public final class CourseDAO {
     public static Set<String> getCourseIDSet() throws SQLException {
         HashSet<String> courseIDSet = new HashSet<>();
 
-        try (DBDao daoO = InitServlet.daoO) {
-            ResultSet rs = daoO.query("select courseID from kc;");
+        DBDao daoO = InitServlet.daoO;
+
+        try (Connection c = daoO.getConnection()) {
+            ResultSet rs = daoO.query(c, "select courseID from kc;");
 
             while (rs.next()) {
                 courseIDSet.add(rs.getString("courseID"));

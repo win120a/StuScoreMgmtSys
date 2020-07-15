@@ -12,6 +12,7 @@ GPLv3
 4. Gson project (https://github.com/google/gson) is used (`WEB-INF/lib/gson-2.8.6.jar`). It is licensed under Apache License.
 5. Open-source JavaScript library - jQuery (`scripts/jquery-3.4.1.js`, licensed under MIT License)
 6. Open-source UI kit - Bootstrap (MIT licensed, https://github.com/twbs/bootstrap )
+7. Database Connection Pool - C3P0 (https://github.com/swaldman/c3p0, dual licensed under EPL 1.0 / LGPL 2.1)
 
 # Structure
 1. The building system of the Servlet Part of this project (a.k.a. `WEB-INF/src` and `WEB-INF/classes`) is driven by Ant. The build file is located in the root of the project.

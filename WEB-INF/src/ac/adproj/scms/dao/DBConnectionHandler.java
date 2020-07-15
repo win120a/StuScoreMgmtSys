@@ -24,13 +24,4 @@ import java.sql.SQLException;
 public interface DBConnectionHandler extends AutoCloseable {
     Connection getConnection() throws SQLException;
 
-    default PreparedStatement prepStmt(String sql, String... contents) throws SQLException {
-        PreparedStatement prepS = getConnection().prepareStatement(sql);
-
-        for (int i = 0; i < contents.length; i++) {
-            prepS.setString(i + 1, contents[i]);
-        }
-
-        return prepS;
-    }
 }
