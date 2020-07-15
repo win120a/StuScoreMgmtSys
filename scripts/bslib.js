@@ -38,10 +38,13 @@ const alertBox_html = "    <div class='modal fade' id='informationWindow_${btOk}
     + "            </div>\r\n" + "        </div>\r\n" + "    </div>";
 
 const frame_html = "    <div class='modal fade' id='informationWindow_${btOk}' tabindex='-1' role='dialog' aria-hidden='true' data-backdrop='static'>\r\n"
-    + "        <div class='modal-dialog' role='document'>\r\n"
+    + "        <div class='modal-dialog modal-dialog-scrollable modal-lg' role='document'>\r\n"
     + "            <div class='modal-content'>\r\n"
     + "                <div class='modal-header'>\r\n"
     + "                    <h5 class='modal-title'>${1}</h5>\r\n"
+    + "        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n"
+    + "          <span aria-hidden=\"true\">&times;</span>\n"
+    + "        </button>"
     + "                </div>\r\n"
     + "                <div class='modal-body'>\r\n                    ${2}\r\n"
     + "                </div>\r\n"
@@ -69,7 +72,7 @@ let replaceAllStrings = (orig, target, replacement) => {
 
 let frameBox = (title, url) => {
     let fHTML = frame_html.replace("${1}", title)
-        .replace("${2}", `<iframe src="${url}" width="600" height="800"></iframe>`);
+        .replace("${2}", `<iframe src="${url}" width="760" height="400"></iframe>`);
 
     fHTML = replaceAllStrings(fHTML, "${btOk}", alertBox_id);
 
@@ -140,6 +143,13 @@ let alertBar = (msg, dismissButton, mills) => {
     let abElement = document.createElement("div");
     abElement.innerHTML = fHTML;
 
+    if (dismissButton) {
+        let jqElement = $(abElement).children(".alert");
+        let classNames = jqElement.attr("class");
+
+        jqElement.attr("class", classNames + " alert-dismissible");
+    }
+
     document.body.appendChild(abElement);
 
     $(`#${alertBar_id}`).alert();
@@ -151,4 +161,9 @@ let alertBar = (msg, dismissButton, mills) => {
     setTimeout(act, mills);
 
     alertBar_id++;
+};
+
+if (window.top === window) {
+    // Hook for frame pages.
+    window.frameBox = (title, url) => frameBox(title, url);
 }
