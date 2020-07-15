@@ -17,21 +17,30 @@
 
 package ac.adproj.scms.servlet.json;
 
+import ac.adproj.scms.dao.CourseDAO;
 import ac.adproj.scms.dao.StudentDAO;
 import ac.adproj.scms.entity.Student;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Scanner;
 import java.util.Set;
 
 public class StudentListJsonServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Set<Student> s = null;
@@ -62,7 +71,59 @@ public class StudentListJsonServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        StringBuilder jsonTextBuilder = new StringBuilder();
+
+        try (Scanner s = new Scanner(req.getReader())) {
+            while (s.hasNext()) {
+                jsonTextBuilder.append(s.nextLine());
+            }
+        }
+
+        JsonObject requestContent = (JsonObject) JsonParser.parseString(jsonTextBuilder.toString());
+
+        JsonArray jsa = requestContent.getAsJsonArray("id");
+
+        Iterator<JsonElement> iterator = jsa.iterator();
+
+        boolean notFullyDel = false;
+        LinkedList<String> undoneIDs = new LinkedList<>();
+
+        while (iterator.hasNext()) {
+            String id = iterator.next().getAsString();
+
+            try {
+                StudentDAO.deleteObject(id);
+            } catch (java.sql.SQLIntegrityConstraintViolationException sicve) {
+                notFullyDel = true;
+                undoneIDs.add(id);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
+        JsonObject notificationJson = new JsonObject();
+
+        if (notFullyDel) {
+            JsonArray ids = new JsonArray(undoneIDs.size());
+
+            undoneIDs.forEach(ids::add);
+
+            notificationJson.addProperty("status", "-1");
+            notificationJson.add("failedID", ids);
+        } else {
+            notificationJson.addProperty("status", "0");
+        }
+
+        notifyClient(resp, notificationJson.toString());
+    }
+
+    private void notifyClient(HttpServletResponse resp, String content) {
+        try (PrintWriter w = resp.getWriter()) {
+            w.print(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

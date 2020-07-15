@@ -61,6 +61,27 @@
                 }
             })
         });
+
+        let deleteStudent = (id) => {
+            let xhr = new XMLHttpRequest();
+
+            xhr.open("DELETE", "../api/studentList");
+            xhr.setRequestHeader("Content-type", "application/json");
+
+            let str = id.toString();
+
+            xhr.onload = () => {
+                let obj = JSON.parse(xhr.responseText);
+
+                if (parseInt(obj.status) === -1) {
+                    alertBar("因输入了成绩，删除失败！学生号：" + obj.failedID.toString(), true, 3000);
+                } else {
+                    alertBar("删除成功。" , true, 3000);
+                }
+            };
+
+            xhr.send("{id : [" + str + "]}");
+        }
     </script>
 </head>
 <body class="container">
